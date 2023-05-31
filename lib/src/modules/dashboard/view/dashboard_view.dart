@@ -15,24 +15,52 @@ class _DashBoardViewState extends State<DashBoardView> {
         children: [
           Flexible(
             flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemCount: 100,
-                itemBuilder: (BuildContext context, int index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: ColoredBox(
-                      color: Theme.of(context).primaryColor,
+            child: Column(
+              children: [
+                AppBar(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  leading: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
                     ),
-                  );
-                },
-              ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 8, top: 4),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                      ),
+                      itemCount: 100,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          color: Theme.of(context).primaryColor,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Chip(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          backgroundColor: Colors.black,
+                          shape: const StadiumBorder(),
+                          label: Text('Label ${i + 1}', style: const TextStyle(color: Colors.white)),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           Flexible(
