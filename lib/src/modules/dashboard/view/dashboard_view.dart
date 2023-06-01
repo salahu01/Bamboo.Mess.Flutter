@@ -64,6 +64,7 @@ class _DashBoardViewState extends State<DashBoardView> {
               ],
             ),
           ),
+          
           Flexible(
             flex: 2,
             child: Column(
