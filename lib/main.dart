@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 
 void main() {
   runApp(const MyApp());
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: "montserratfamily",
       ),
       debugShowCheckedModeBanner: false,
       home: const DashBoardView(),
