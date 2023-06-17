@@ -37,22 +37,26 @@ class _DashBoardViewState extends State<DashBoardView> {
         ),
         centerTitle: true,
         elevation: 4,
-        title: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          elevation: 10,
-          child: SizedBox(
-            width: 600,
-            child: TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Search foods here ...',
-                hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
-                prefixIcon: const Icon(Icons.search, color: Colors.black, size: 28),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                contentPadding: const EdgeInsets.symmetric(vertical: 18),
+        title: Visibility(
+          visible: !_showBills,
+          replacement: const Text('Saved Bills', style: TextStyle(color: Colors.white, fontSize: 40)),
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 10,
+            child: SizedBox(
+              width: 600,
+              child: TextField(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Search foods here ...',
+                  hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
+                  prefixIcon: const Icon(Icons.search, color: Colors.black, size: 28),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                ),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
               ),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
             ),
           ),
         ),
