@@ -1,106 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:freelance/src/modules/custom/slide_and_remove.dart';
 
-class SavedItemsView extends StatefulWidget {
+class SavedItemsView extends StatelessWidget {
   const SavedItemsView({super.key});
 
   @override
-  State<SavedItemsView> createState() => _SavedItemsViewState();
-}
-
-class _SavedItemsViewState extends State<SavedItemsView> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: Colors.white,
-        title: TextButton(
-          onPressed: () {},
-          child: const Text(
-            "SAVED ITEMS",
-            style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-              ),
-              child: const Text(
-                '1',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+      body: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: const EdgeInsets.only(bottom: 24, left: 12, right: 24, top: 24),
+        elevation: 4,
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 24),
+              child: Text('Billing', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return SlideBillMenu(
-                  menuItems: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                      ),
-                      child: IconButton(
-                        color: Colors.white,
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {},
-                      ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
+              child: Divider(color: Colors.black),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                physics: const BouncingScrollPhysics(),
+                itemCount: 5,
+                itemBuilder: (context, i) {
+                  i += 1;
+                  return ListTile(
+                    dense: true,
+                    title: const Text(
+                      'Pani puri ',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                     ),
-                  ],
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    subtitle: Text(
+                      'Qty : $i',
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                     ),
                     trailing: Text(
-                      "$index x \$1200",
-                      style: const TextStyle(fontSize: 20),
+                      '\$ ${i}00',
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    title: Text(
-                      'Item $index',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12), child: Divider()),
-          const Text('Total Amount : \$5000', style: TextStyle(fontSize: 20)),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                customBotton("SAVE", () {}),
-                customBotton("CHARGE", () {}),
-              ],
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Divider(color: Colors.black),
             ),
-          ),
-        ],
+            const Text(
+              'Total Amount : 100',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  customBotton("SAVE", () {}, context),
+                  customBotton("CHARGE", () {}, context),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget customBotton(String name, VoidCallback onPressed) {
+  Widget customBotton(String name, VoidCallback onPressed, BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ButtonStyle(shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)))),
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
+        backgroundColor: Colors.purple.shade400,
+      ),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.08,
         height: 72,

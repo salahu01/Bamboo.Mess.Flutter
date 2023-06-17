@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Dialogs {
   static Future<void> singleFieldDailog(
@@ -33,11 +34,11 @@ class Dialogs {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(color: Colors.green),
+                  borderSide: BorderSide(color: HexColor('#deb4ff')),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(color: Colors.green),
+                  borderSide: BorderSide(color: HexColor('#deb4ff')),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -49,7 +50,7 @@ class Dialogs {
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(color: Colors.green),
+                  borderSide: BorderSide(color: HexColor('#deb4ff')),
                 ),
                 hintText: validatorText,
                 hintStyle: const TextStyle(
@@ -63,11 +64,12 @@ class Dialogs {
           ),
           actions: [
             TextButton(
-                onPressed: () {
-                  addCatrgoryCtrl.clear();
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel')),
+              onPressed: () {
+                addCatrgoryCtrl.clear();
+                Navigator.pop(context);
+              },
+              child: Text('Cancel', style: TextStyle(color: HexColor('#deb4ff'), fontSize: 18)),
+            ),
             TextButton(
               onPressed: () {
                 if (addCategoryKey.currentState?.validate() ?? false) {
@@ -75,7 +77,7 @@ class Dialogs {
                   Navigator.pop(context);
                 }
               },
-              child: Text(leftButtonText),
+              child: Text(leftButtonText, style: TextStyle(color: HexColor('#deb4ff'), fontSize: 18)),
             ),
           ],
         );
