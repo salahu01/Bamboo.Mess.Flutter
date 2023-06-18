@@ -15,9 +15,17 @@ class DashBoardView extends StatefulWidget {
 class _DashBoardViewState extends State<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
   bool _showBills = false;
+  bool _startAnimation = false;
+
+  @override
+  void initState() {
+    startAnimation();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _key,
       appBar: AppBar(
@@ -62,7 +70,10 @@ class _DashBoardViewState extends State<DashBoardView> {
         ),
         actions: [
           GestureDetector(
-            onTap: () => setState(() => _showBills = _showBills ? false : true),
+            onTap: () {
+              setState(() => _showBills = _showBills ? false : true);
+              startAnimation();
+            },
             child: Card(
               margin: const EdgeInsets.all(30),
               elevation: 10,
@@ -70,7 +81,14 @@ class _DashBoardViewState extends State<DashBoardView> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Icon(_showBills ? Icons.close : Icons.save, size: 34, color: Colors.white),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder: (child, anim) => RotationTransition(
+                    turns: child.key == const ValueKey('icon1') ? Tween<double>(begin: 1, end: 0.75).animate(anim) : Tween<double>(begin: 0.75, end: 1).animate(anim),
+                    child: FadeTransition(opacity: anim, child: child),
+                  ),
+                  child: _showBills ? const Icon(Icons.close, key: ValueKey('icon1'), size: 34) : const Icon(Icons.save, key: ValueKey('icon2'), size: 34),
+                ),
               ),
             ),
           ),
@@ -177,7 +195,10 @@ class _DashBoardViewState extends State<DashBoardView> {
           scrollDirection: Axis.horizontal,
           itemCount: 5,
           itemBuilder: (context, index) {
-            return Container(
+            return AnimatedContainer(
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 300 + (index * 200)),
+              transform: Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
               margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
               width: 500,
               child: Card(
@@ -240,9 +261,9 @@ class _DashBoardViewState extends State<DashBoardView> {
           children: [
             Flexible(
               flex: 5,
-              child: CategoryView(),
+              child: CategoryView(startAnimation: _startAnimation),
             ),
-            Flexible(
+            const Flexible(
               flex: 2,
               child: SavedItemsView(),
             ),
@@ -250,5 +271,12 @@ class _DashBoardViewState extends State<DashBoardView> {
         ),
       ),
     );
+  }
+
+  void startAnimation() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() => _startAnimation = true);
+    });
+    _startAnimation = false;
   }
 }

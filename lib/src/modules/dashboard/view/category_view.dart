@@ -5,7 +5,8 @@ import 'package:freelance/src/modules/custom/show_dialog.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CategoryView extends StatefulWidget {
-  const CategoryView({super.key});
+  const CategoryView({super.key, required this.startAnimation});
+  final bool startAnimation;
 
   @override
   State<CategoryView> createState() => _CategoryViewState();
@@ -23,7 +24,14 @@ class _CategoryViewState extends State<CategoryView> {
   final _gridViewKey = GlobalKey();
 
   @override
+  void initState() {
+    startAnimation();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
         children: [
@@ -42,7 +50,7 @@ class _CategoryViewState extends State<CategoryView> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
             elevation: 4,
-            child: buildBottom(context),
+            child: buildBottom(context, width),
           ),
         ],
       ),
@@ -73,14 +81,14 @@ class _CategoryViewState extends State<CategoryView> {
       lockedIndices: lockedIndices,
       scrollController: _scrollController,
       builder: (children) {
-        return GridView.extent(
+        return GridView.count(
           key: _gridViewKey,
           childAspectRatio: 3 / 2,
           shrinkWrap: true,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
           controller: _scrollController,
-          maxCrossAxisExtent: 280,
+          crossAxisCount: 5,
           padding: EdgeInsets.zero,
           physics: const BouncingScrollPhysics(),
           children: children,
@@ -90,7 +98,7 @@ class _CategoryViewState extends State<CategoryView> {
     );
   }
 
-  Widget buildBottom(BuildContext context) {
+  Widget buildBottom(BuildContext context, double width) {
     return SizedBox(
       height: 80,
       child: Padding(
@@ -117,23 +125,28 @@ class _CategoryViewState extends State<CategoryView> {
               itemCount: items.length,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               itemBuilder: (ctx, index) {
-                return GestureDetector(
-                  onTap: () {
-                    selectecdIndexUpdate(index);
-                  },
-                  child: Card(
-                    elevation: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    color: index == selectedIndex ? HexColor('#deb4ff') : Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48),
-                      child: Center(
-                        child: Text(
-                          items[index],
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: index == selectedIndex ? Colors.white : Colors.black,
+                return AnimatedContainer(
+                  curve: Curves.easeInOut,
+                  duration: Duration(milliseconds: 300 + (index * 200)),
+                  transform: Matrix4.translationValues(widget.startAnimation ? 0 : width * 0.4, 0, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      selectecdIndexUpdate(index);
+                    },
+                    child: Card(
+                      elevation: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      color: index == selectedIndex ? HexColor('#deb4ff') : Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 48),
+                        child: Center(
+                          child: Text(
+                            items[index],
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: index == selectedIndex ? Colors.white : Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -159,6 +172,12 @@ class _CategoryViewState extends State<CategoryView> {
   selectecdIndexUpdate(int index) {
     setState(() {
       selectedIndex = index;
+    });
+  }
+
+  void startAnimation() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {});
     });
   }
 }
