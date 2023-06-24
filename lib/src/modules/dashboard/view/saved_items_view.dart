@@ -14,7 +14,8 @@ class SavedItemsView extends StatelessWidget {
           children: [
             const Padding(
               padding: EdgeInsets.only(top: 24),
-              child: Text('Billing', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+              child: Text('Billing',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
@@ -31,15 +32,24 @@ class SavedItemsView extends StatelessWidget {
                     dense: true,
                     title: const Text(
                       'Pani puri ',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                     subtitle: Text(
                       'Qty : $i',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                     trailing: Text(
                       '\$ ${i}00',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                   );
                 },
@@ -51,7 +61,10 @@ class SavedItemsView extends StatelessWidget {
             ),
             const Text(
               'Total Amount : 100',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.6),
             ),
             Padding(
               padding: const EdgeInsets.all(12),
@@ -69,11 +82,17 @@ class SavedItemsView extends StatelessWidget {
     );
   }
 
-  Widget customBotton(String name, VoidCallback onPressed, BuildContext context) {
+  Widget customBotton(
+    String name,
+    VoidCallback onPressed,
+    BuildContext context,
+  ) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.01)),
         backgroundColor: Colors.purple.shade400,
       ),
       child: SizedBox(

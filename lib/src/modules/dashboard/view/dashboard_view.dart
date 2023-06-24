@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freelance/src/modules/dashboard/view/category_view.dart';
 import 'package:freelance/src/modules/dashboard/view/saved_items_view.dart';
+import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
@@ -31,7 +32,8 @@ class _DashBoardViewState extends State<DashBoardView> {
       appBar: AppBar(
         toolbarHeight: 120,
         backgroundColor: HexColor('#deb4ff'),
-        systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
+        systemOverlayStyle:
+            SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
         leadingWidth: 120,
         leading: GestureDetector(
           onTap: () => _key.currentState?.openDrawer(),
@@ -39,7 +41,8 @@ class _DashBoardViewState extends State<DashBoardView> {
             margin: const EdgeInsets.all(30),
             elevation: 10,
             color: HexColor('#deb4ff'),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: const Icon(Icons.menu, size: 34, color: Colors.white),
           ),
         ),
@@ -47,9 +50,11 @@ class _DashBoardViewState extends State<DashBoardView> {
         elevation: 4,
         title: Visibility(
           visible: !_showBills,
-          replacement: const Text('Saved Bills', style: TextStyle(color: Colors.white, fontSize: 40)),
+          replacement: const Text('Saved Bills',
+              style: TextStyle(color: Colors.white, fontSize: 40)),
           child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             elevation: 10,
             child: SizedBox(
               width: 600,
@@ -58,12 +63,21 @@ class _DashBoardViewState extends State<DashBoardView> {
                   filled: true,
                   fillColor: Colors.white,
                   hintText: 'Search foods here ...',
-                  hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
-                  prefixIcon: const Icon(Icons.search, color: Colors.black, size: 28),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  hintStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black.withOpacity(0.8)),
+                  prefixIcon:
+                      const Icon(Icons.search, color: Colors.black, size: 28),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none),
                   contentPadding: const EdgeInsets.symmetric(vertical: 18),
                 ),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
               ),
             ),
           ),
@@ -78,16 +92,23 @@ class _DashBoardViewState extends State<DashBoardView> {
               margin: const EdgeInsets.all(30),
               elevation: 10,
               color: HexColor('#deb4ff'),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),
                   transitionBuilder: (child, anim) => RotationTransition(
-                    turns: child.key == const ValueKey('icon1') ? Tween<double>(begin: 1, end: 0.75).animate(anim) : Tween<double>(begin: 0.75, end: 1).animate(anim),
+                    turns: child.key == const ValueKey('icon1')
+                        ? Tween<double>(begin: 1, end: 0.75).animate(anim)
+                        : Tween<double>(begin: 0.75, end: 1).animate(anim),
                     child: FadeTransition(opacity: anim, child: child),
                   ),
-                  child: _showBills ? const Icon(Icons.close, key: ValueKey('icon1'), size: 34) : const Icon(Icons.save, key: ValueKey('icon2'), size: 34),
+                  child: _showBills
+                      ? const Icon(Icons.close,
+                          key: ValueKey('icon1'), size: 34)
+                      : const Icon(Icons.save,
+                          key: ValueKey('icon2'), size: 34),
                 ),
               ),
             ),
@@ -149,7 +170,11 @@ class _DashBoardViewState extends State<DashBoardView> {
                 ),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const ReceiptsScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -197,22 +222,37 @@ class _DashBoardViewState extends State<DashBoardView> {
           itemBuilder: (context, index) {
             return AnimatedContainer(
               curve: Curves.easeInOut,
-              duration: Duration(milliseconds: 300 + (index * 200)),
-              transform: Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
+              duration: Duration(
+                milliseconds: 300 + (index * 200),
+              ),
+              transform:
+                  Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
               margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
               width: 500,
               child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: index == 1 ? HexColor('#deb4ff') : Colors.transparent, width: 4)),
-                margin: const EdgeInsets.only(bottom: 24, left: 12, right: 24, top: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                      color:
+                          index == 1 ? HexColor('#deb4ff') : Colors.transparent,
+                      width: 4),
+                ),
+                margin: const EdgeInsets.only(
+                    bottom: 24, left: 12, right: 24, top: 24),
                 elevation: 4,
                 child: Column(
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(top: 24),
-                      child: Text('Billing', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+                      child: Text(
+                        'Billing',
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.w600),
+                      ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 128, vertical: 8),
                       child: Divider(color: Colors.black),
                     ),
                     Expanded(
@@ -226,29 +266,42 @@ class _DashBoardViewState extends State<DashBoardView> {
                             dense: true,
                             title: const Text(
                               'Pani puri ',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.6),
                             ),
                             subtitle: Text(
                               'Qty : $i',
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.6),
                             ),
                             trailing: Text(
                               '\$ ${i}00',
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.6),
                             ),
                           );
                         },
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                       child: Divider(color: Colors.black),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(bottom: 24),
                       child: Text(
                         'Total Amount : 100',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.6),
                       ),
                     ),
                   ],
