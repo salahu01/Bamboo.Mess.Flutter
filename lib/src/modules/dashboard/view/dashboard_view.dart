@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freelance/src/modules/dashboard/view/category_view.dart';
-import 'package:freelance/src/modules/dashboard/view/saved_items_view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
+import 'package:freelance/src/modules/sales/sales_screen.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
@@ -15,25 +14,20 @@ class DashBoardView extends StatefulWidget {
 
 class _DashBoardViewState extends State<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
-  bool _showBills = false;
-  bool _startAnimation = false;
-
-  @override
-  void initState() {
-    startAnimation();
-    super.initState();
-  }
+  final ValueNotifier<bool> _showBills = ValueNotifier(false);
+  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.list, Icons.settings];
+  final _drawerTitles = ['Sales', 'Receipts', 'Items', 'Settings'];
+  final _appBarTitles = ['Receipts', 'Items', 'Settings'];
+  int _drawerIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _key,
       appBar: AppBar(
         toolbarHeight: 120,
         backgroundColor: HexColor('#deb4ff'),
-        systemOverlayStyle:
-            SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
+        systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
         leadingWidth: 120,
         leading: GestureDetector(
           onTap: () => _key.currentState?.openDrawer(),
@@ -41,295 +35,125 @@ class _DashBoardViewState extends State<DashBoardView> {
             margin: const EdgeInsets.all(30),
             elevation: 10,
             color: HexColor('#deb4ff'),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: const Icon(Icons.menu, size: 34, color: Colors.white),
           ),
         ),
         centerTitle: true,
         elevation: 4,
-        title: Visibility(
-          visible: !_showBills,
-          replacement: const Text('Saved Bills',
-              style: TextStyle(color: Colors.white, fontSize: 40)),
-          child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            elevation: 10,
-            child: SizedBox(
-              width: 600,
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: 'Search foods here ...',
-                  hintStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black.withOpacity(0.8)),
-                  prefixIcon:
-                      const Icon(Icons.search, color: Colors.black, size: 28),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+        title: [
+          Visibility(
+            visible: !_showBills.value,
+            replacement: const Text('Saved Bills', style: TextStyle(color: Colors.white, fontSize: 40)),
+            child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              elevation: 10,
+              child: SizedBox(
+                width: 600,
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Search foods here ...',
+                    hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
+                    prefixIcon: const Icon(Icons.search, color: Colors.black, size: 28),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
                 ),
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
               ),
             ),
           ),
-        ),
+          ...List.generate(3, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
+        ][_drawerIndex],
         actions: [
-          GestureDetector(
-            onTap: () {
-              setState(() => _showBills = _showBills ? false : true);
-              startAnimation();
-            },
-            child: Card(
-              margin: const EdgeInsets.all(30),
-              elevation: 10,
-              color: HexColor('#deb4ff'),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (child, anim) => RotationTransition(
-                    turns: child.key == const ValueKey('icon1')
-                        ? Tween<double>(begin: 1, end: 0.75).animate(anim)
-                        : Tween<double>(begin: 0.75, end: 1).animate(anim),
-                    child: FadeTransition(opacity: anim, child: child),
+          Visibility(
+            visible: _drawerIndex == 0,
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _showBills.value = _showBills.value ? false : true);
+              },
+              child: Card(
+                margin: const EdgeInsets.all(30),
+                elevation: 10,
+                color: HexColor('#deb4ff'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder: (child, anim) => RotationTransition(
+                      turns: child.key == const ValueKey('icon1') ? Tween<double>(begin: 1, end: 0.75).animate(anim) : Tween<double>(begin: 0.75, end: 1).animate(anim),
+                      child: FadeTransition(opacity: anim, child: child),
+                    ),
+                    child: _showBills.value ? const Icon(Icons.close, key: ValueKey('icon1'), size: 34) : const Icon(Icons.save, key: ValueKey('icon2'), size: 34),
                   ),
-                  child: _showBills
-                      ? const Icon(Icons.close,
-                          key: ValueKey('icon1'), size: 34)
-                      : const Icon(Icons.save,
-                          key: ValueKey('icon2'), size: 34),
                 ),
               ),
             ),
           ),
         ],
       ),
-      drawer: Drawer(
-        width: 600,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: HexColor('#deb4ff'),
-              ),
-              accountName: const Text(
-                "Owner",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              accountEmail: const Text(
-                "Bamboo Mess",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(8),
-              leading: const Icon(
-                Icons.home,
-                size: 32,
-              ),
-              title: const Text(
-                "Home",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(8),
-              leading: const Icon(
-                Icons.receipt,
-                size: 32,
-              ),
-              title: const Text(
-                "Receipt",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const ReceiptsScreen(),
+      drawer: SafeArea(
+        child: Drawer(
+          width: 600,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            margin: const EdgeInsets.all(20),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                const SizedBox(
+                  height: 132,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(padding: EdgeInsets.only(top: 24), child: Text('BAMBOO MESS', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600))),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8), child: Divider(color: Colors.black)),
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(8),
-              leading: const Icon(
-                Icons.list,
-                size: 32,
-              ),
-              title: const Text(
-                "Items",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
                 ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
+                const SizedBox(height: 12),
+                ...List.generate(
+                  4,
+                  (i) {
+                    final selected = _drawerIndex == i;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                      child: ListTile(
+                        selected: selected,
+                        selectedTileColor: HexColor('#deb4ff'),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        leading: Icon(_drawerIcons[i], size: 32, color: Colors.black),
+                        title: Text(_drawerTitles[i], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black)),
+                        onTap: () => setState(() => _drawerIndex = i),
+                      ),
+                    );
+                  },
+                )
+              ],
             ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(8),
-              leading: const Icon(
-                Icons.settings,
-                size: 32,
-              ),
-              title: const Text(
-                "Settings",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
         ),
       ),
-      body: Visibility(
-        visible: !_showBills,
-        replacement: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return AnimatedContainer(
-              curve: Curves.easeInOut,
-              duration: Duration(
-                milliseconds: 300 + (index * 200),
-              ),
-              transform:
-                  Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
-              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
-              width: 500,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(
-                      color:
-                          index == 1 ? HexColor('#deb4ff') : Colors.transparent,
-                      width: 4),
-                ),
-                margin: const EdgeInsets.only(
-                    bottom: 24, left: 12, right: 24, top: 24),
-                elevation: 4,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 24),
-                      child: Text(
-                        'Billing',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 128, vertical: 8),
-                      child: Divider(color: Colors.black),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: 5,
-                        itemBuilder: (context, i) {
-                          i += 1;
-                          return ListTile(
-                            dense: true,
-                            title: const Text(
-                              'Pani puri ',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.6),
-                            ),
-                            subtitle: Text(
-                              'Qty : $i',
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.6),
-                            ),
-                            trailing: Text(
-                              '\$ ${i}00',
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.6),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                      child: Divider(color: Colors.black),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 24),
-                      child: Text(
-                        'Total Amount : 100',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.6),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-        child: Row(
-          children: [
-            Flexible(
-              flex: 5,
-              child: CategoryView(startAnimation: _startAnimation),
-            ),
-            const Flexible(
-              flex: 2,
-              child: SavedItemsView(),
-            ),
-          ],
-        ),
-      ),
+      body: [
+        SalesView(showBills: _showBills),
+        const ReceiptsView(),
+        const SizedBox.shrink(),
+        const SizedBox.shrink(),
+      ][_drawerIndex],
     );
   }
 
-  void startAnimation() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() => _startAnimation = true);
-    });
-    _startAnimation = false;
+  @override
+  void dispose() {
+    _showBills.dispose();
+    super.dispose();
   }
 }
