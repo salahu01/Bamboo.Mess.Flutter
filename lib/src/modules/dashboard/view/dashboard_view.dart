@@ -15,9 +15,9 @@ class DashBoardView extends StatefulWidget {
 class _DashBoardViewState extends State<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
   final ValueNotifier<bool> _showBills = ValueNotifier(false);
-  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.list, Icons.settings, Icons.person];
-  final _drawerTitles = ['Sales', 'Receipts', 'Items', 'Settings', 'Labours'];
-  final _appBarTitles = ['Receipts', 'Items', 'Settings', 'Labours'];
+  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person];
+  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours'];
+  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours'];
   int _drawerIndex = 0;
 
   @override
