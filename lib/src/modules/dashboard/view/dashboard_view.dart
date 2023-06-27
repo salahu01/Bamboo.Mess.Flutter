@@ -15,9 +15,9 @@ class DashBoardView extends StatefulWidget {
 class _DashBoardViewState extends State<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
   final ValueNotifier<bool> _showBills = ValueNotifier(false);
-  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.list, Icons.settings];
-  final _drawerTitles = ['Sales', 'Receipts', 'Items', 'Settings'];
-  final _appBarTitles = ['Receipts', 'Items', 'Settings'];
+  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.list, Icons.settings, Icons.person];
+  final _drawerTitles = ['Sales', 'Receipts', 'Items', 'Settings', 'Labours'];
+  final _appBarTitles = ['Receipts', 'Items', 'Settings', 'Labours'];
   int _drawerIndex = 0;
 
   @override
@@ -65,7 +65,7 @@ class _DashBoardViewState extends State<DashBoardView> {
               ),
             ),
           ),
-          ...List.generate(3, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
+          ...List.generate(4, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
         ][_drawerIndex],
         actions: [
           Visibility(
@@ -120,7 +120,7 @@ class _DashBoardViewState extends State<DashBoardView> {
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(
-                  4,
+                  5,
                   (i) {
                     final selected = _drawerIndex == i;
                     return Padding(
@@ -145,6 +145,7 @@ class _DashBoardViewState extends State<DashBoardView> {
       body: [
         SalesView(showBills: _showBills),
         const ReceiptsView(),
+        const SizedBox.shrink(),
         const SizedBox.shrink(),
         const SizedBox.shrink(),
       ][_drawerIndex],
