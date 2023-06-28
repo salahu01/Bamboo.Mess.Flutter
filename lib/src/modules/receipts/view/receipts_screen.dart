@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:freelance/src/core/theme/app_colors.dart';
 
 class ReceiptsView extends StatefulWidget {
   const ReceiptsView({super.key});
@@ -14,7 +14,7 @@ class _ReceiptsViewState extends State<ReceiptsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor('#deb4ff').withOpacity(0.2),
+      backgroundColor: primary.withOpacity(0.2),
       body: Row(
         children: [
           Flexible(
@@ -71,7 +71,7 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                                     child: ListTile(
                                       selected: selected,
-                                      selectedTileColor: HexColor('#deb4ff'),
+                                      selectedTileColor: primary,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                       leading: const Icon(Icons.payments, size: 34, color: Colors.black),

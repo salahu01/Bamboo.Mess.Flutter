@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:freelance/src/core/theme/app_colors.dart';
 
 class Dialogs {
   static Future<void> singleFieldDailog(
@@ -34,11 +34,11 @@ class Dialogs {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: HexColor('#deb4ff')),
+                  borderSide: BorderSide(color: primary),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: HexColor('#deb4ff')),
+                  borderSide: BorderSide(color: primary),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -50,7 +50,7 @@ class Dialogs {
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: HexColor('#deb4ff')),
+                  borderSide: BorderSide(color: primary),
                 ),
                 hintText: validatorText,
                 hintStyle: const TextStyle(
@@ -68,7 +68,7 @@ class Dialogs {
                 addCatrgoryCtrl.clear();
                 Navigator.pop(context);
               },
-              child: Text('Cancel', style: TextStyle(color: HexColor('#deb4ff'), fontSize: 18)),
+              child: Text('Cancel', style: TextStyle(color: primary, fontSize: 18)),
             ),
             TextButton(
               onPressed: () {
@@ -77,7 +77,7 @@ class Dialogs {
                   Navigator.pop(context);
                 }
               },
-              child: Text(leftButtonText, style: TextStyle(color: HexColor('#deb4ff'), fontSize: 18)),
+              child: Text(leftButtonText, style: TextStyle(color: primary, fontSize: 18)),
             ),
           ],
         );

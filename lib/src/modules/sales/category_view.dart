@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
+import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/custom/show_dialog.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key, required this.startAnimation});
@@ -64,7 +64,7 @@ class _CategoryViewState extends State<CategoryView> {
         return Card(
           key: Key(children[i].toString()),
           elevation: 8,
-          color: HexColor('#deb4ff'),
+          color: primary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: const Center(
             child: Text(
@@ -111,7 +111,7 @@ class _CategoryViewState extends State<CategoryView> {
               onTap: () => Dialogs.singleFieldDailog(context, title: 'Add Category', validatorText: 'Enter category here', leftButtonText: 'Save'),
               child: Card(
                 elevation: 8,
-                color: HexColor('#deb4ff'),
+                color: primary,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
@@ -136,7 +136,7 @@ class _CategoryViewState extends State<CategoryView> {
                     child: Card(
                       elevation: 8,
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      color: index == selectedIndex ? HexColor('#deb4ff') : Colors.white,
+                      color: index == selectedIndex ? primary : Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 48),
