@@ -4,15 +4,13 @@ class SlideBillMenu extends StatefulWidget {
   final Widget child;
   final List<Widget> menuItems;
 
-  const SlideBillMenu({Key? key, required this.child, required this.menuItems})
-      : super(key: key);
+  const SlideBillMenu({Key? key, required this.child, required this.menuItems}) : super(key: key);
 
   @override
   State<SlideBillMenu> createState() => _SlideBillMenuState();
 }
 
-class _SlideBillMenuState extends State<SlideBillMenu>
-    with SingleTickerProviderStateMixin {
+class _SlideBillMenuState extends State<SlideBillMenu> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -32,15 +30,12 @@ class _SlideBillMenuState extends State<SlideBillMenu>
 
   @override
   Widget build(BuildContext context) {
-    final animation =
-        Tween(begin: const Offset(0.0, 0.0), end: const Offset(-0.2, 0.0))
-            .animate(CurveTween(curve: Curves.bounceOut).animate(_controller));
+    final animation = Tween(begin: const Offset(0.0, 0.0), end: const Offset(-0.2, 0.0)).animate(CurveTween(curve: Curves.bounceOut).animate(_controller));
 
     return GestureDetector(
       onHorizontalDragUpdate: (data) {
         setState(() {
-          _controller.value -=
-              (data.primaryDelta! / (context.size!.width * 0.2));
+          _controller.value -= (data.primaryDelta! / (context.size!.width * 0.2));
         });
       },
       child: LayoutBuilder(

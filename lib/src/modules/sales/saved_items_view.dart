@@ -82,7 +82,7 @@ class SavedItemsView extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
-        backgroundColor: primary,
+        backgroundColor: primary.value,
       ),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.08,

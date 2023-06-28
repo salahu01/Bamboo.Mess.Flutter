@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 import 'package:freelance/src/modules/sales/sales_screen.dart';
+import 'package:freelance/src/modules/settings/settings_view.dart';
 
 class DashBoardView extends StatefulWidget {
   const DashBoardView({super.key});
@@ -20,12 +21,20 @@ class _DashBoardViewState extends State<DashBoardView> {
   int _drawerIndex = 0;
 
   @override
+  void initState() {
+    primary.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
       appBar: AppBar(
         toolbarHeight: 120,
-        backgroundColor: primary,
+        backgroundColor: primary.value,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
         leadingWidth: 120,
         leading: GestureDetector(
@@ -33,7 +42,7 @@ class _DashBoardViewState extends State<DashBoardView> {
           child: Card(
             margin: const EdgeInsets.all(30),
             elevation: 10,
-            color: primary,
+            color: primary.value,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: const Icon(Icons.menu, size: 34, color: Colors.white),
           ),
@@ -76,7 +85,7 @@ class _DashBoardViewState extends State<DashBoardView> {
               child: Card(
                 margin: const EdgeInsets.all(30),
                 elevation: 10,
-                color: primary,
+                color: primary.value,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -126,7 +135,7 @@ class _DashBoardViewState extends State<DashBoardView> {
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                       child: ListTile(
                         selected: selected,
-                        selectedTileColor: primary,
+                        selectedTileColor: primary.value,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         leading: Icon(_drawerIcons[i], size: 32, color: Colors.black),
@@ -145,7 +154,7 @@ class _DashBoardViewState extends State<DashBoardView> {
         SalesView(showBills: _showBills),
         const ReceiptsView(),
         const SizedBox.shrink(),
-        const SizedBox.shrink(),
+        const SettingsView(),
         const SizedBox.shrink(),
       ][_drawerIndex],
     );

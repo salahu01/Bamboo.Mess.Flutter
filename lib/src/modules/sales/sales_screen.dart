@@ -38,7 +38,7 @@ class _SalesViewState extends State<SalesView> {
             margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
             width: 500,
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: index == 1 ? primary : Colors.transparent, width: 4)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: index == 1 ? primary.value : Colors.transparent, width: 4)),
               margin: const EdgeInsets.only(bottom: 24, left: 12, right: 24, top: 24),
               elevation: 4,
               child: Column(

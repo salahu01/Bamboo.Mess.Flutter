@@ -14,7 +14,7 @@ class _ReceiptsViewState extends State<ReceiptsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primary.withOpacity(0.2),
+      backgroundColor: primary.value.withOpacity(0.2),
       body: Row(
         children: [
           Flexible(
@@ -60,7 +60,7 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(16),
-                              child: Text('Sunday, May 28, 2023', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: primary)),
+                              child: Text('Sunday, May 28, 2023', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: primary.value)),
                             ),
                             Column(
                               children: List.generate(
@@ -71,7 +71,7 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                                     child: ListTile(
                                       selected: selected,
-                                      selectedTileColor: primary,
+                                      selectedTileColor: primary.value,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                       leading: const Icon(Icons.payments, size: 34, color: Colors.black),

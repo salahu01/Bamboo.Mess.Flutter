@@ -34,11 +34,11 @@ class Dialogs {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: primary),
+                  borderSide: BorderSide(color: primary.value),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: primary),
+                  borderSide: BorderSide(color: primary.value),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -50,7 +50,7 @@ class Dialogs {
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: primary),
+                  borderSide: BorderSide(color: primary.value),
                 ),
                 hintText: validatorText,
                 hintStyle: const TextStyle(
@@ -68,7 +68,7 @@ class Dialogs {
                 addCatrgoryCtrl.clear();
                 Navigator.pop(context);
               },
-              child: Text('Cancel', style: TextStyle(color: primary, fontSize: 18)),
+              child: Text('Cancel', style: TextStyle(color: primary.value, fontSize: 18)),
             ),
             TextButton(
               onPressed: () {
@@ -77,7 +77,7 @@ class Dialogs {
                   Navigator.pop(context);
                 }
               },
-              child: Text(leftButtonText, style: TextStyle(color: primary, fontSize: 18)),
+              child: Text(leftButtonText, style: TextStyle(color: primary.value, fontSize: 18)),
             ),
           ],
         );

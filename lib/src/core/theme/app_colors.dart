@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 final primaryColors = [
   Colors.pinkAccent,
-  Colors.blueAccent,
-  Colors.greenAccent,
-  Colors.redAccent,
+  Colors.blueGrey,
+  Colors.lightGreen[800],
+  Colors.red,
 ];
 
-//Selected primary
-Color primary = Colors.pinkAccent;
+//Selected primary.value.value
+final ValueNotifier<Color> primary = ValueNotifier(Colors.pinkAccent);

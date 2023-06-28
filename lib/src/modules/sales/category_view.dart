@@ -64,7 +64,7 @@ class _CategoryViewState extends State<CategoryView> {
         return Card(
           key: Key(children[i].toString()),
           elevation: 8,
-          color: primary,
+          color: primary.value,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: const Center(
             child: Text(
@@ -111,7 +111,7 @@ class _CategoryViewState extends State<CategoryView> {
               onTap: () => Dialogs.singleFieldDailog(context, title: 'Add Category', validatorText: 'Enter category here', leftButtonText: 'Save'),
               child: Card(
                 elevation: 8,
-                color: primary,
+                color: primary.value,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
@@ -136,7 +136,7 @@ class _CategoryViewState extends State<CategoryView> {
                     child: Card(
                       elevation: 8,
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      color: index == selectedIndex ? primary : Colors.white,
+                      color: index == selectedIndex ? primary.value : Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 48),
