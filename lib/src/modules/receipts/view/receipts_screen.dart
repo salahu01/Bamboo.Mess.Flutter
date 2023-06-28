@@ -58,9 +58,9 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                           primary: false,
                           shrinkWrap: true,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Text('Sunday, May 28, 2023', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.pinkAccent)),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text('Sunday, May 28, 2023', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: primary)),
                             ),
                             Column(
                               children: List.generate(

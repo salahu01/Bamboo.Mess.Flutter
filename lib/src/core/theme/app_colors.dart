@@ -1,3 +1,13 @@
-import 'package:hexcolor/hexcolor.dart';
+import 'package:flutter/material.dart';
 
-final primary = HexColor('#deb4ff');
+//Accent colors
+
+final primaryColors = [
+  Colors.pinkAccent,
+  Colors.blueAccent,
+  Colors.greenAccent,
+  Colors.redAccent,
+];
+
+//Selected primary
+Color primary = Colors.pinkAccent;
