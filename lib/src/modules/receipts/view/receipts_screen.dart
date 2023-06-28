@@ -105,69 +105,6 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                 ],
               ),
             ),
-            // child: Column(
-            //   children: [
-            //     TextField(
-            //       decoration: InputDecoration(
-            //         filled: true,
-            //         fillColor: Colors.white,
-            //         hintText: 'Search',
-            //         isDense: true,
-            //         hintStyle: TextStyle(fontSize: 32, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.6)),
-            //         prefixIcon: Padding(
-            //           padding: const EdgeInsets.symmetric(horizontal: 12),
-            //           child: Icon(Icons.search, color: Colors.black.withOpacity(0.6), size: 48),
-            //         ),
-            //         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            //         border: const OutlineInputBorder(borderSide: BorderSide.none),
-            //       ),
-            //       style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.7)),
-            //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: const Divider(indent: 80, color: Colors.black26, height: 0.1),
-            //     ),
-            //     Expanded(
-            //       child: ListView.separated(
-            //         shrinkWrap: true,
-            //         itemCount: 100,
-            //         separatorBuilder: (context, index) => const Divider(indent: 80, color: Colors.black26, height: 0.1),
-            //         itemBuilder: (context, i) {
-            //           return ColoredBox(
-            //             color: i == 0 ? HexColor('#deb4ff').withOpacity(0.8) : Colors.transparent,
-            //             child: const Row(
-            //               children: [
-            //                 Icon(
-            //                   Icons.payments_outlined,
-            //                   size: 42,
-            //                 ),
-            //                 Column(
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   children: [
-            //                     Text(
-            //                       '3,055.00',
-            //                       style: TextStyle(
-            //                         fontSize: 30,
-            //                         fontWeight: FontWeight.w500,
-            //                       ),
-            //                     ),
-            //                     Text(
-            //                       '05:23 PM',
-            //                       style: TextStyle(
-            //                         fontSize: 20,
-            //                         fontWeight: FontWeight.w500,
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 )
-            //               ],
-            //             ),
-            //           );
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ),
           Flexible(
             flex: 2,
@@ -184,29 +121,40 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                         const Padding(
                           padding: EdgeInsets.only(top: 24),
                           child: Text(
-                            'Billing',
-                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                            '3,055.00',
+                            style: TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
                           ),
                         ),
+                        Text(
+                          'Total',
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.grey[900]),
+                        ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 4, left: 24),
+                          padding: EdgeInsets.only(left: 24, top: 8),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Billed : Employee 1',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Employee : Employee 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 8, bottom: 20),
+                                  child: Text('POS: POS 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                ),
+                                Text('Dine in', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                              ],
                             ),
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                           child: Divider(color: Colors.black),
                         ),
                         Expanded(
                           child: ListView.builder(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             physics: const BouncingScrollPhysics(),
-                            itemCount: 5,
+                            itemCount: 32,
                             itemBuilder: (context, i) {
                               i += 1;
                               return ListTile(
@@ -225,21 +173,6 @@ class _ReceiptsViewState extends State<ReceiptsView> {
                                 ),
                               );
                             },
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                          child: Divider(color: Colors.black),
-                        ),
-                        const Text(
-                          'Total : 100.00',
-                          style: TextStyle(fontSize: 38, fontWeight: FontWeight.w700, letterSpacing: 0.6),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [],
                           ),
                         ),
                       ],
