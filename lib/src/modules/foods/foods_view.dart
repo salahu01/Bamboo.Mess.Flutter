@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/custom/show_dialog.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 
 class FoodsView extends StatefulWidget {
   const FoodsView({super.key, required this.startAnimation});
