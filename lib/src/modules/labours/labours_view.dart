@@ -99,25 +99,25 @@ class _LaboursViewState extends State<LaboursView> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   elevation: 4,
-                  child: SizedBox(
+                  child: const SizedBox(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 24),
-                          child: const Icon(Icons.person, size: 200, color: Colors.black),
+                          child: Icon(Icons.person, size: 200, color: Colors.black),
                         ),
-                        const Text(
+                        Text(
                           'Employee',
                           style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.black),
                         ),
                         Text(
                           '+91 0000000',
-                          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
+                          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
                         ),
                         Text(
                           'Male',
-                          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
+                          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
                         ),
                       ],
                     ),

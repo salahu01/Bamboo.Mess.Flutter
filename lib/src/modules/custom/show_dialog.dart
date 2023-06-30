@@ -20,6 +20,7 @@ class Dialogs {
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: SizedBox(
             width: 600,
             child: TextFormField(
