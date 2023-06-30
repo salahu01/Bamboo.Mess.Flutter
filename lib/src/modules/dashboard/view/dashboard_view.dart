@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/foods/foods_view.dart';
 import 'package:freelance/src/modules/labours/labours_view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 import 'package:freelance/src/modules/sales/sales_screen.dart';
@@ -154,7 +155,7 @@ class _DashBoardViewState extends State<DashBoardView> {
       body: [
         SalesView(showBills: _showBills),
         const ReceiptsView(),
-        const SizedBox.shrink(),
+        const FoodsView(startAnimation: true),
         const SettingsView(),
         const LaboursView(),
       ][_drawerIndex],

@@ -4,15 +4,15 @@ import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/custom/show_dialog.dart';
 
-class CategoryView extends StatefulWidget {
-  const CategoryView({super.key, required this.startAnimation});
+class FoodsView extends StatefulWidget {
+  const FoodsView({super.key, required this.startAnimation});
   final bool startAnimation;
 
   @override
-  State<CategoryView> createState() => _CategoryViewState();
+  State<FoodsView> createState() => _FoodsViewState();
 }
 
-class _CategoryViewState extends State<CategoryView> {
+class _FoodsViewState extends State<FoodsView> {
   int selectedIndex = 0;
 
   List<String> items = ['All', 'Rice', 'Kury'];
@@ -61,6 +61,20 @@ class _CategoryViewState extends State<CategoryView> {
     final generatedChildren = List<Widget>.generate(
       children.length,
       (i) {
+        if (i == 0) {
+          return GestureDetector(
+            key: Key(children[i].toString()),
+            onTap: () => Dialogs.singleFieldDailog(context, title: 'Add Food', validatorText: 'Enter food name here', leftButtonText: 'Save'),
+            child: Card(
+              elevation: 8,
+              color: primary.value,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              child: const Center(
+                child: Icon(Icons.add, size: 62, color: Colors.white),
+              ),
+            ),
+          );
+        }
         return Card(
           key: Key(children[i].toString()),
           elevation: 8,
@@ -83,7 +97,7 @@ class _CategoryViewState extends State<CategoryView> {
       builder: (children) {
         return GridView.count(
           key: _gridViewKey,
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 1.8,
           shrinkWrap: true,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
@@ -106,6 +120,19 @@ class _CategoryViewState extends State<CategoryView> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () => Dialogs.singleFieldDailog(context, title: 'Add Category', validatorText: 'Enter category here', leftButtonText: 'Save'),
+              child: Card(
+                elevation: 8,
+                color: primary.value,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Icon(Icons.add, size: 46, color: Colors.white),
+                ),
+              ),
+            ),
             ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
