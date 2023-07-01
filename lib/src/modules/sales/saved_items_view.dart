@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';
 
 class SavedItemsView extends StatelessWidget {
   const SavedItemsView({super.key});
@@ -35,15 +36,24 @@ class SavedItemsView extends StatelessWidget {
                     dense: true,
                     title: const Text(
                       'Pani puri ',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                     subtitle: Text(
                       'Qty : $i',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                     trailing: Text(
                       '\$ ${i}00',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.6),
                     ),
                   );
                 },
@@ -55,7 +65,10 @@ class SavedItemsView extends StatelessWidget {
             ),
             const Text(
               'Total Amount : 100',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.6),
             ),
             Padding(
               padding: const EdgeInsets.all(12),
@@ -63,7 +76,10 @@ class SavedItemsView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   customBotton("SAVE", () {}, context),
-                  customBotton("CHARGE", () {}, context),
+                  customBotton("CHARGE", () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const ChargeScreen()));
+                  }, context),
                 ],
               ),
             ),
@@ -81,7 +97,9 @@ class SavedItemsView extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.01)),
         backgroundColor: primary.value,
       ),
       child: SizedBox(

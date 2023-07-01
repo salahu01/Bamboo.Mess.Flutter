@@ -142,7 +142,10 @@ class _DashBoardViewState extends State<DashBoardView> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         leading: Icon(_drawerIcons[i], size: 32, color: Colors.black),
                         title: Text(_drawerTitles[i], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black)),
-                        onTap: () => setState(() => _drawerIndex = i),
+                        onTap: (){
+                          setState(() => _drawerIndex = i);
+                          Navigator.pop(context);
+                        } 
                       ),
                     );
                   },

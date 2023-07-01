@@ -17,7 +17,7 @@ class _CategoryViewState extends State<CategoryView> {
   List<String> items = ['All', 'Rice', 'Kury'];
   final lockedIndices = <int>[];
 
-  List<int> children = List.generate(60, (index) => index);
+  List<int> children = List.generate(25, (index) => index);
 
   final _scrollController = ScrollController();
   final _gridViewKey = GlobalKey();
@@ -36,8 +36,10 @@ class _CategoryViewState extends State<CategoryView> {
         children: [
           Expanded(
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(
+                  left: 24, right: 12, top: 24, bottom: 24),
               elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -46,7 +48,8 @@ class _CategoryViewState extends State<CategoryView> {
             ),
           ),
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
             elevation: 4,
             child: buildBottom(context, width),
@@ -65,11 +68,27 @@ class _CategoryViewState extends State<CategoryView> {
           elevation: 8,
           color: primary.value,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: const Center(
-            child: Text(
-              'Thalesseri Biriyani',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
-            ),
+          child: Center(
+            child: i.isOdd
+                ? GestureDetector(
+                    onTap: () => _addFoodOrCatrgoryWidget(),
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(255, 193, 190, 190),
+                      ),
+                      child: const Icon(Icons.add, size: 30),
+                    ),
+                  )
+                : const Text(
+                    'Thalesseri Biriyani',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
           ),
         );
       },
@@ -114,16 +133,20 @@ class _CategoryViewState extends State<CategoryView> {
                 return AnimatedContainer(
                   curve: Curves.easeInOut,
                   duration: Duration(milliseconds: 300 + (index * 200)),
-                  transform: Matrix4.translationValues(widget.startAnimation ? 0 : width * 0.4, 0, 0),
+                  transform: Matrix4.translationValues(
+                      widget.startAnimation ? 0 : width * 0.4, 0, 0),
                   child: GestureDetector(
                     onTap: () {
                       selectecdIndexUpdate(index);
                     },
                     child: Card(
                       elevation: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      color: index == selectedIndex ? primary.value : Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      color:
+                          index == selectedIndex ? primary.value : Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 48),
                         child: Center(
@@ -131,7 +154,9 @@ class _CategoryViewState extends State<CategoryView> {
                             items[index],
                             style: TextStyle(
                               fontSize: 20,
-                              color: index == selectedIndex ? Colors.white : Colors.black,
+                              color: index == selectedIndex
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                         ),
@@ -165,5 +190,9 @@ class _CategoryViewState extends State<CategoryView> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {});
     });
+  }
+
+  _addFoodOrCatrgoryWidget() {
+   
   }
 }
