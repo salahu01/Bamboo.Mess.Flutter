@@ -20,11 +20,11 @@ var employeename = [
   'Employee 5',
 ];
 
-String dropdownvalues = "Cash In Hand";
+String dropdownvalues = "Dine in";
 
 var paymentmethod = [
-  'Cash In Hand',
-  'Cash At Bank',
+  'Dine in',
+  'Parcel',
 ];
 
 class _ChargeScreenState extends State<ChargeScreen> {

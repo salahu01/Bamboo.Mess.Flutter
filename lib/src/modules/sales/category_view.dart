@@ -77,9 +77,13 @@ class _CategoryViewState extends State<CategoryView> {
                       height: 90,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 193, 190, 190),
+                        color: Color.fromARGB(255, 70, 70, 70),
                       ),
-                      child: const Icon(Icons.add, size: 30),
+                      child: const Icon(
+                        Icons.add,
+                        size: 60,
+                        color: Colors.white,
+                      ),
                     ),
                   )
                 : const Text(
@@ -193,6 +197,25 @@ class _CategoryViewState extends State<CategoryView> {
   }
 
   _addFoodOrCatrgoryWidget() {
-   
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                   
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }
