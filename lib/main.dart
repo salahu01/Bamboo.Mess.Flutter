@@ -1,9 +1,14 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/services/db/db.services.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await DataBase().connectDb();
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MyApp()));
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -25,7 +30,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "montserratfamily",
       ),
       debugShowCheckedModeBanner: false,
-      home:  const DashBoardView(),
+      home: const DashBoardView(),
     );
   }
 }
