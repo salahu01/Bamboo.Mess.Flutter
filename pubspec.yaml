@@ -14,7 +14,11 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_reorderable_grid_view: ^4.0.0
-  hexcolor: ^3.0.1
+  esc_pos_bluetooth: ^0.4.1
+  permission_handler: ^10.4.3
+  bloc: ^8.1.2
+  sizer: ^2.0.15
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:

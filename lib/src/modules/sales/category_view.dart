@@ -89,9 +89,10 @@ class _CategoryViewState extends State<CategoryView> {
                 : const Text(
                     'Thalesseri Biriyani',
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
           ),
         );
@@ -207,9 +208,7 @@ class _CategoryViewState extends State<CategoryView> {
               height: MediaQuery.of(context).size.height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                   
-                  ],
+                  children: [],
                 ),
               ),
             )
