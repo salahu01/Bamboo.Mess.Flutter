@@ -1,21 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/sales/category_view.dart';
-import 'package:freelance/src/modules/sales/saved_items_view.dart';
+import 'dart:developer';
 
-class SalesView extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/sales/provider/sales.provider.dart';
+import 'package:freelance/src/modules/sales/view/category_view.dart';
+import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
+
+class SalesView extends ConsumerStatefulWidget {
   const SalesView({super.key, required this.showBills});
   final ValueNotifier<bool> showBills;
 
   @override
-  State<SalesView> createState() => _SalesViewState();
+  ConsumerState<SalesView> createState() => _SalesViewState();
 }
 
-class _SalesViewState extends State<SalesView> {
+class _SalesViewState extends ConsumerState<SalesView> {
   bool _startAnimation = false;
   @override
   void initState() {
-    startAnimation();
     widget.showBills.addListener(() {
       if (mounted) startAnimation();
     });
@@ -93,18 +96,22 @@ class _SalesViewState extends State<SalesView> {
           );
         },
       ),
-      child: Row(
-        children: [
-          Flexible(
-            flex: 5,
-            child: CategoryView(startAnimation: _startAnimation),
+      child: ref.watch(categoryProvider).when(
+            data: (data) => Row(
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: CategoryView( categories: data),
+                ),
+                const Flexible(
+                  flex: 2,
+                  child: SavedItemsView(),
+                ),
+              ],
+            ),
+            error: (error, stackTrace) => Text('$error'),
+            loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
-          const Flexible(
-            flex: 2,
-            child: SavedItemsView(),
-          ),
-        ],
-      ),
     );
   }
 

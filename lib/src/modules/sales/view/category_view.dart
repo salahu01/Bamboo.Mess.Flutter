@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
+import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 
 class CategoryView extends StatefulWidget {
-  const CategoryView({super.key, required this.startAnimation});
-  final bool startAnimation;
+  const CategoryView({super.key, required this.categories});
+  final List<CategoryModel> categories;
 
   @override
   State<CategoryView> createState() => _CategoryViewState();
@@ -13,20 +14,10 @@ class CategoryView extends StatefulWidget {
 
 class _CategoryViewState extends State<CategoryView> {
   int selectedIndex = 0;
-
-  List<String> items = ['All', 'Rice', 'Kury'];
   final lockedIndices = <int>[];
-
-  List<int> children = List.generate(25, (index) => index);
 
   final _scrollController = ScrollController();
   final _gridViewKey = GlobalKey();
-
-  @override
-  void initState() {
-    startAnimation();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +27,8 @@ class _CategoryViewState extends State<CategoryView> {
         children: [
           Expanded(
             child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.only(
-                  left: 24, right: 12, top: 24, bottom: 24),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
               elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -48,8 +37,7 @@ class _CategoryViewState extends State<CategoryView> {
             ),
           ),
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
             elevation: 4,
             child: buildBottom(context, width),
@@ -61,15 +49,15 @@ class _CategoryViewState extends State<CategoryView> {
 
   Widget _getReorderableWidget() {
     final generatedChildren = List<Widget>.generate(
-      children.length,
+      (widget.categories[selectedIndex].products?.length ?? 0) + 1,
       (i) {
         return Card(
-          key: Key(children[i].toString()),
+          key: Key('$i'),
           elevation: 8,
           color: primary.value,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: Center(
-            child: i.isOdd
+            child: i == (widget.categories[selectedIndex].products?.length ?? 1)
                 ? GestureDetector(
                     onTap: () => _addFoodOrCatrgoryWidget(),
                     child: Container(
@@ -86,12 +74,9 @@ class _CategoryViewState extends State<CategoryView> {
                       ),
                     ),
                   )
-                : const Text(
-                    'Thalesseri Biriyani',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                : Text(
+                    widget.categories[selectedIndex].products?[i]?.name ?? '',
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
                   ),
           ),
         );
@@ -131,37 +116,26 @@ class _CategoryViewState extends State<CategoryView> {
             ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: items.length,
+              itemCount: widget.categories.length,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               itemBuilder: (ctx, index) {
-                return AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  duration: Duration(milliseconds: 300 + (index * 200)),
-                  transform: Matrix4.translationValues(
-                      widget.startAnimation ? 0 : width * 0.4, 0, 0),
-                  child: GestureDetector(
-                    onTap: () {
-                      selectecdIndexUpdate(index);
-                    },
-                    child: Card(
-                      elevation: 8,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 4),
-                      color:
-                          index == selectedIndex ? primary.value : Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 48),
-                        child: Center(
-                          child: Text(
-                            items[index],
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: index == selectedIndex
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                return GestureDetector(
+                  onTap: () {
+                    selectecdIndexUpdate(index);
+                  },
+                  child: Card(
+                    elevation: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    color: index == selectedIndex ? primary.value : Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 48),
+                      child: Center(
+                        child: Text(
+                          widget.categories[index].categaryName ?? '',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: index == selectedIndex ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -178,8 +152,8 @@ class _CategoryViewState extends State<CategoryView> {
 
   void _handleReorder(List<OrderUpdateEntity> onReorderList) {
     for (final reorder in onReorderList) {
-      final child = children.removeAt(reorder.oldIndex);
-      children.insert(reorder.newIndex, child);
+      final child = widget.categories[selectedIndex].products?.removeAt(reorder.oldIndex);
+      widget.categories[selectedIndex].products?.insert(reorder.newIndex, child);
     }
     setState(() {});
   }
@@ -207,9 +181,7 @@ class _CategoryViewState extends State<CategoryView> {
               height: MediaQuery.of(context).size.height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                   
-                  ],
+                  children: [],
                 ),
               ),
             )

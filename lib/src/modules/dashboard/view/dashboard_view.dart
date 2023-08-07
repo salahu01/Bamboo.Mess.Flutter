@@ -4,7 +4,7 @@ import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/foods/foods_view.dart';
 import 'package:freelance/src/modules/labours/labours_view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
-import 'package:freelance/src/modules/sales/sales_screen.dart';
+import 'package:freelance/src/modules/sales/view/sales_screen.dart';
 import 'package:freelance/src/modules/settings/settings_view.dart';
 
 class DashBoardView extends StatefulWidget {
