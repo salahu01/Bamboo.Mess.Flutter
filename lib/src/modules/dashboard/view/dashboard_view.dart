@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/foods/foods_view.dart';
 import 'package:freelance/src/modules/labours/labours_view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
@@ -22,10 +23,11 @@ class _DashBoardViewState extends State<DashBoardView> {
     Icons.receipt_outlined,
     Icons.category,
     Icons.settings,
-    Icons.person
+    Icons.person,
+    Icons.bluetooth
   ];
-  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours'];
-  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours'];
+  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours','Bluetooth'];
+  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours','Bluetooth Connection'];
   int _drawerIndex = 0;
 
   @override
@@ -95,7 +97,7 @@ class _DashBoardViewState extends State<DashBoardView> {
             ),
           ),
           ...List.generate(
-              4,
+              5,
               (i) => Text(_appBarTitles[i],
                   style: const TextStyle(color: Colors.white, fontSize: 40)))
         ][_drawerIndex],
@@ -169,7 +171,7 @@ class _DashBoardViewState extends State<DashBoardView> {
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(
-                  5,
+                  6,
                   (i) {
                     final selected = _drawerIndex == i;
                     return Padding(
@@ -207,6 +209,7 @@ class _DashBoardViewState extends State<DashBoardView> {
         const FoodsView(startAnimation: true),
         const SettingsView(),
         const LaboursView(),
+        const BluetoothConnection(),
       ][_drawerIndex],
     );
   }

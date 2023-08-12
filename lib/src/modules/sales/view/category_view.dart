@@ -177,29 +177,4 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
       setState(() {});
     });
   }
-
-  // _addFoodOrCatrgoryWidget() {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
-  //         actions: [
-  //           SizedBox(
-  //             width: MediaQuery.of(context).size.width * 0.5,
-  //             height: MediaQuery.of(context).size.height * 0.4,
-  //             child: SingleChildScrollView(
-  //               child: Column(
-  //                 children: [
-
-  //                 ],
-  //               ),
-  //             ),
-  //           )
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 }
