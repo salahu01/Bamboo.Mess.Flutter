@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/sales/provider/sales.provider.dart';
+import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:freelance/src/modules/sales/view/category_view.dart';
 import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
 

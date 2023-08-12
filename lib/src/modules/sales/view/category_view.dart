@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 
-class CategoryView extends StatefulWidget {
+class CategoryView extends ConsumerStatefulWidget {
   const CategoryView({super.key, required this.categories});
   final List<CategoryModel> categories;
 
   @override
-  State<CategoryView> createState() => _CategoryViewState();
+  ConsumerState<CategoryView> createState() => _CategoryViewState();
 }
 
-class _CategoryViewState extends State<CategoryView> {
+class _CategoryViewState extends ConsumerState<CategoryView> {
   int selectedIndex = 0;
   final lockedIndices = <int>[];
 
@@ -59,7 +61,9 @@ class _CategoryViewState extends State<CategoryView> {
           child: Center(
             child: i == (widget.categories[selectedIndex].products?.length ?? 1)
                 ? GestureDetector(
-                    onTap: () => _addFoodOrCatrgoryWidget(),
+                    onTap: () {
+                      Dialogs.singleFieldDailog(context,ids:widget.categories[selectedIndex].productIds, categoryName: widget.categories[selectedIndex].categaryName);
+                    },
                     child: Container(
                       width: 90,
                       height: 90,
@@ -113,12 +117,16 @@ class _CategoryViewState extends State<CategoryView> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.categories.length,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              itemBuilder: (ctx, index) {
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 12),
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.add, color: primary.value, size: 40),
+              ),
+            ),
+            ...List.generate(
+              widget.categories.length,
+              (index) {
                 return GestureDetector(
                   onTap: () {
                     selectecdIndexUpdate(index);
@@ -170,24 +178,28 @@ class _CategoryViewState extends State<CategoryView> {
     });
   }
 
-  _addFoodOrCatrgoryWidget() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          actions: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [],
-                ),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
+  // _addFoodOrCatrgoryWidget() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.01)),
+  //         actions: [
+  //           SizedBox(
+  //             width: MediaQuery.of(context).size.width * 0.5,
+  //             height: MediaQuery.of(context).size.height * 0.4,
+  //             child: SingleChildScrollView(
+  //               child: Column(
+  //                 children: [
+
+  //                 ],
+  //               ),
+  //             ),
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

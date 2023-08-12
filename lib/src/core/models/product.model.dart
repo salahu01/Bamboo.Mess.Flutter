@@ -5,7 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 class ProductModel {
   final String? id;
   final String? name;
-  final int? price;
+  final num? price;
   final String? categaryName;
 
   const ProductModel({
