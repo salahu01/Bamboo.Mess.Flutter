@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 
 class ChargeScreen extends StatefulWidget {
   const ChargeScreen({super.key});
@@ -221,7 +223,13 @@ class _ChargeScreenState extends State<ChargeScreen> {
                         ),
                         const SizedBox(height: 45),
                         InkWell(
-                          onTap: () {},
+                          onTap: () async {
+                            BlocProvider.of<PrinterConnectivityCubit>(context)
+                                .printerBluetoothManager
+                                .printTicket(await BlocProvider.of<
+                                        PrinterConnectivityCubit>(context)
+                                    .generateBtPrint());
+                          },
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.4,
                             height: MediaQuery.of(context).size.height * 0.1,
