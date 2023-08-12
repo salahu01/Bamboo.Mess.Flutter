@@ -20,39 +20,44 @@ class BluetoothConnection extends StatefulWidget {
 class _BluetoothConnectionState extends State<BluetoothConnection> {
   List<PrinterBluetooth> _devices = [];
   PrinterBluetooth? selectedDevice;
- late PrinterConnectivityCubit printerConnectivityCubit;
-      
+  late PrinterConnectivityCubit printerConnectivityCubit;
+
   int? selectedIndex;
- late  PrinterBluetoothManager printerManager;  
- 
- @override
- initState(){
-  super.initState();
-  printerConnectivityCubit=BlocProvider.of<PrinterConnectivityCubit>(context);
-  printerManager=printerConnectivityCubit.printerBluetoothManager;
- }
- 
- @override
+  late PrinterBluetoothManager printerManager;
+
+  @override
+  initState() {
+    super.initState();
+    printerConnectivityCubit =
+        BlocProvider.of<PrinterConnectivityCubit>(context);
+    printerManager = printerConnectivityCubit.printerBluetoothManager;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: StreamBuilder<bool>(
-        stream: printerManager.isScanningStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton(
-              onPressed: _stopScanDevices,
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.stop),
-            );
-          } else {
-            return FloatingActionButton(
-              backgroundColor: Colors.amber,
-              onPressed: () => _startScanDevices(),
-              child: const Icon(Icons.search),
-            );
-          }
-        },
+      floatingActionButton: Padding(
+        padding:
+            EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.02),
+        child: StreamBuilder<bool>(
+          stream: printerManager.isScanningStream,
+          initialData: false,
+          builder: (context, snapshot) {
+            if (snapshot.data!) {
+              return FloatingActionButton(
+                onPressed: _stopScanDevices,
+                backgroundColor: Colors.red,
+                child: const Icon(Icons.stop),
+              );
+            } else {
+              return FloatingActionButton(
+                backgroundColor: Colors.amber,
+                onPressed: () => _startScanDevices(),
+                child: const Icon(Icons.search),
+              );
+            }
+          },
+        ),
       ),
       backgroundColor: primary.value.withOpacity(0.2),
       body: Row(
@@ -67,8 +72,8 @@ class _BluetoothConnectionState extends State<BluetoothConnection> {
               child: Column(
                 children: [
                   SizedBox(
-                    // width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.width * 0.9,
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.78,
                     child: ListView.separated(
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 15),
@@ -81,49 +86,54 @@ class _BluetoothConnectionState extends State<BluetoothConnection> {
                             selectedIndex = index;
                             setState(() {});
                           },
-                          child: Container(
-                            height: 60,
-                            width: 70,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: selectedIndex == index
-                                  ? const Color(0xFFfa9e18)
-                                  : Colors.grey.withOpacity(.2),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.print,
-                                    color: selectedIndex == index
-                                        ? Colors.white
-                                        : Colors.black),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      _devices[index].name ?? '',
-                                      style: TextStyle(
-                                        color: selectedIndex == index
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    Text(
-                                      _devices[index].address!,
-                                      style: TextStyle(
-                                          fontSize: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 10),
+                            child: Container(
+                              height: 60,
+                              width: 70,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: selectedIndex == index
+                                    ? const Color(0xFFfa9e18)
+                                    : Colors.grey.withOpacity(.2),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.print,
+                                      color: selectedIndex == index
+                                          ? Colors.white
+                                          : Colors.black),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _devices[index].name ?? '',
+                                        style: TextStyle(
                                           color: selectedIndex == index
                                               ? Colors.white
-                                              : Colors.black),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                              : Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        _devices[index].address!,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: selectedIndex == index
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -137,44 +147,53 @@ class _BluetoothConnectionState extends State<BluetoothConnection> {
         ],
       ),
       bottomNavigationBar: selectedIndex != null
-          ? SizedBox(
-              height: 10,
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: SaveButton(
-                            label: "Cancel",
-                            color: Colors.grey,
-                            onTap: () => Navigator.pop(context))),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: BlocConsumer<PrinterConnectivityCubit,
-                          PrinterConnectivityState>(
-                        listener: (context, state) {
-                          if (state is PrinterConnected) {
-                            Utils.showMessageBar(context,
-                                message:
-                                    'Bluetooth Printer Successfully Connected.',
-                                type: "message");
-                          }
-                        },
-                        builder: (context, state) {
-                          log(state.toString());
-                          if (state is PrinterConnectivityLoading) {
+          ? Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.3,
+                  right: MediaQuery.of(context).size.width * 0.3,
+                  bottom: 20),
+              child: SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: SaveButton(
+                              label: "Cancel",
+                              color: Colors.grey,
+                              onTap: () {
+                                Utils.showMessageBar(context,
+                                    message: 'Connect Bluetooth Printer',
+                                    type: "message");
+                              })),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: BlocConsumer<PrinterConnectivityCubit,
+                            PrinterConnectivityState>(
+                          listener: (context, state) {
+                            if (state is PrinterConnected) {
+                              Utils.showMessageBar(context,
+                                  message:
+                                      'Bluetooth Printer Successfully Connected',
+                                  type: "message");
+                            }
+                          },
+                          builder: (context, state) {
+                            log(state.toString());
+                            if (state is PrinterConnectivityLoading) {
+                              return SaveButton(
+                                  label: '',
+                                  onTap: () {},
+                                  child: const CircularProgressIndicator
+                                      .adaptive());
+                            }
                             return SaveButton(
-                                label: '',
-                                onTap: () {},
-                                child:
-                                    const CircularProgressIndicator.adaptive());
-                          }
-                          return SaveButton(
                               label: 'Connect',
                               onTap: () {
                                 printerManager
@@ -187,11 +206,13 @@ class _BluetoothConnectionState extends State<BluetoothConnection> {
                                 Utils.showMessageBar(context,
                                     message: "Success Connected to the device",
                                     type: "message");
-                              });
-                        },
-                      ),
-                    )
-                  ],
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
