@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
+import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class CategoryView extends ConsumerStatefulWidget {
   const CategoryView({super.key, required this.categories});
@@ -62,7 +63,8 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
             child: i == (widget.categories[selectedIndex].products?.length ?? 1)
                 ? GestureDetector(
                     onTap: () {
-                      Dialogs.singleFieldDailog(context,ids:widget.categories[selectedIndex].productIds, categoryName: widget.categories[selectedIndex].categaryName);
+                      Dialogs.singleFieldDailog(context,
+                          ids: widget.categories[selectedIndex].productIds, categoryName: widget.categories[selectedIndex].categaryName, onSuccess: () => ref.refresh(categoryProvider));
                     },
                     child: Container(
                       width: 90,
@@ -120,7 +122,9 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 12),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Dialogs.singleFieldDailog(context, onSuccess: () => ref.refresh(categoryProvider));
+                },
                 icon: Icon(Icons.add, color: primary.value, size: 40),
               ),
             ),
