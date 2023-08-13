@@ -8,6 +8,7 @@ class Dialogs {
     BuildContext context, {
     List<String?>? ids = const [],
     String? categoryName,
+    void Function()? onSuccess,
   }) {
     final titleCtrl = TextEditingController();
     final priceCtrl = TextEditingController();
@@ -19,10 +20,11 @@ class Dialogs {
         return Consumer(builder: (context, ref, child) {
           final state = ref.watch(uploadProvider);
           if (state == 'Success') {
+            onSuccess?.call();
             Navigator.pop(context);
           }
           return AlertDialog(
-            title: Center(child: Text('Add ${isProduct ? 'Category' : 'Food'}')),
+            title: Center(child: Text('Add ${isProduct ? 'Food' : 'Category'}')),
             titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             content: SizedBox(
@@ -46,7 +48,7 @@ class Dialogs {
                           errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
                           focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
                           disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
-                          hintText: i == 0 ? 'Enter ${isProduct ? 'category' : 'food'} here ...' : 'Enter price here ...',
+                          hintText: i == 0 ? 'Enter ${isProduct ? 'food' : 'category'} here ...' : 'Enter price here ...',
                           hintStyle: const TextStyle(fontSize: 20),
                         ),
                         style: const TextStyle(fontSize: 20),

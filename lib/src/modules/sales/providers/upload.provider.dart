@@ -1,4 +1,4 @@
-part of './sales.provider.dart';
+part of 'sales.provider.dart';
 
 class UploadNotifier extends StateNotifier<String> {
   UploadNotifier() : super('Save');

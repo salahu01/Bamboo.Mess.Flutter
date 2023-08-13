@@ -26,7 +26,7 @@ final class CategoryModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "products": productIds?.map((x) => x) ?? [],
+        "products": productIds ?? [],
         "categary_name": categaryName,
       };
 }
