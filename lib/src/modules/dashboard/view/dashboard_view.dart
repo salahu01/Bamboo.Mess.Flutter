@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/foods/foods_view.dart';
-import 'package:freelance/src/modules/labours/labours_view.dart';
+import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 import 'package:freelance/src/modules/sales/view/sales_screen.dart';
 import 'package:freelance/src/modules/settings/settings_view.dart';
