@@ -10,6 +10,9 @@ import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 void main() async {
   await DataBase().connectDb();
   WidgetsFlutterBinding.ensureInitialized();
+  const MethodChannel channel = MethodChannel('com.imin.printersdk');
+  var sdkinit = await channel.invokeMethod("sdkInit");
+
   runApp(const ProviderScope(child: MyApp()));
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -27,8 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: <BlocProvider>[
-        BlocProvider<PrinterConnectivityCubit>(
-            create: (_) => PrinterConnectivityCubit()),
+        BlocProvider<PrinterConnectivityCubit>(create: (_) => PrinterConnectivityCubit()),
       ],
       child: MaterialApp(
         theme: ThemeData(

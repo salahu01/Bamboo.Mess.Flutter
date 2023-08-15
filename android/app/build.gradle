@@ -69,4 +69,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation files('libs/IminLibs1.0.15.jar')
+    implementation files('libs/iminPrinterSDK.jar') //iminPrinter
+
 }
