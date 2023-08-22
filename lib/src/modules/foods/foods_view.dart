@@ -10,15 +10,6 @@ class FoodsView extends StatefulWidget {
 }
 
 class _FoodsViewState extends State<FoodsView> {
-  // int selectedIndex = 0;
-
-  // List<String> items = ['All', 'Rice', 'Kury'];
-  // final lockedIndices = <int>[];
-
-  // List<int> children = List.generate(60, (index) => index);
-
-  // final _scrollController = ScrollController();
-  // final _gridViewKey = GlobalKey();
 
   @override
   void initState() {

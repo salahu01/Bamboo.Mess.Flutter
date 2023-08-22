@@ -54,19 +54,27 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
     final generatedChildren = List<Widget>.generate(
       (widget.categories[selectedIndex].products?.length ?? 0) + 1,
       (i) {
-        return Card(
+        return GestureDetector(
           key: Key('$i'),
-          elevation: 8,
-          color: primary.value,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: Center(
-            child: i == (widget.categories[selectedIndex].products?.length ?? 1)
-                ? GestureDetector(
-                    onTap: () {
-                      Dialogs.singleFieldDailog(context,
-                          ids: widget.categories[selectedIndex].productIds, categoryName: widget.categories[selectedIndex].categaryName, onSuccess: () => ref.refresh(categoryProvider));
-                    },
-                    child: Container(
+          onTap: () {
+            if (i == (widget.categories[selectedIndex].products?.length ?? 1)) {
+              Dialogs.singleFieldDailog(
+                context,
+                ids: widget.categories[selectedIndex].productIds,
+                categoryName: widget.categories[selectedIndex].categaryName,
+                onSuccess: () => ref.refresh(categoryProvider),
+              );
+            } else {
+              ref.read(billProductProvider.notifier).addProductToBill(widget.categories[selectedIndex].products?[i]);
+            }
+          },
+          child: Card(
+            elevation: 8,
+            color: primary.value,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            child: Center(
+              child: i == (widget.categories[selectedIndex].products?.length ?? 1)
+                  ? Container(
                       width: 90,
                       height: 90,
                       decoration: const BoxDecoration(
@@ -78,12 +86,12 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                         size: 60,
                         color: Colors.white,
                       ),
+                    )
+                  : Text(
+                      widget.categories[selectedIndex].products?[i]?.name ?? '',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
                     ),
-                  )
-                : Text(
-                    widget.categories[selectedIndex].products?[i]?.name ?? '',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
-                  ),
+            ),
           ),
         );
       },

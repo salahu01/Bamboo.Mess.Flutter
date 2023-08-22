@@ -4,18 +4,18 @@ import 'package:freelance/src/core/models/product.model.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class DataBase {
+class MongoDataBase {
   //* This constructor body for creating singleton widget
-  factory DataBase() {
-    _dataBase == null ? {_dataBase = DataBase._internel()} : {};
+  factory MongoDataBase() {
+    _dataBase == null ? {_dataBase = MongoDataBase._internel()} : {};
     return _dataBase!;
   }
 
   //* This named constructor for create object for this class
-  DataBase._internel();
+  MongoDataBase._internel();
 
   //* This variable for store this class object globally
-  static DataBase? _dataBase;
+  static MongoDataBase? _dataBase;
 
   //* collections
   DbCollection get _products => _db.collection('products');

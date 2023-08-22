@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freelance/src/core/services/db/db.services.dart';
+import 'package:freelance/src/core/models/reciept.model.dart';
+import 'package:freelance/src/core/services/db/local.db.sevices.dart';
+import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
+import 'package:hive_flutter/adapters.dart';
 
 void main() async {
-  await DataBase().connectDb();
+  await MongoDataBase().connectDb();
+  await Hive.initFlutter();
+  Hive.registerAdapter(RecieptProductAdapter());
+  await LocalDataBase().openBox();
   WidgetsFlutterBinding.ensureInitialized();
   const MethodChannel channel = MethodChannel('com.imin.printersdk');
-  var sdkinit = await channel.invokeMethod("sdkInit");
-
+  await channel.invokeMethod("sdkInit").catchError((e) {});
   runApp(const ProviderScope(child: MyApp()));
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
