@@ -22,6 +22,10 @@ final storedBillsProvider = FutureProvider.autoDispose<List<List>>((ref) async {
   return products;
 });
 
+final selectedBillProvider = StateProvider<int?>((ref) {
+  return null;
+});
+
 final uploadProvider = StateNotifierProvider<UploadNotifier, String>((ref) {
   return UploadNotifier();
 });

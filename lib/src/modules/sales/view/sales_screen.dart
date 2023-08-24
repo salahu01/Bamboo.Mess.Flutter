@@ -31,68 +31,77 @@ class _SalesViewState extends ConsumerState<SalesView> {
       visible: !widget.showBills.value,
       replacement: Consumer(
         builder: (context, ref, child) {
+          final selectedBill = ref.watch(selectedBillProvider);
           return ref.watch(storedBillsProvider).when(
                 data: (data) {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return AnimatedContainer(
-                        curve: Curves.easeInOut,
-                        duration: Duration(milliseconds: 300 + (index * 200)),
-                        transform: Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
-                        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
-                        width: 500,
-                        child: Card(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: index == 1 ? primary.value : Colors.transparent, width: 4)),
-                          margin: const EdgeInsets.only(bottom: 24, left: 12, right: 24, top: 24),
-                          elevation: 4,
-                          child: Column(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(top: 24),
-                                child: Text('Billing', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
-                                child: Divider(color: Colors.black),
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: data[index].length,
-                                  itemBuilder: (context, i) {
-                                    return ListTile(
-                                      dense: true,
-                                      title: Text(
-                                        data[index][i].name ?? '',
-                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                      ),
-                                      subtitle: Text(
-                                        'Qty : ${data[index][i].count ?? 0}',
-                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                      ),
-                                      trailing: Text(
-                                        '₹ ${data[index].fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}',
-                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                      ),
-                                    );
-                                  },
+                      return GestureDetector(
+                        onTap: () {
+                          ref.read(selectedBillProvider.notifier).update((_) => _ = index);
+                          ref.read(billProductProvider.notifier)
+                            ..clearProducts()
+                            ..selectBill(data[index].cast());
+                        },
+                        child: AnimatedContainer(
+                          curve: Curves.easeInOut,
+                          duration: Duration(milliseconds: 300 + (index * 200)),
+                          transform: Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
+                          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
+                          width: 500,
+                          child: Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: index == selectedBill ? primary.value : Colors.transparent, width: 4)),
+                            margin: const EdgeInsets.only(bottom: 24, left: 12, right: 24, top: 24),
+                            elevation: 4,
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 24),
+                                  child: Text('Billing', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
                                 ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                child: Divider(color: Colors.black),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 24),
-                                child: Text(
-                                  'Total Amount : 100',
-                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 128, vertical: 8),
+                                  child: Divider(color: Colors.black),
                                 ),
-                              ),
-                            ],
+                                Expanded(
+                                  child: ListView.builder(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: data[index].length,
+                                    itemBuilder: (context, i) {
+                                      return ListTile(
+                                        dense: true,
+                                        title: Text(
+                                          data[index][i].name ?? '',
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                        ),
+                                        subtitle: Text(
+                                          'Qty : ${data[index][i].count ?? 0}',
+                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                        ),
+                                        trailing: Text(
+                                          '₹ ${data[index].fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}',
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                  child: Divider(color: Colors.black),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(bottom: 24),
+                                  child: Text(
+                                    'Total Amount : 100',
+                                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
