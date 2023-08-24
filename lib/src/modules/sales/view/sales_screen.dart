@@ -6,29 +6,15 @@ import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:freelance/src/modules/sales/view/category_view.dart';
 import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
 
-class SalesView extends ConsumerStatefulWidget {
+class SalesView extends ConsumerWidget {
   const SalesView({super.key, required this.showBills});
   final ValueNotifier<bool> showBills;
+  
 
   @override
-  ConsumerState<SalesView> createState() => _SalesViewState();
-}
-
-class _SalesViewState extends ConsumerState<SalesView> {
-  bool _startAnimation = false;
-  @override
-  void initState() {
-    widget.showBills.addListener(() {
-      if (mounted) startAnimation();
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+  Widget build(BuildContext context,WidgetRef ref) {
     return Visibility(
-      visible: !widget.showBills.value,
+      visible: showBills.value,
       replacement: Consumer(
         builder: (context, ref, child) {
           return ref.watch(storedBillsProvider).when(
@@ -37,10 +23,7 @@ class _SalesViewState extends ConsumerState<SalesView> {
                     scrollDirection: Axis.horizontal,
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return AnimatedContainer(
-                        curve: Curves.easeInOut,
-                        duration: Duration(milliseconds: 300 + (index * 200)),
-                        transform: Matrix4.translationValues(_startAnimation ? 0 : width, 0, 0),
+                      return Container(
                         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
                         width: 500,
                         child: Card(
@@ -121,12 +104,5 @@ class _SalesViewState extends ConsumerState<SalesView> {
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
     );
-  }
-
-  void startAnimation() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() => _startAnimation = true);
-    });
-    _startAnimation = false;
   }
 }

@@ -18,7 +18,6 @@ final categoryProvider = FutureProvider.autoDispose<List<CategoryModel>>((ref) a
 
 final storedBillsProvider = FutureProvider.autoDispose<List<List>>((ref) async {
   final products = await LocalDataBase().retriveProducts();
-  ref.keepAlive();
   return products;
 });
 
