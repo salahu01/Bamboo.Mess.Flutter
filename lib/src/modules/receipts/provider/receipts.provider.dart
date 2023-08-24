@@ -10,6 +10,5 @@ final recieptsProvider = FutureProvider.autoDispose<List<List<RecieptModel>>>((r
     final index = reciepts.indexWhere((_) => '${_.first.date?.order}' == '${e.date?.order}');
     index == -1 ? reciepts.add([e]) : reciepts[index].add(e);
   }
-  ref.keepAlive();
   return reciepts;
 });
