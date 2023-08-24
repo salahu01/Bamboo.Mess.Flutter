@@ -38,7 +38,7 @@ class SalesView extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      if (ref.read(selectedBillProvider) == null) {
+                      if (ref.read(selectedBillProvider) != index) {
                         ref.read(selectedBillProvider.notifier).update((_) => _ = index);
                         ref.read(billProductProvider.notifier)
                           ..clearProducts()
