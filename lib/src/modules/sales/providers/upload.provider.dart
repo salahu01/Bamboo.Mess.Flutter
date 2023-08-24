@@ -24,10 +24,16 @@ class StoreBillNotifier extends StateNotifier<String> {
 
   void storeBill(List<RecieptProduct> products, WidgetRef ref) async {
     try {
+      var res = false;
       state = 'Loading...';
-      final res = await LocalDataBase().storeProducts(products);
+      final index = ref.read(selectedBillProvider);
+      res = await (index == null ? LocalDataBase().storeProducts(products) : LocalDataBase().updateProducts(products, index));
       if (res) {
-        ref.read(billProductProvider.notifier).clearProducts();
+        ref
+          ..read(billProductProvider.notifier).clearProducts()
+          ..read(selectedBillProvider.notifier).update((state) => state = null)
+          ..read(billProductProvider.notifier).clearProducts()
+          ..refresh(storedBillsProvider);
         state = 'Save';
       } else {
         state = 'Retry';

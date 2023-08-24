@@ -8,12 +8,12 @@ import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
 
 class SalesView extends ConsumerWidget {
   const SalesView({super.key, required this.showBills});
-  final ValueNotifier<bool> showBills;
+  final bool showBills;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Visibility(
-      visible: showBills.value,
+      visible: showBills,
       replacement: ref.watch(categoryProvider).when(
             data: (data) => Row(
               children: [
@@ -38,10 +38,15 @@ class SalesView extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      ref.read(selectedBillProvider.notifier).update((_) => _ = index);
-                      ref.read(billProductProvider.notifier)
-                        ..clearProducts()
-                        ..selectBill(data[index].cast());
+                      if (ref.read(selectedBillProvider) == null) {
+                        ref.read(selectedBillProvider.notifier).update((_) => _ = index);
+                        ref.read(billProductProvider.notifier)
+                          ..clearProducts()
+                          ..selectBill(data[index].cast());
+                      } else {
+                        ref.read(selectedBillProvider.notifier).update((_) => _ = null);
+                        ref.read(billProductProvider.notifier).clearProducts();
+                      }
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
