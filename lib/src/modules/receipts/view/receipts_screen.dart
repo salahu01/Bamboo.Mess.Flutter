@@ -114,8 +114,8 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                   Flexible(
                     flex: 2,
                     child: Center(
-                      child: SizedBox(
-                        width: 600,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.15),
                         child: Card(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           margin: const EdgeInsets.symmetric(vertical: 16),
@@ -126,16 +126,16 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 24),
                                   child: Text(
-                                    '${data[_selectedRow][_selectedReceipt].totalAmount ?? ''}',
+                                    '₹ ${data[_selectedRow][_selectedReceipt].totalAmount ?? ''}.00',
                                     style: const TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 Text(
                                   'Total',
-                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.grey[900]),
+                                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Colors.grey[900]),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 24, top: 8),
+                                  padding: const EdgeInsets.only(left: 24, top: 8),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
