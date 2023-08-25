@@ -123,30 +123,27 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                           child: SizedBox(
                             child: Column(
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 24),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
                                   child: Text(
-                                    '3,055.00',
-                                    style: TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
+                                    '${data[_selectedRow][_selectedReceipt].totalAmount ?? ''}',
+                                    style: const TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 Text(
                                   'Total',
                                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.grey[900]),
                                 ),
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.only(left: 24, top: 8),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('Employee : Employee 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 8, bottom: 20),
-                                          child: Text('POS: POS 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                                        ),
-                                        Text('Dine in', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                                        Text('Employee : ${data[_selectedRow][_selectedReceipt].employee ?? ''}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                        const SizedBox(height: 12),
+                                        Text(data[_selectedRow][_selectedReceipt].orderType ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
                                       ],
                                     ),
                                   ),
@@ -159,21 +156,20 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                   child: ListView.builder(
                                     padding: const EdgeInsets.symmetric(horizontal: 24),
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: 32,
+                                    itemCount: data[_selectedRow][_selectedReceipt].products?.length ?? 0,
                                     itemBuilder: (context, i) {
-                                      i += 1;
                                       return ListTile(
                                         dense: true,
-                                        title: const Text(
-                                          'Pani puri ',
-                                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                        title: Text(
+                                          data[_selectedRow][_selectedReceipt].products?[i].name ?? '',
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                                         ),
                                         subtitle: Text(
-                                          'Qty : $i',
+                                          'Qty : ${data[_selectedRow][_selectedReceipt].products?[i].count}',
                                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                                         ),
                                         trailing: Text(
-                                          '\$ ${i}00',
+                                          '₹ ${(data[_selectedRow][_selectedReceipt].products?[i].count ?? 0) * (data[_selectedRow][_selectedReceipt].products?[i].price ?? 0)}',
                                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                                         ),
                                       );
