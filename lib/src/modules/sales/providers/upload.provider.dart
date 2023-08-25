@@ -22,7 +22,7 @@ class UploadNotifier extends StateNotifier<String> {
 class StoreBillNotifier extends StateNotifier<String> {
   StoreBillNotifier() : super('Save');
 
-  void storeBill(List<RecieptProduct> products, WidgetRef ref) async {
+  void storeBill(List<RecieptProduct> products, ref) async {
     try {
       var res = false;
       state = 'Loading...';
@@ -32,7 +32,6 @@ class StoreBillNotifier extends StateNotifier<String> {
         ref
           ..read(billProductProvider.notifier).clearProducts()
           ..read(selectedBillProvider.notifier).update((state) => state = null)
-          ..read(billProductProvider.notifier).clearProducts()
           ..refresh(storedBillsProvider);
         state = 'Save';
       } else {

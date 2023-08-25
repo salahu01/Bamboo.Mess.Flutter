@@ -80,4 +80,17 @@ class Dialogs {
       },
     );
   }
+
+  static void showSnack(BuildContext context, String text) {
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(
+        content: Text(text, style: const TextStyle(fontSize: 40)),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 500),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2, vertical: MediaQuery.of(context).size.height * 0.06),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+      ));
+  }
 }

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
+import 'package:freelance/src/modules/charge_screen/provider/charge.screen.provider.dart';
+import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class ChargeScreen extends ConsumerStatefulWidget {
@@ -13,20 +17,11 @@ class ChargeScreen extends ConsumerStatefulWidget {
   ConsumerState<ChargeScreen> createState() => _ChargeScreenState();
 }
 
-String dropdownvalue = 'Select Employee';
+String? selectedEmployee;
 
-var employeename = [
-  'Select Employee',
-  'Employee 1',
-  'Employee 2',
-  'Employee 3',
-  'Employee 4',
-  'Employee 5',
-];
+String? selectedOrderType = 'Dine in';
 
-String dropdownvalues = "Dine in";
-
-var paymentmethod = [
+var orderTypes = [
   'Dine in',
   'Parcel',
 ];
@@ -103,120 +98,142 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
             ),
           ),
           Expanded(
-            flex: 4,
-            child: Container(
-              color: const Color.fromARGB(255, 228, 222, 222),
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "₹ ${products.fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}",
-                          style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          "Total Amount",
-                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+              flex: 4,
+              child: ref.watch(employeesProvider).when(
+                    data: (data) {
+                      return Container(
+                        color: const Color.fromARGB(255, 228, 222, 222),
+                        child: Column(
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.17,
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              child: Center(
-                                child: DropdownButton(
-                                  value: dropdownvalue,
-                                  underline: const SizedBox.shrink(),
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Icon(Icons.keyboard_arrow_down, size: 35),
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "₹ ${products.fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}",
+                                    style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w600),
                                   ),
-                                  items: employeename.map((String items) {
-                                    return DropdownMenuItem(
-                                      value: items,
-                                      child: Text(
-                                        items,
-                                        style: const TextStyle(fontSize: 25),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      dropdownvalue = newValue!;
-                                    });
-                                  },
-                                ),
+                                  const Text(
+                                    "Total Amount",
+                                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.17,
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              // color: Colors.amber,
-                              child: Center(
-                                child: DropdownButton(
-                                  underline: const SizedBox.shrink(),
-                                  value: dropdownvalues,
-                                  icon: const Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Icon(Icons.keyboard_arrow_down, size: 35),
-                                  ),
-                                  items: paymentmethod.map((String items) {
-                                    return DropdownMenuItem(
-                                      value: items,
-                                      child: Text(
-                                        items,
-                                        style: const TextStyle(fontSize: 25),
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.17,
+                                        height: MediaQuery.of(context).size.height * 0.07,
+                                        child: Center(
+                                          child: DropdownButton(
+                                            value: selectedEmployee,
+                                            hint: const Text('Select Employee', style: TextStyle(fontSize: 25)),
+                                            underline: const SizedBox.shrink(),
+                                            icon: const Padding(
+                                              padding: EdgeInsets.only(left: 15),
+                                              child: Icon(Icons.keyboard_arrow_down, size: 35),
+                                            ),
+                                            items: data.map((item) {
+                                              return DropdownMenuItem(
+                                                value: item.name,
+                                                child: Text(
+                                                  item.name ?? '',
+                                                  style: const TextStyle(fontSize: 25),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedEmployee = newValue!;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                       ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      dropdownvalues = newValue!;
-                                    });
-                                  },
-                                ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.17,
+                                        height: MediaQuery.of(context).size.height * 0.07,
+                                        // color: Colors.amber,
+                                        child: Center(
+                                          child: DropdownButton(
+                                            underline: const SizedBox.shrink(),
+                                            value: selectedOrderType,
+                                            icon: const Padding(
+                                              padding: EdgeInsets.only(left: 15),
+                                              child: Icon(Icons.keyboard_arrow_down, size: 35),
+                                            ),
+                                            items: orderTypes.map((String items) {
+                                              return DropdownMenuItem(
+                                                value: items,
+                                                child: Text(
+                                                  items,
+                                                  style: const TextStyle(fontSize: 25),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedOrderType = newValue!;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 45),
+                                  InkWell(
+                                    onTap: () async {
+                                      if (selectedEmployee == null) {
+                                        Dialogs.showSnack(context,'Please select employee !');
+                                      } else {
+                                        ref
+                                            .read(uploadRecieptProvider.notifier)
+                                            .createReciept(RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now()), ref);
+                                        BlocProvider.of<PrinterConnectivityCubit>(context)
+                                            .printerBluetoothManager
+                                            .printTicket(await BlocProvider.of<PrinterConnectivityCubit>(context).generateBtPrint());
+                                      }
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width * 0.4,
+                                      height: MediaQuery.of(context).size.height * 0.1,
+                                      decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(30)),
+                                      child: Center(
+                                        child: Consumer(
+                                          builder: (context, ref, child) {
+                                            final state = ref.watch(uploadRecieptProvider);
+                                            if (state == 'Success') {
+                                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                Navigator.pop(context);
+                                              });
+                                            }
+                                            return Text(state, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold));
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 45),
-                        InkWell(
-                          onTap: () async {
-                            BlocProvider.of<PrinterConnectivityCubit>(context).printerBluetoothManager.printTicket(await BlocProvider.of<PrinterConnectivityCubit>(context).generateBtPrint());
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(30)),
-                            child: const Center(
-                              child: Text(
-                                "Charge Amount",
-                                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                      );
+                    },
+                    error: (error, stackTrace) => Text('$error'),
+                    loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
+                  )),
         ],
       ),
     );

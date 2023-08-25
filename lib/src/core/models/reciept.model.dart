@@ -6,6 +6,7 @@ part 'reciept.model.g.dart';
 
 class RecieptModel {
   final String? id;
+  final String? orderType;
   final DateTime? date;
   final List<RecieptProduct>? products;
   late final num? totalAmount;
@@ -13,12 +14,13 @@ class RecieptModel {
   final String? employee;
 
   RecieptModel({
-    required this.id,
+    this.id,
     required this.products,
+    required this.orderType,
     required this.employee,
     required this.date,
-    required this.totalAmount,
-    required this.time,
+    this.totalAmount,
+    this.time,
   });
 
   factory RecieptModel.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class RecieptModel {
     final dateTime = json['date'] == null ? null : (json['date'] as DateTime).findTime;
     return RecieptModel(
       employee: json['employee'],
+      orderType: json['order_type'],
       date: json['date'],
       products: tempProducts,
       id: (json["_id"] as ObjectId).$oid,
@@ -38,7 +41,8 @@ class RecieptModel {
   Map<String, dynamic> toJson() => {
         'products': products?.map((v) => v.toJson()).toList() ?? [],
         'employee': employee,
-        'date': date,
+        'date': date ?? DateTime.now(),
+        'order_type': orderType,
       };
 }
 

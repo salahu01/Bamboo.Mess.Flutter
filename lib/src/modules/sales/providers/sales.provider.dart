@@ -12,7 +12,7 @@ final categoryProvider = FutureProvider.autoDispose<List<CategoryModel>>((ref) a
   final categories = await MongoDataBase().getCategories;
   final allProducts = await MongoDataBase().getProducts;
   categories.insert(categories.length, CategoryModel(productIds: const [], categaryName: 'All', products: allProducts));
-  ref.keepAlive();
+  // ref.keepAlive();
   return categories;
 });
 
