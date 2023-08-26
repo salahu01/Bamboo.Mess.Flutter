@@ -195,7 +195,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                   InkWell(
                                     onTap: () async {
                                       if (selectedEmployee == null) {
-                                        Dialogs.showSnack(context,'Please select employee !');
+                                        Dialogs.showSnack(context, 'Please select employee !');
                                       } else {
                                         ref
                                             .read(uploadRecieptProvider.notifier)

@@ -20,6 +20,9 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
       backgroundColor: primary.value.withOpacity(0.2),
       body: ref.watch(recieptsProvider).when(
             data: (data) {
+              if (data.isEmpty) {
+                return const Center(child: Text('No Reciepts', style: TextStyle(fontSize: 30)));
+              }
               return Row(
                 children: [
                   Flexible(

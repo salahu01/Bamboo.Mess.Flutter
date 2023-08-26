@@ -26,11 +26,11 @@ class RecieptModel {
   factory RecieptModel.fromJson(Map<String, dynamic> json) {
     log('$json');
     final tempProducts = (json['products'] as List?)?.map((e) => RecieptProduct.fromJson(e)).toList() ?? [];
-    final dateTime = json['date'] == null ? null : (json['date'] as DateTime).findTime;
+    final dateTime = json['date'] == null ? null : DateTime.parse(json['date']).findTime;
     return RecieptModel(
       employee: json['employee'],
       orderType: json['order_type'],
-      date: json['date'],
+      date: DateTime.parse(json['date']),
       products: tempProducts,
       id: (json["_id"] as ObjectId).$oid,
       totalAmount: tempProducts.fold(0, (a, b) => (a ?? 0) + ((b.price ?? 0) * (b.count ?? 0))),
@@ -41,7 +41,7 @@ class RecieptModel {
   Map<String, dynamic> toJson() => {
         'products': products?.map((v) => v.toJson()).toList() ?? [],
         'employee': employee,
-        'date': date ?? DateTime.now(),
+        'date': '${date ?? DateTime.now()}',
         'order_type': orderType,
       };
 }
