@@ -33,7 +33,7 @@ class RecieptModel {
       date: json['date'],
       products: tempProducts,
       id: (json["_id"] as ObjectId).$oid,
-      totalAmount: tempProducts.map((e) => e.price).reduce((a, b) => (a ?? 0) + (b ?? 0)),
+      totalAmount: tempProducts.fold(0, (a, b) => (a ?? 0) + ((b.price ?? 0) * (b.count ?? 0))),
       time: dateTime,
     );
   }
