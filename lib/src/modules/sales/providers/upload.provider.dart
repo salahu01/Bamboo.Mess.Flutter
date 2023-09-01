@@ -22,12 +22,17 @@ class UploadNotifier extends StateNotifier<String> {
 class StoreBillNotifier extends StateNotifier<String> {
   StoreBillNotifier() : super('Save');
 
-  void storeBill(List<RecieptProduct> products, WidgetRef ref) async {
+  void storeBill(List<RecieptProduct> products, ref) async {
     try {
+      var res = false;
       state = 'Loading...';
-      final res = await LocalDataBase().storeProducts(products);
+      final index = ref.read(selectedBillProvider);
+      res = await (index == null ? LocalDataBase().storeProducts(products) : LocalDataBase().updateProducts(products, index));
       if (res) {
-        ref.read(billProductProvider.notifier).clearProducts();
+        ref
+          ..read(billProductProvider.notifier).clearProducts()
+          ..read(selectedBillProvider.notifier).update((state) => state = null)
+          ..refresh(storedBillsProvider);
         state = 'Save';
       } else {
         state = 'Retry';

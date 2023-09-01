@@ -36,6 +36,16 @@ final class LocalDataBase {
     }
   }
 
+  //*store products to db
+  Future<bool> updateProducts(List<RecieptProduct> products,int index) async {
+    try {
+      await _storedBills.putAt(index, products);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   //*remove products from db
   Future<bool> removeProducts(int index) async {
     try {

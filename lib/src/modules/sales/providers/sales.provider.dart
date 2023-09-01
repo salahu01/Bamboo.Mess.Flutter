@@ -12,13 +12,17 @@ final categoryProvider = FutureProvider.autoDispose<List<CategoryModel>>((ref) a
   final categories = await MongoDataBase().getCategories;
   final allProducts = await MongoDataBase().getProducts;
   categories.insert(categories.length, CategoryModel(productIds: const [], categaryName: 'All', products: allProducts));
-  ref.keepAlive();
+  // ref.keepAlive();
   return categories;
 });
 
 final storedBillsProvider = FutureProvider.autoDispose<List<List>>((ref) async {
   final products = await LocalDataBase().retriveProducts();
   return products;
+});
+
+final selectedBillProvider = StateProvider<int?>((ref) {
+  return null;
 });
 
 final uploadProvider = StateNotifierProvider<UploadNotifier, String>((ref) {

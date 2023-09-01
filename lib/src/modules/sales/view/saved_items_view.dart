@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
@@ -74,15 +75,9 @@ class SavedItemsView extends ConsumerWidget {
                             billsProvider.toUpperCase(),
                             () {
                               if (products.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: const Text('Please select products !', style: TextStyle(fontSize: 40)),
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2, vertical: MediaQuery.of(context).size.height * 0.06),
-                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
-                                ));
+                                Dialogs.showSnack(context, 'Please select products !');
                               } else {
-                                ref.read(storeBillsProvider.notifier).storeBill(products,ref);
+                                ref.read(storeBillsProvider.notifier).storeBill(products, ref);
                               }
                             },
                             context,
@@ -91,7 +86,13 @@ class SavedItemsView extends ConsumerWidget {
                       ),
                       customBotton(
                         "CHARGE",
-                        () => Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const ChargeScreen())),
+                        () {
+                          if (products.isEmpty) {
+                            Dialogs.showSnack(context, 'Please select products !');
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const ChargeScreen()));
+                          }
+                        },
                         context,
                       ),
                     ],

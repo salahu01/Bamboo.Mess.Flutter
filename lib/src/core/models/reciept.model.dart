@@ -6,6 +6,7 @@ part 'reciept.model.g.dart';
 
 class RecieptModel {
   final String? id;
+  final String? orderType;
   final DateTime? date;
   final List<RecieptProduct>? products;
   late final num? totalAmount;
@@ -13,24 +14,26 @@ class RecieptModel {
   final String? employee;
 
   RecieptModel({
-    required this.id,
+    this.id,
     required this.products,
+    required this.orderType,
     required this.employee,
     required this.date,
-    required this.totalAmount,
-    required this.time,
+    this.totalAmount,
+    this.time,
   });
 
   factory RecieptModel.fromJson(Map<String, dynamic> json) {
     log('$json');
     final tempProducts = (json['products'] as List?)?.map((e) => RecieptProduct.fromJson(e)).toList() ?? [];
-    final dateTime = json['date'] == null ? null : (json['date'] as DateTime).findTime;
+    final dateTime = json['date'] == null ? null : DateTime.parse(json['date']).findTime;
     return RecieptModel(
       employee: json['employee'],
-      date: json['date'],
+      orderType: json['order_type'],
+      date: DateTime.parse(json['date']),
       products: tempProducts,
       id: (json["_id"] as ObjectId).$oid,
-      totalAmount: tempProducts.map((e) => e.price).reduce((a, b) => (a ?? 0) + (b ?? 0)),
+      totalAmount: tempProducts.fold(0, (a, b) => (a ?? 0) + ((b.price ?? 0) * (b.count ?? 0))),
       time: dateTime,
     );
   }
@@ -38,7 +41,8 @@ class RecieptModel {
   Map<String, dynamic> toJson() => {
         'products': products?.map((v) => v.toJson()).toList() ?? [],
         'employee': employee,
-        'date': date,
+        'date': '${date ?? DateTime.now()}',
+        'order_type': orderType,
       };
 }
 

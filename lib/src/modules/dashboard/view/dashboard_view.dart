@@ -17,7 +17,7 @@ class DashBoardView extends StatefulWidget {
 
 class _DashBoardViewState extends State<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
-  final ValueNotifier<bool> _showBills = ValueNotifier(false);
+  bool _showBills = false;
   final _drawerIcons = [
     Icons.shopping_basket,
     Icons.receipt_outlined,
@@ -63,7 +63,7 @@ class _DashBoardViewState extends State<DashBoardView> {
         elevation: 4,
         title: [
           Visibility(
-            visible: !_showBills.value,
+            visible: !_showBills,
             replacement: const Text('Saved Bills',
                 style: TextStyle(color: Colors.white, fontSize: 40)),
             child: Card(
@@ -107,7 +107,7 @@ class _DashBoardViewState extends State<DashBoardView> {
             child: GestureDetector(
               onTap: () {
                 setState(
-                    () => _showBills.value = _showBills.value ? false : true);
+                    () => _showBills = _showBills ? false : true);
               },
               child: Card(
                 margin: const EdgeInsets.all(30),
@@ -125,7 +125,7 @@ class _DashBoardViewState extends State<DashBoardView> {
                           : Tween<double>(begin: 0.75, end: 1).animate(anim),
                       child: FadeTransition(opacity: anim, child: child),
                     ),
-                    child: _showBills.value
+                    child: _showBills
                         ? const Icon(Icons.close,
                             key: ValueKey('icon1'), size: 34)
                         : const Icon(Icons.save,
@@ -212,11 +212,5 @@ class _DashBoardViewState extends State<DashBoardView> {
         const BluetoothConnection(),
       ][_drawerIndex],
     );
-  }
-
-  @override
-  void dispose() {
-    _showBills.dispose();
-    super.dispose();
   }
 }

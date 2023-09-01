@@ -28,4 +28,8 @@ class BillProductsNotifier extends StateNotifier<List<RecieptProduct>> {
   void clearProducts() {
     state = [];
   }
+
+  void selectBill(List<RecieptProduct> products) {
+    state = products;
+  }
 }
