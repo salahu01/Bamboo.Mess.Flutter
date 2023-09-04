@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:freelance/src/modules/sales/view/category_view.dart';
 import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
@@ -47,6 +48,7 @@ class SalesView extends ConsumerWidget {
                         ref.read(selectedBillProvider.notifier).update((_) => _ = null);
                         ref.read(billProductProvider.notifier).clearProducts();
                       }
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const DashBoardView()));
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
@@ -81,7 +83,7 @@ class SalesView extends ConsumerWidget {
                                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                                     ),
                                     subtitle: Text(
-                                      'Qty : ${data[index][i].count ?? 0}',
+                                      'Qty   ×   ${data[index][i].count ?? 0}',
                                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                                     ),
                                     trailing: Text(

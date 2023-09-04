@@ -32,7 +32,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
     final products = ref.watch(billProductProvider);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: 80,
         backgroundColor: primary.value,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
         leadingWidth: 120,
