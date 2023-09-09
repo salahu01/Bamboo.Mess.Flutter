@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
+import 'package:freelance/src/modules/labours/view/add_profile.dart';
 
 class LaboursView extends ConsumerStatefulWidget {
   const LaboursView({super.key});
@@ -136,6 +137,12 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
             error: (error, stackTrace) => Text('$error'),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const CustomDialogBox()));
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
