@@ -221,7 +221,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
       body: [
         SalesView(showBills: _showBills),
         const ReceiptsView(),
-        const FoodsView(startAnimation: true),
+        const FoodsView(),
         const SettingsView(),
         const LaboursView(),
         const BluetoothConnection(),
