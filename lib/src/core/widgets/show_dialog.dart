@@ -69,12 +69,44 @@ class Dialogs {
               TextButton(
                 onPressed: () {
                   if (state == 'Loading...') return;
-                  if (key.currentState?.validate() ?? false)
+                  if (key.currentState?.validate() ?? false) {
                     ref.read(uploadProvider.notifier).uploadFoodAndCategory(isProduct ? [titleCtrl.text, categoryName, num.parse(priceCtrl.text)] : titleCtrl.text, ids: ids);
+                  }
                 },
                 child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),
               )
             ],
+          );
+        });
+      },
+    );
+  }
+
+  static Future<void> deleteLoadingDailog(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Consumer(builder: (context, ref, child) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: SizedBox(
+              width: 600,
+              height: 120,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Text(
+                      'Deleating...',
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                    ),
+                    LinearProgressIndicator(color: primary.value),
+                  ],
+                ),
+              ),
+            ),
           );
         });
       },

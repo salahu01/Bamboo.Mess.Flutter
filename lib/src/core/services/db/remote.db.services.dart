@@ -49,12 +49,28 @@ class MongoDataBase {
 
   //* Insert One
   Future<ProductModel> insertProduct(ProductModel v, List<String?>? ids) =>
-      _products.insertOne(v.toJson()).then((e) => ProductModel.fromJson(e.document ?? {})).then((_) => uodateCategory(_, ids).then((c) => _));
+      _products.insertOne(v.toJson()).then((e) => ProductModel.fromJson(e.document ?? {})).then((_) => updateCategory(_, ids).then((c) => _));
   Future<CategoryModel> insertCategory(CategoryModel v) => _categories.insertOne(v.toJson()).then((e) => CategoryModel.fromJson(e.document ?? {}));
   Future<EmployeeModel> insertEmployee(EmployeeModel v) => _employees.insertOne(v.toJson()).then((e) => EmployeeModel.fromJson(e.document ?? {}));
   Future<RecieptModel> insertReciept(RecieptModel v) => _reciepts.insertOne(v.toJson()).then((e) => RecieptModel.fromJson(e.document ?? {}));
 
   //* Update One
-  Future<bool> uodateCategory(ProductModel productModel, List<String?>? ids) =>
+  Future<bool> updateCategory(ProductModel productModel, List<String?>? ids) =>
       _categories.updateOne(where.eq('categary_name', productModel.categaryName), modify.set('products', [...(ids ?? []), productModel.id])).then((e) => e.isSuccess);
+
+  // //* Delete All
+  Future<bool> deleteProducts(List<String> ids, String categaryName, List<String?> allIds) {
+    return _products.deleteMany({'_id': ObjectId.fromHexString(ids.first)}).then((e) {
+      if (e.isSuccess) {
+        for (var e in ids) {
+          allIds.remove(e);
+        }
+        return _categories.updateOne(where.eq('categary_name', categaryName), modify.set('products', [...allIds])).then((e) => e.isSuccess);
+      }
+      return false;
+    });
+  }
+  // Future<bool> deleteOneCategorie(id) => _categories.findOne({'_id': id}).then((e) => true);
+  // Future<bool> deleteOneEmployee(id) => _employees.findOne({'_id': id}).then((e) => true);
+  // Future<bool> deleteOneReciept(id) => _reciepts.findOne({'_id': id}).then((e) => true);
 }

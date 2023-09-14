@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
+import 'package:freelance/src/modules/foods/provider/foods_provider.dart';
 import 'package:freelance/src/modules/foods/view/foods_view.dart';
 import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
@@ -46,7 +51,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
 
   @override
   Widget build(BuildContext context) {
-    final _showBills = ref.watch(showBillsProvider);
+    final showBills = ref.watch(showBillsProvider);
     return Scaffold(
       key: _key,
       appBar: AppBar(
@@ -68,7 +73,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
         elevation: 4,
         title: [
           Visibility(
-            visible: !_showBills,
+            visible: !showBills,
             replacement: const Text('Saved Bills', style: TextStyle(color: Colors.white, fontSize: 40)),
             child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -146,7 +151,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
             visible: _drawerIndex == 0,
             child: GestureDetector(
               onTap: () {
-                ref.read(showBillsProvider.notifier).update((state) => !_showBills);
+                ref.read(showBillsProvider.notifier).update((state) => !showBills);
               },
               child: Card(
                 margin: const EdgeInsets.only(top: 10, right: 30, left: 10, bottom: 10),
@@ -161,7 +166,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                       turns: child.key == const ValueKey('icon1') ? Tween<double>(begin: 1, end: 0.75).animate(anim) : Tween<double>(begin: 0.75, end: 1).animate(anim),
                       child: FadeTransition(opacity: anim, child: child),
                     ),
-                    child: _showBills ? const Icon(Icons.close, key: ValueKey('icon1'), size: 34) : const Icon(Icons.save, key: ValueKey('icon2'), size: 34),
+                    child: showBills ? const Icon(Icons.close, key: ValueKey('icon1'), size: 34) : const Icon(Icons.save, key: ValueKey('icon2'), size: 34),
                   ),
                 ),
               ),
@@ -219,7 +224,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
         ),
       ),
       body: [
-        SalesView(showBills: _showBills),
+        SalesView(showBills: showBills),
         const ReceiptsView(),
         const FoodsView(),
         const SettingsView(),
