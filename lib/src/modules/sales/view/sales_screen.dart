@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
+import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:freelance/src/modules/sales/view/category_view.dart';
 import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
@@ -48,7 +47,7 @@ class SalesView extends ConsumerWidget {
                         ref.read(selectedBillProvider.notifier).update((_) => _ = null);
                         ref.read(billProductProvider.notifier).clearProducts();
                       }
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const DashBoardView()));
+                      ref.read(showBillsProvider.notifier).update((_) => false);
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),

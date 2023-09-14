@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
+import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
 import 'package:freelance/src/modules/foods/foods_view.dart';
 import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 import 'package:freelance/src/modules/sales/view/sales_screen.dart';
 import 'package:freelance/src/modules/settings/settings_view.dart';
 
-class DashBoardView extends StatefulWidget {
+class DashBoardView extends ConsumerStatefulWidget {
   const DashBoardView({super.key});
 
   @override
-  State<DashBoardView> createState() => _DashBoardViewState();
+  ConsumerState<DashBoardView> createState() => _DashBoardViewState();
 }
 
-class _DashBoardViewState extends State<DashBoardView> {
+class _DashBoardViewState extends ConsumerState<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
-  bool _showBills = false;
   final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person, Icons.bluetooth];
   final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours', 'Bluetooth'];
   final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours', 'Bluetooth Connection'];
@@ -45,6 +46,7 @@ class _DashBoardViewState extends State<DashBoardView> {
 
   @override
   Widget build(BuildContext context) {
+    final _showBills = ref.watch(showBillsProvider);
     return Scaffold(
       key: _key,
       appBar: AppBar(
@@ -55,7 +57,7 @@ class _DashBoardViewState extends State<DashBoardView> {
         leading: GestureDetector(
           onTap: () => _key.currentState?.openDrawer(),
           child: Card(
-            margin:const EdgeInsets.only(top: 10,left: 30,bottom: 10),
+            margin: const EdgeInsets.only(top: 10, left: 30, bottom: 10),
             elevation: 10,
             color: primary.value,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -75,7 +77,7 @@ class _DashBoardViewState extends State<DashBoardView> {
                 onTap: _toggleSearch,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: _isSearchActive ? 500 : 90,
+                  width: _isSearchActive ? 600 : 90,
                   height: 60,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -91,22 +93,22 @@ class _DashBoardViewState extends State<DashBoardView> {
                       _isSearchActive
                           ? Expanded(
                               child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: TextField(
-                                autofocus: true,
-                                focusNode: _focusNode,
-                                // style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Search foods here ...",
-                                  hintStyle: TextStyle(color: Colors.black),
+                                padding: const EdgeInsets.only(right: 10),
+                                child: TextField(
+                                  autofocus: true,
+                                  focusNode: _focusNode,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Search foods here ...",
+                                    hintStyle: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ),
-                            ))
+                            )
                           : Container(
-                            color: Colors.white,
-                            child:const Text("search"),
-                          ),
+                              color: Colors.white,
+                              child: const Text("search"),
+                            ),
                     ],
                   ),
                 ),
@@ -144,10 +146,10 @@ class _DashBoardViewState extends State<DashBoardView> {
             visible: _drawerIndex == 0,
             child: GestureDetector(
               onTap: () {
-                setState(() => _showBills = _showBills ? false : true);
+                ref.read(showBillsProvider.notifier).update((state) => !_showBills);
               },
               child: Card(
-                margin: const EdgeInsets.only(top: 10,right: 30,left: 10,bottom: 10),
+                margin: const EdgeInsets.only(top: 10, right: 30, left: 10, bottom: 10),
                 elevation: 10,
                 color: primary.value,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
