@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
-import 'package:freelance/src/modules/foods/foods_view.dart';
+import 'package:freelance/src/modules/foods/view/foods_view.dart';
 import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
 import 'package:freelance/src/modules/sales/view/sales_screen.dart';
