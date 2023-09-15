@@ -74,8 +74,15 @@ class FoodsView extends ConsumerWidget {
                                               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                             ),
                                             trailing: IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.more_vert, size: 32, color: Colors.black),
+                                              onPressed: () {
+                                                Dialogs.deleteLoadingDailog(context);
+                                                MongoDataBase().deleteOneCategory(data[i]).then((value) {
+                                                  Navigator.pop(context);
+                                                  // ignore: unused_result
+                                                  value ? ref.refresh(categoryProvider) : null;
+                                                });
+                                              },
+                                              icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                             ),
                                             onTap: () => ref.read(selCategoryProvider.notifier).update((_) => data[i]),
                                           ),

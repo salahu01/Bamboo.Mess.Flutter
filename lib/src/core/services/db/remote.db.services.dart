@@ -60,7 +60,9 @@ class MongoDataBase {
 
   // //* Delete All
   Future<bool> deleteProducts(List<String> ids, String categaryName, List<String?> allIds) {
-    return _products.deleteMany({'_id': [...ids]}).then((e) {
+    return _products.deleteMany({
+      '_id': {'\$in': ids.map((e) => ObjectId.fromHexString(e)).toList()},
+    }).then((e) {
       if (e.isSuccess) {
         for (var e in ids) {
           allIds.remove(e);
@@ -72,7 +74,16 @@ class MongoDataBase {
   }
 
   //* Delete One
-  Future<bool> deleteOneCategory(id) => _categories.deleteOne({'_id': id}).then((e) => e.isSuccess);
+  Future<bool> deleteOneCategory(CategoryModel model) {
+    return _products.deleteMany({
+      '_id': {'\$in': model.productIds?.map((e) => ObjectId.fromHexString(e ?? '')).toList()}
+    }).then((e) {
+      if (e.isSuccess) {
+        return _categories.deleteMany({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) => e.isSuccess);
+      }
+      return false;
+    });
+  }
   // Future<bool> deleteOneEmployee(id) => _employees.findOne({'_id': id}).then((e) => true);
   // Future<bool> deleteOneReciept(id) => _reciepts.findOne({'_id': id}).then((e) => true);
 }

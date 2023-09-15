@@ -105,7 +105,7 @@ class Dialogs {
                   children: List.generate(
                     3,
                     (i) => Padding(
-                      padding: EdgeInsets.only(bottom: 24),
+                      padding: const EdgeInsets.only(bottom: 24),
                       child: TextFormField(
                         controller: i == 0 ? titleCtrl : priceCtrl,
                         validator: (value) => value == null || value.isEmpty ? 'Please enter the value !' : null,
