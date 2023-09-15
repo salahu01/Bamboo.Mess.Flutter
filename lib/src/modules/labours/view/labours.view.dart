@@ -80,7 +80,7 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                       ),
                                       trailing: IconButton(
                                         onPressed: () {
-                                          Dialogs.deleteLoadingDailog(context);
+                                          Dialogs.loadingDailog(context);
                                           MongoDataBase().deleteOneEmployee(data[i]).then((value) {
                                             Navigator.pop(context);
                                             // ignore: unused_result

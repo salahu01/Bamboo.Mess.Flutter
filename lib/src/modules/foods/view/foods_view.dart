@@ -75,7 +75,7 @@ class FoodsView extends ConsumerWidget {
                                             ),
                                             trailing: IconButton(
                                               onPressed: () {
-                                                Dialogs.deleteLoadingDailog(context);
+                                                Dialogs.loadingDailog(context);
                                                 MongoDataBase().deleteOneCategory(data[i]).then((value) {
                                                   Navigator.pop(context);
                                                   // ignore: unused_result
@@ -201,7 +201,7 @@ class FoodsView extends ConsumerWidget {
                             visible: ids.isNotEmpty,
                             child: GestureDetector(
                               onTap: () {
-                                Dialogs.deleteLoadingDailog(context);
+                                Dialogs.loadingDailog(context);
                                 MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? []).then((value) {
                                   Navigator.pop(context);
                                   // ignore: unused_result

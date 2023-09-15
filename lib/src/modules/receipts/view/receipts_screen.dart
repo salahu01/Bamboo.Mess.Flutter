@@ -95,7 +95,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                               ),
                                               trailing: IconButton(
                                                 onPressed: () {
-                                                  Dialogs.deleteLoadingDailog(context);
+                                                  Dialogs.loadingDailog(context);
                                                   MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
                                                     Navigator.pop(context);
                                                     // ignore: unused_result

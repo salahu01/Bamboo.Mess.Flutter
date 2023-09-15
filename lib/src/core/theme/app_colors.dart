@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelance/src/core/services/db/local.db.sevices.dart';
 
 //Accent colors
 
@@ -11,3 +12,9 @@ final primaryColors = [
 
 //Selected primary.value.value
 final ValueNotifier<Color> primary = ValueNotifier(Colors.pinkAccent);
+
+Future<void> retriveColor() async {
+  final _ = await LocalDataBase().retriveColor();
+  primary.value = primaryColors[_ ]!;
+}
+

@@ -15,18 +15,29 @@ final class LocalDataBase {
   static LocalDataBase? _dataBase;
 
   late final Box<List> _storedBills;
+  late final Box<int> _storedTheme;
 
   //* open box
   Future<void> openBox() async {
     _storedBills = await Hive.openBox<List>('bills');
+    _storedTheme = await Hive.openBox('color');
   }
 
-  //*retrive products from db
+  //*retrive from db
   Future<List<List>> retriveProducts() async {
     return _storedBills.values.toList();
   }
 
-  //*store products to db
+  Future<int> retriveColor() async {
+    try {
+      return _storedTheme.values.first;
+    } catch (e) {
+      await _storedTheme.add(0);
+      return 0;
+    }
+  }
+
+  //*store to db
   Future<bool> storeProducts(List<RecieptProduct> products) async {
     try {
       await _storedBills.add(products);
@@ -36,10 +47,19 @@ final class LocalDataBase {
     }
   }
 
-  //*store products to db
-  Future<bool> updateProducts(List<RecieptProduct> products,int index) async {
+  //*update to db
+  Future<bool> updateProducts(List<RecieptProduct> products, int index) async {
     try {
       await _storedBills.putAt(index, products);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateColor(int color) async {
+    try {
+      await _storedTheme.putAt(0, color);
       return true;
     } catch (e) {
       return false;

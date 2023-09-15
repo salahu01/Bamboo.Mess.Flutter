@@ -137,7 +137,10 @@ class Dialogs {
               ),
               TextButton(
                 onPressed: () {
-                 
+                  // if (state == 'Loading...') return;
+                  // if (key.currentState?.validate() ?? false) {
+                  //   ref.read(uploadProvider.notifier).uploadFoodAndCategory(isProduct ? [titleCtrl.text, categoryName, num.parse(priceCtrl.text)] : titleCtrl.text, ids: ids);
+                  // }
                 },
                 child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),
               )
@@ -148,7 +151,7 @@ class Dialogs {
     );
   }
 
-  static Future<void> deleteLoadingDailog(BuildContext context) {
+  static Future<void> loadingDailog(BuildContext context, {String? text}) {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -164,9 +167,9 @@ class Dialogs {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const Text(
-                      'Deleating...',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                    Text(
+                      text ?? 'Deleating...',
+                      style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
                     ),
                     LinearProgressIndicator(color: primary.value),
                   ],
