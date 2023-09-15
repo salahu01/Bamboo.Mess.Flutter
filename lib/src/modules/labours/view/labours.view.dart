@@ -13,7 +13,7 @@ class LaboursView extends ConsumerStatefulWidget {
 }
 
 class _LaboursViewState extends ConsumerState<LaboursView> {
-  int _selectedLabour = 0;
+  int? _selectedLabour;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +80,7 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                       ),
                                       trailing: IconButton(
                                         onPressed: () {
+                                          _selectedLabour = null;
                                           Dialogs.loadingDailog(context);
                                           MongoDataBase().deleteOneEmployee(data[i]).then((value) {
                                             Navigator.pop(context);
@@ -112,29 +113,35 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           elevation: 4,
-                          child: const SizedBox(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 24),
-                                  child: Icon(Icons.person, size: 200, color: Colors.black),
+                          child: _selectedLabour == null
+                              ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Select Employee !', style: TextStyle(fontSize: 20)),
+                                  ],
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 24),
+                                      child: Icon(Icons.person, size: 200, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].name}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].phone}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].age}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Employee',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.black),
-                                ),
-                                Text(
-                                  '+91 0000000',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                                Text(
-                                  'Male',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                       ),
                     ),

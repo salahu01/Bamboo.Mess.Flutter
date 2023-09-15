@@ -39,7 +39,7 @@ class SettingsView extends StatelessWidget {
                               radius: 36,
                               child: GestureDetector(
                                 onTap: () {
-                                  Dialogs.loadingDailog(context);
+                                  Dialogs.loadingDailog(context, text: 'Updating...');
                                   LocalDataBase().updateColor(i).then((_) {
                                     Navigator.pop(context);
                                   });

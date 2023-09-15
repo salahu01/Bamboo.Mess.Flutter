@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class Dialogs {
@@ -83,15 +84,14 @@ class Dialogs {
   }
 
   static Future<void> addEmployeeDialog(BuildContext context) {
-    final titleCtrl = TextEditingController();
-    final priceCtrl = TextEditingController();
-    final hints = ['Enter Employee Name ', 'Enter Employee Phone', 'Enter Employee Gender'];
+    final ctrls = List.generate(3, (i) => TextEditingController());
+    final hints = ['Enter Employee Name ', 'Enter Phone Phone', 'Enter Gender Gender'];
     final key = GlobalKey<FormState>();
     return showDialog(
       context: context,
       builder: (context) {
         return Consumer(builder: (context, ref, child) {
-          final state = ref.watch(uploadProvider);
+          final state = ref.watch(uploadEmployeeProvider);
           return AlertDialog(
             title: const Center(child: Text('Add Employee')),
             titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
@@ -107,7 +107,7 @@ class Dialogs {
                     (i) => Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: TextFormField(
-                        controller: i == 0 ? titleCtrl : priceCtrl,
+                        controller: ctrls[i],
                         validator: (value) => value == null || value.isEmpty ? 'Please enter the value !' : null,
                         keyboardType: i == 1 ? TextInputType.number : null,
                         decoration: InputDecoration(
@@ -130,17 +130,18 @@ class Dialogs {
             actions: [
               TextButton(
                 onPressed: () {
-                  titleCtrl.clear();
-                  Navigator.pop(context);
+                  for (var e in ctrls) {
+                    e.clear();
+                  }
                 },
                 child: Text('Cancel', style: TextStyle(color: primary.value, fontSize: 18)),
               ),
               TextButton(
                 onPressed: () {
-                  // if (state == 'Loading...') return;
-                  // if (key.currentState?.validate() ?? false) {
-                  //   ref.read(uploadProvider.notifier).uploadFoodAndCategory(isProduct ? [titleCtrl.text, categoryName, num.parse(priceCtrl.text)] : titleCtrl.text, ids: ids);
-                  // }
+                  if (state == 'Loading...') return;
+                  if (key.currentState?.validate() ?? false) {
+                    ref.read(uploadEmployeeProvider.notifier).uploadFoodAndCategory(ctrls.map((e) => e.text).toList(), ref, context);
+                  }
                 },
                 child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),
               )
