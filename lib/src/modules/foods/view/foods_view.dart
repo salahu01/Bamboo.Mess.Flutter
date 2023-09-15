@@ -154,10 +154,6 @@ class FoodsView extends ConsumerWidget {
                                                       '₹ ${product?.price ?? ''}',
                                                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
                                                     ),
-                                                    // trailing: IconButton(
-                                                    //   onPressed: () {},
-                                                    //   icon: const Icon(Icons.more_vert, size: 32, color: Colors.black),
-                                                    // ),
                                                     trailing: Transform.scale(
                                                       scale: 1.8,
                                                       child: Checkbox(
@@ -201,7 +197,8 @@ class FoodsView extends ConsumerWidget {
                                 Dialogs.deleteLoadingDailog(context);
                                 MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? []).then((value) {
                                   Navigator.pop(context);
-                                  ref.refresh(categoryProvider);
+                                  // ignore: unused_result
+                                  value ? ref.refresh(categoryProvider) : null;
                                 });
                               },
                               child: Card(

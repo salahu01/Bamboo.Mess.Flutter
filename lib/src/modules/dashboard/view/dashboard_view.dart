@@ -1,14 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
-import 'package:freelance/src/modules/foods/provider/foods_provider.dart';
 import 'package:freelance/src/modules/foods/view/foods_view.dart';
 import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';

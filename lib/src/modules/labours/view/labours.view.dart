@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
-import 'package:freelance/src/modules/labours/view/add_profile.dart';
 
 class LaboursView extends ConsumerStatefulWidget {
   const LaboursView({super.key});
@@ -17,7 +17,7 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
-      body: ref.watch(employeesProvider).when(
+      body: ref.watch(laboursProvider).when(
             data: (data) {
               return Row(
                 children: [
@@ -78,8 +78,10 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
                                       ),
                                       trailing: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.more_vert, size: 32, color: Colors.black),
+                                        onPressed: () {
+                                          Dialogs.deleteLoadingDailog(context);
+                                        },
+                                        icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                       ),
                                       onTap: () => setState(() {
                                         _selectedLabour = i;
@@ -137,11 +139,20 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
             error: (error, stackTrace) => Text('$error'),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const CustomDialogBox()));
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Dialogs.addEmployeeDialog(context);
         },
-        child: const Icon(Icons.add),
+        child: Card(
+          margin: const EdgeInsets.all(32),
+          elevation: 10,
+          color: primary.value,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: const Padding(
+            padding: EdgeInsets.all(16),
+            child: Icon(Icons.person_add_alt_1, size: 40, color: Colors.white),
+          ),
+        ),
       ),
     );
   }
