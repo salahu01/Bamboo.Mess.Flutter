@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
           fontFamily: "montserratfamily",
         ),
         debugShowCheckedModeBanner: false,
-        // home: const DashBoardView(),
-        home: const MyHomePage(title: "print sample"),
+        home: const DashBoardView(),
+        // home: const MyHomePage(title: "print sample"),
       ),
     );
   }
