@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/extensions/date_time.extension.dart';
+import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/receipts/provider/receipts.provider.dart';
 
 class ReceiptsView extends ConsumerStatefulWidget {
@@ -92,8 +94,15 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
                                               ),
                                               trailing: IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(Icons.more_vert, size: 32, color: Colors.black),
+                                                onPressed: () {
+                                                  Dialogs.deleteLoadingDailog(context);
+                                                  MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
+                                                    Navigator.pop(context);
+                                                    // ignore: unused_result
+                                                    value ? ref.refresh(recieptsProvider) : null;
+                                                  });
+                                                },
+                                                icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                               ),
                                               onTap: () => setState(() {
                                                 _selectedReceipt = i;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
@@ -80,6 +81,11 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                       trailing: IconButton(
                                         onPressed: () {
                                           Dialogs.deleteLoadingDailog(context);
+                                          MongoDataBase().deleteOneEmployee(data[i]).then((value) {
+                                            Navigator.pop(context);
+                                            // ignore: unused_result
+                                            value ? ref.refresh(laboursProvider) : null;
+                                          });
                                         },
                                         icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                       ),
