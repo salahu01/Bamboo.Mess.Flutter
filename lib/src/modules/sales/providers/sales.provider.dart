@@ -5,6 +5,7 @@ import 'package:freelance/src/core/models/product.model.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/services/db/local.db.sevices.dart';
 import 'package:freelance/src/core/services/db/remote.db.services.dart';
+import 'package:freelance/src/modules/foods/provider/foods_provider.dart';
 import 'package:freelance/src/modules/sales/providers/bill.provider.dart';
 part 'upload.provider.dart';
 
@@ -13,6 +14,7 @@ final categoryProvider = FutureProvider.autoDispose<List<CategoryModel>>((ref) a
   final allProducts = await MongoDataBase().getProducts;
   categories.insert(categories.length, CategoryModel(productIds: const [], categaryName: 'All', products: allProducts));
   // ref.keepAlive();
+  ref.read(selCategoryProvider.notifier).update((_) => categories.first);
   return categories;
 });
 

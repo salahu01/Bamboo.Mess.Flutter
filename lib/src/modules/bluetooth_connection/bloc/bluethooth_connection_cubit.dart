@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart' as bt;
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:freelance/src/core/esc_pos_utils.dart' as escpos;
+import 'package:freelance/src/core/widgets/esc_pos_utils.dart' as escpos;
 part 'bluethooth_connection_state.dart';
 
 class PrinterConnectivityCubit extends Cubit<PrinterConnectivityState> {

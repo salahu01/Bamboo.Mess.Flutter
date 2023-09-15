@@ -5,6 +5,7 @@ import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/services/db/local.db.sevices.dart';
 import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 import 'package:freelance/src/modules/printing/printing_ui.dart';
@@ -17,6 +18,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(RecieptProductAdapter());
   await LocalDataBase().openBox();
+  await retriveColor();
   WidgetsFlutterBinding.ensureInitialized();
   const MethodChannel channel = MethodChannel('com.imin.printersdk');
   await channel.invokeMethod("sdkInit").catchError((e) {});

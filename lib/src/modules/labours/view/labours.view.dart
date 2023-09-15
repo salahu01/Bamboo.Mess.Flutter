@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
+import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
-import 'package:freelance/src/modules/labours/view/add_profile.dart';
 
 class LaboursView extends ConsumerStatefulWidget {
   const LaboursView({super.key});
@@ -12,12 +13,12 @@ class LaboursView extends ConsumerStatefulWidget {
 }
 
 class _LaboursViewState extends ConsumerState<LaboursView> {
-  int _selectedLabour = 0;
+  int? _selectedLabour;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
-      body: ref.watch(employeesProvider).when(
+      body: ref.watch(laboursProvider).when(
             data: (data) {
               return Row(
                 children: [
@@ -78,8 +79,16 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
                                       ),
                                       trailing: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.more_vert, size: 32, color: Colors.black),
+                                        onPressed: () {
+                                          _selectedLabour = null;
+                                          Dialogs.loadingDailog(context);
+                                          MongoDataBase().deleteOneEmployee(data[i]).then((value) {
+                                            Navigator.pop(context);
+                                            // ignore: unused_result
+                                            value ? ref.refresh(laboursProvider) : null;
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                       ),
                                       onTap: () => setState(() {
                                         _selectedLabour = i;
@@ -104,29 +113,35 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           elevation: 4,
-                          child: const SizedBox(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 24),
-                                  child: Icon(Icons.person, size: 200, color: Colors.black),
+                          child: _selectedLabour == null
+                              ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Select Employee !', style: TextStyle(fontSize: 20)),
+                                  ],
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 24),
+                                      child: Icon(Icons.person, size: 200, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].name}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].phone}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
+                                    ),
+                                    Text(
+                                      '${data[_selectedLabour!].age}',
+                                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Employee',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.black),
-                                ),
-                                Text(
-                                  '+91 0000000',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                                Text(
-                                  'Male',
-                                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                       ),
                     ),
@@ -137,11 +152,20 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
             error: (error, stackTrace) => Text('$error'),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const CustomDialogBox()));
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Dialogs.addEmployeeDialog(context);
         },
-        child: const Icon(Icons.add),
+        child: Card(
+          margin: const EdgeInsets.all(32),
+          elevation: 10,
+          color: primary.value,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: const Padding(
+            padding: EdgeInsets.all(16),
+            child: Icon(Icons.person_add_alt_1, size: 40, color: Colors.white),
+          ),
+        ),
       ),
     );
   }

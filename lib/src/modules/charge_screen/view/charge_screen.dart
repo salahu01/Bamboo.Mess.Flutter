@@ -99,7 +99,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
           ),
           Expanded(
               flex: 4,
-              child: ref.watch(employeesProvider).when(
+              child: ref.watch(laboursProvider).when(
                     data: (data) {
                       return Container(
                         color: const Color.fromARGB(255, 228, 222, 222),
