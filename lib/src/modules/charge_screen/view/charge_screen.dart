@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +29,14 @@ var orderTypes = [
 ];
 
 class _ChargeScreenState extends ConsumerState<ChargeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 1), () async {
+      await selectEmployee();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(billProductProvider);
@@ -134,36 +144,21 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                       SizedBox(
                                         width: MediaQuery.of(context).size.width * 0.17,
                                         height: MediaQuery.of(context).size.height * 0.07,
-                                        child: Center(
-                                          child: DropdownButton(
-                                            value: selectedEmployee,
-                                            hint: const Text('Select Employee', style: TextStyle(fontSize: 25)),
-                                            underline: const SizedBox.shrink(),
-                                            icon: const Padding(
-                                              padding: EdgeInsets.only(left: 15),
-                                              child: Icon(Icons.keyboard_arrow_down, size: 35),
-                                            ),
-                                            items: data.map((item) {
-                                              return DropdownMenuItem(
-                                                value: item.name,
-                                                child: Text(
-                                                  item.name ?? '',
-                                                  style: const TextStyle(fontSize: 25),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                selectedEmployee = newValue!;
-                                              });
-                                            },
+                                        child: InkWell(
+                                          onTap: () {
+                                            selectEmployee();
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Text(selectedEmployee == null ? "Please Select Emplyee" : selectedEmployee.toString(), style: const TextStyle(fontSize: 25)),
+                                              selectedEmployee == null ? const Icon(Icons.keyboard_double_arrow_down_outlined) : const SizedBox.shrink()
+                                            ],
                                           ),
                                         ),
                                       ),
                                       SizedBox(
                                         width: MediaQuery.of(context).size.width * 0.17,
                                         height: MediaQuery.of(context).size.height * 0.07,
-                                        // color: Colors.amber,
                                         child: Center(
                                           child: DropdownButton(
                                             underline: const SizedBox.shrink(),
@@ -236,6 +231,57 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                   )),
         ],
       ),
+    );
+  }
+
+  Future selectEmployee() {
+    return showDialog(
+      barrierDismissible: false,
+      useRootNavigator: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(10),
+          title: const Text("Select Employee", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+          content: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              width: 700,
+              child: ref.watch(laboursProvider).when(
+                    data: (data) {
+                      return GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 2, crossAxisSpacing: 2),
+                        itemCount: data.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedEmployee = data[index].name;
+                                log("selected emplyee is => $selectedEmployee");
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              color: primary.value,
+                              child: Center(
+                                child: Text(
+                                  data[index].name.toString(),
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    error: (error, stackTrace) => Text('$error'),
+                    loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
+                  ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

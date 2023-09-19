@@ -116,6 +116,7 @@ class FoodsView extends ConsumerWidget {
                                           height: 68,
                                           child: Center(
                                             child: TextField(
+                                              onChanged: (value) {},
                                               decoration: InputDecoration(
                                                 filled: true,
                                                 fillColor: Colors.white,

@@ -96,6 +96,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                                 padding: const EdgeInsets.only(right: 10),
                                 child: TextField(
                                   autofocus: true,
+                                  
                                   focusNode: _focusNode,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
