@@ -21,10 +21,6 @@ class Dialogs {
       builder: (context) {
         return Consumer(builder: (context, ref, child) {
           final state = ref.watch(uploadProvider);
-          if (state == 'Success') {
-            onSuccess?.call();
-            Navigator.pop(context);
-          }
           return StatefulBuilder(builder: (BuildContext context, setState) {
             return AlertDialog(
               title: Row(
@@ -39,12 +35,14 @@ class Dialogs {
                       value: selectedTyoeInFood,
                       items: ['One Product', 'Category']
                           .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(fontWeight: FontWeight.bold))),
+                            (e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              onTap: () => setState(() => selectedTyoeInFood = e),
+                            ),
                           )
                           .toList(),
-                      onChanged: (value) {
-                        setState(() => selectedTyoeInFood = value ?? 'One Product');
-                      },
+                      onChanged: (value) {},
                     ),
                   ),
                 ],
@@ -96,10 +94,14 @@ class Dialogs {
                   onPressed: () {
                     if (state == 'Loading...') return;
                     if (key.currentState?.validate() ?? false) {
+                      if (!isProduct) {
+                        ref.read(uploadProvider.notifier).uploadFoodAndCategory(titleCtrl.text, ids: ids, isOneProduct: false, onSuccess: onSuccess);
+                        return;
+                      }
                       final isOneProduct = selectedTyoeInFood == 'One Product';
                       final List list = [titleCtrl.text, categoryName];
                       if (isOneProduct) list.add(num.parse(priceCtrl.text));
-                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(isProduct ? list : titleCtrl.text, ids: ids, isOneProduct: isOneProduct);
+                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(list, ids: ids, isOneProduct: isOneProduct, onSuccess: onSuccess);
                     }
                   },
                   child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),

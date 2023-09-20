@@ -39,6 +39,7 @@ class SavedItemsView extends ConsumerWidget {
                     itemBuilder: (context, i) {
                       return ListTile(
                         dense: true,
+                        onTap: () => ref.read(billProductProvider.notifier).removeProductFromBill(i),
                         title: Text(
                           products[i].name ?? '',
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),

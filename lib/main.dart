@@ -34,6 +34,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static final navigator = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<PrinterConnectivityCubit>(create: (_) => PrinterConnectivityCubit()),
       ],
       child: MaterialApp(
+        navigatorKey: navigator,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
           fontFamily: "montserratfamily",

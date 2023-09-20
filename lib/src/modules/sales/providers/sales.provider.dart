@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/main.dart';
 import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/models/product.model.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
@@ -11,10 +13,11 @@ part 'upload.provider.dart';
 
 final categoryProvider = FutureProvider.autoDispose<List<CategoryModel>>((ref) async {
   final categories = await MongoDataBase().getCategories;
-  final allProducts = await MongoDataBase().getProducts;
-  categories.insert(categories.length, CategoryModel(productIds: const [], categaryName: 'All', products: allProducts));
-  // ref.keepAlive();
-  ref.read(selCategoryProvider.notifier).update((_) => categories.first);
+  if (categories.isNotEmpty) {
+    final allProducts = await MongoDataBase().getProducts;
+    categories.insert(categories.length, CategoryModel(productIds: const [], categaryName: 'All', products: allProducts));
+    ref.read(selCategoryProvider.notifier).update((_) => categories.length == 1 ? null : categories.first);
+  }
   return categories;
 });
 

@@ -25,13 +25,13 @@ class FoodsView extends ConsumerWidget {
                         Flexible(
                           child: Card(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                            margin: const EdgeInsets.all(40),
+                            margin: const EdgeInsets.only(left: 40, bottom: 16, top: 16),
                             child: Column(
                               children: [
                                 Card(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   elevation: 4,
-                                  margin: const EdgeInsets.only(top: 24, bottom: 24),
+                                  margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                                   child: SizedBox(
                                     width: 600,
                                     height: 68,
@@ -56,38 +56,42 @@ class FoodsView extends ConsumerWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  child: ListView(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    children: List.generate(
-                                      data.length - 1,
-                                      (i) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                                          child: ListTile(
-                                            selected: selCategory?.id == data[i].id,
-                                            selectedTileColor: primary.value,
-                                            contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                            leading: const Icon(Icons.fastfood_outlined, size: 34, color: Colors.black),
-                                            title: Text(
-                                              data[i].categaryName ?? '',
-                                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+                                  child: Visibility(
+                                    visible: data.isNotEmpty,
+                                    replacement: const Center(child: Text('No Categories !', style: TextStyle(fontSize: 24))),
+                                    child: ListView(
+                                      padding: const EdgeInsets.only(bottom: 12),
+                                      children: List.generate(
+                                        data.isEmpty ? 0 : data.length - 1,
+                                        (i) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                                            child: ListTile(
+                                              selected: selCategory?.id == data[i].id,
+                                              selectedTileColor: primary.value,
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                              leading: const Icon(Icons.fastfood_outlined, size: 34, color: Colors.black),
+                                              title: Text(
+                                                data[i].categaryName ?? '',
+                                                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+                                              ),
+                                              trailing: IconButton(
+                                                onPressed: () {
+                                                  Dialogs.loadingDailog(context);
+                                                  MongoDataBase().deleteOneCategory(data[i]).then((value) {
+                                                    Navigator.pop(context);
+                                                    // ignore: unused_result
+                                                    value ? ref.refresh(categoryProvider) : null;
+                                                  });
+                                                },
+                                                icon: const Icon(Icons.delete, size: 32, color: Colors.black),
+                                              ),
+                                              onTap: () => ref.read(selCategoryProvider.notifier).update((_) => data[i]),
                                             ),
-                                            trailing: IconButton(
-                                              onPressed: () {
-                                                Dialogs.loadingDailog(context);
-                                                MongoDataBase().deleteOneCategory(data[i]).then((value) {
-                                                  Navigator.pop(context);
-                                                  // ignore: unused_result
-                                                  value ? ref.refresh(categoryProvider) : null;
-                                                });
-                                              },
-                                              icon: const Icon(Icons.delete, size: 32, color: Colors.black),
-                                            ),
-                                            onTap: () => ref.read(selCategoryProvider.notifier).update((_) => data[i]),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -139,7 +143,7 @@ class FoodsView extends ConsumerWidget {
                                       Expanded(
                                         child: Visibility(
                                           visible: selCategory?.products?.isNotEmpty ?? false,
-                                          replacement: const Center(child: Text('No Foods !', style: TextStyle(fontSize: 32))),
+                                          replacement: const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24))),
                                           child: Consumer(builder: (context, ref, child) {
                                             final ids = ref.watch(selDeletedProvider);
                                             return GridView.builder(

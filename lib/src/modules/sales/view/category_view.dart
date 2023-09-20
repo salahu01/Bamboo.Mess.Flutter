@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/category.model.dart';
+import 'package:freelance/src/core/models/product.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
@@ -16,6 +17,7 @@ class CategoryView extends ConsumerStatefulWidget {
 class _CategoryViewState extends ConsumerState<CategoryView> {
   int selectedIndex = 0;
   final lockedIndices = <int>[];
+  ProductModel? selectedProduct;
 
   final _scrollController = ScrollController();
   final _gridViewKey = GlobalKey();
@@ -24,29 +26,49 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: _getReorderableWidget(),
+      body: Visibility(
+        visible: selectedProduct == null,
+        replacement: Column(
+          children: [
+            // Expanded(
+            //   child: Card(
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            //     margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+            //     elevation: 4,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(12),
+            //       child: _getReorderableWidget(),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: widget.categories.isEmpty ? empty : _getReorderableWidget(),
+                ),
               ),
             ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
-            elevation: 4,
-            child: buildBottom(context, width),
-          ),
-        ],
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
+              elevation: 4,
+              child: buildBottom(context, width),
+            ),
+          ],
+        ),
       ),
     );
   }
+
+  Widget get empty => const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24)));
 
   Widget _getReorderableWidget() {
     final generatedChildren = List<Widget>.generate(
@@ -77,9 +99,25 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                       decoration: const BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 70, 70, 70)),
                       child: const Icon(Icons.add, size: 60, color: Colors.white),
                     )
-                  : Text(
-                      widget.categories[selectedIndex].products?[i]?.name ?? '',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
+                  : Stack(
+                      children: [
+                        Visibility(
+                          visible: widget.categories[selectedIndex].products?[i]?.productIds != null,
+                          child: const Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(Icons.category, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            widget.categories[selectedIndex].products?[i]?.name ?? '',
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
             ),
           ),
