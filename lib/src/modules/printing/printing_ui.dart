@@ -39,8 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           stateNotifier.value = await channel.invokeMethod("sdkInit");
                         }),
                         clickBtn("getStatus", () async {
-                          stateNotifier.value =
-                              "getStatus : ${await channel.invokeMethod("getStatus")}";
+                          stateNotifier.value = "getStatus : ${await channel.invokeMethod("getStatus")}";
                         }),
                         clickBtn("print samples", () async {
                           stateNotifier.value = await channel.invokeMethod(
@@ -51,12 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         clickBtn("printBitmap", () async {
                           final ByteData bytes = await rootBundle.load('images/icon.png');
                           //bytes.buffer.asUint8List();
-                          stateNotifier.value =
-                          await channel.invokeMethod("printBitmap", {
-                            'image': bytes.buffer.asUint8List(),
-                            'type': 'image/png',
-                            'name': 'icon.png'
-                          });
+                          stateNotifier.value = await channel.invokeMethod("printBitmap", {'image': bytes.buffer.asUint8List(), 'type': 'image/png', 'name': 'icon.png'});
                         }),
                         ValueListenableBuilder(
                             valueListenable: stateNotifier,
@@ -79,13 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         clickBtn("getSn", () async {
-                          libsNotifier.value =
-                              "sn:${await channel.invokeMethod("getSn")}";
+                          libsNotifier.value = "sn:${await channel.invokeMethod("getSn")}";
                           print('sn=${libsNotifier.value}');
                         }),
                         clickBtn("opencashBox", () async {
-                          libsNotifier.value =
-                              "${await channel.invokeMethod("opencashBox")}";
+                          libsNotifier.value = "${await channel.invokeMethod("opencashBox")}";
                         }),
                         ValueListenableBuilder(
                             valueListenable: libsNotifier,

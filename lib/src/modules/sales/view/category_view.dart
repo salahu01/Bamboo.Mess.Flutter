@@ -53,7 +53,6 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
       (widget.categories[selectedIndex].products?.length ?? 0) + 1,
       (i) {
         return GestureDetector(
-          key: Key('$i'),
           onTap: () {
             if (i == (widget.categories[selectedIndex].products?.length ?? 1)) {
               Dialogs.singleFieldDailog(
@@ -75,15 +74,8 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                   ? Container(
                       width: 90,
                       height: 90,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 70, 70, 70),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 60,
-                        color: Colors.white,
-                      ),
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 70, 70, 70)),
+                      child: const Icon(Icons.add, size: 60, color: Colors.white),
                     )
                   : Text(
                       widget.categories[selectedIndex].products?[i]?.name ?? '',

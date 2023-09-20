@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
-import 'package:freelance/src/modules/printing/printing_ui.dart';
 import 'package:hive_flutter/adapters.dart';
 // import 'dart:convert';
 // import 'package:drago_usb_printer/drago_usb_printer.dart';
