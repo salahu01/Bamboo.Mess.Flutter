@@ -148,7 +148,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                           },
                                           child: Row(
                                             children: [
-                                              Text(selectedEmployee == null ? "Please Select Emplyee" : selectedEmployee.toString(), style: const TextStyle(fontSize: 25)),
+                                              Text(selectedEmployee == null ? "Select Emplyee" : selectedEmployee.toString(), style: const TextStyle(fontSize: 25)),
                                               selectedEmployee == null ? const Icon(Icons.keyboard_double_arrow_down_outlined) : const SizedBox.shrink()
                                             ],
                                           ),

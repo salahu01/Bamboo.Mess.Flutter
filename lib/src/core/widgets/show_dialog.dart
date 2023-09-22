@@ -129,10 +129,10 @@ class Dialogs {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             content: SizedBox(
               width: 600,
+              height: MediaQuery.sizeOf(context).height * 0.3,
               child: Form(
                 key: key,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: ListView(
                   children: List.generate(
                     3,
                     (i) => Padding(
@@ -161,6 +161,7 @@ class Dialogs {
             actions: [
               TextButton(
                 onPressed: () {
+                  Navigator.pop(context);
                   for (var e in ctrls) {
                     e.clear();
                   }
