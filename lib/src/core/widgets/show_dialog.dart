@@ -9,15 +9,18 @@ class Dialogs {
     BuildContext context, {
     List<String?>? ids = const [],
     String? categoryName,
+    String? subProduct,
     void Function()? onSuccess,
   }) {
     final titleCtrl = TextEditingController();
     final priceCtrl = TextEditingController();
     final isProduct = categoryName != null;
+    final isSubProduct = subProduct != null;
     final key = GlobalKey<FormState>();
     var selectedTyoeInFood = 'One Product';
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return Consumer(builder: (context, ref, child) {
           final state = ref.watch(uploadProvider);
@@ -26,10 +29,10 @@ class Dialogs {
               title: Row(
                 children: [
                   const Spacer(),
-                  Text('Add ${isProduct ? 'Food' : 'Category'}'),
+                  Text('Add ${isProduct || isSubProduct ? 'Food' : 'Category'}'),
                   const Spacer(),
                   Visibility(
-                    visible: isProduct,
+                    visible: isProduct && !isSubProduct,
                     child: DropdownButton(
                       underline: const SizedBox.shrink(),
                       value: selectedTyoeInFood,
@@ -57,9 +60,9 @@ class Dialogs {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ...List.generate(
-                        selectedTyoeInFood == 'One Product' && isProduct ? 2 : 1,
+                        selectedTyoeInFood == 'One Product' && isProduct || isSubProduct ? 2 : 1,
                         (i) => Padding(
-                          padding: EdgeInsets.only(bottom: isProduct && i == 0 ? 24 : 0),
+                          padding: EdgeInsets.only(bottom: i == 0 ? 24 : 0),
                           child: TextFormField(
                             controller: i == 0 ? titleCtrl : priceCtrl,
                             validator: (value) => value == null || value.isEmpty ? 'Please enter the value !' : null,
@@ -71,7 +74,7 @@ class Dialogs {
                               errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
                               focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
                               disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
-                              hintText: i == 0 ? 'Enter ${isProduct ? 'food' : 'category'} here ...' : 'Enter price here ...',
+                              hintText: i == 0 ? 'Enter ${isProduct || isSubProduct ? 'food' : 'category'} here ...' : 'Enter price here ...',
                               hintStyle: const TextStyle(fontSize: 20),
                             ),
                             style: const TextStyle(fontSize: 20),
@@ -94,14 +97,15 @@ class Dialogs {
                   onPressed: () {
                     if (state == 'Loading...') return;
                     if (key.currentState?.validate() ?? false) {
-                      if (!isProduct) {
-                        ref.read(uploadProvider.notifier).uploadFoodAndCategory(titleCtrl.text, ids: ids, isOneProduct: false, onSuccess: onSuccess);
+                      //* adding category
+                      if (!isProduct && !isSubProduct) {
+                        ref.read(uploadProvider.notifier).uploadFoodAndCategory(titleCtrl.text, ids: ids, onSuccess: onSuccess);
                         return;
                       }
                       final isOneProduct = selectedTyoeInFood == 'One Product';
                       final List list = [titleCtrl.text, categoryName];
                       if (isOneProduct) list.add(num.parse(priceCtrl.text));
-                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(list, ids: ids, isOneProduct: isOneProduct, onSuccess: onSuccess);
+                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(list, ids: ids,subProduct: subProduct, onSuccess: onSuccess);
                     }
                   },
                   child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),
@@ -120,6 +124,7 @@ class Dialogs {
     final key = GlobalKey<FormState>();
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return Consumer(builder: (context, ref, child) {
           final state = ref.watch(uploadEmployeeProvider);

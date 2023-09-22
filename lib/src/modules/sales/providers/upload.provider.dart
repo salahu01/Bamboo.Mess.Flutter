@@ -3,12 +3,13 @@ part of 'sales.provider.dart';
 class UploadNotifier extends StateNotifier<String> {
   UploadNotifier() : super('Save');
 
-  void uploadFoodAndCategory(product, {required bool isOneProduct, List<String?>? ids = const [], void Function()? onSuccess}) async {
-    print('OneProduct : $isOneProduct');
+  void uploadFoodAndCategory(product, {String? subProduct, List<String?>? ids = const [], void Function()? onSuccess}) async {
     try {
       state = 'Loading...';
       if (product is List) {
-        if (isOneProduct) {
+        if (subProduct != null) {
+          await MongoDataBase().insertSubProduct(ProductModel(name: product[0], price: product[2], categaryName: product[1]), subProduct, ids);
+        } else if (product.length == 3) {
           await MongoDataBase().insertProduct(ProductModel(name: product[0], price: product[2], categaryName: product[1]), ids);
         } else {
           await MongoDataBase().insertProduct(ProductModel(name: product[0], categaryName: product[1], productIds: const []), ids);

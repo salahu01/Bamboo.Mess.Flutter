@@ -36,7 +36,15 @@ class MongoDataBase {
   }
 
   //* Find All
-  Future<List<ProductModel>> get getProducts => _products.find().map((e) => ProductModel.fromJson(e)).toList();
+  Future<List<ProductModel>> get getProducts async {
+    final products = await _products.find().map((e) => ProductModel.fromJson(e)).toList();
+    final subProducts = products.where((_) => _.categaryName == null).toList();
+    for (var i = 0; i < products.length; i++) {
+      products[i] = products[i].update(subProducts);
+    }
+    return products;
+  }
+
   Future<List<CategoryModel>> get getCategories => getProducts.then((v) => _categories.find().map((e) => CategoryModel.fromJson(e, products: v)).toList());
   Future<List<EmployeeModel>> get getEmployees => _employees.find().map((e) => EmployeeModel.fromJson(e)).toList();
   Future<List<RecieptModel>> get getReciepts => _reciepts.find().map((e) => RecieptModel.fromJson(e)).toList();
@@ -50,6 +58,8 @@ class MongoDataBase {
   //* Insert One
   Future<ProductModel> insertProduct(ProductModel v, List<String?>? ids) =>
       _products.insertOne(v.toJson()).then((e) => ProductModel.fromJson(e.document ?? {})).then((_) => updateCategory(_, ids).then((c) => _));
+  Future<ProductModel> insertSubProduct(ProductModel v, String selectedId, List<String?>? ids) =>
+      _products.insertOne(v.toJson()).then((e) => ProductModel.fromJson(e.document ?? {})).then((_) => updateProduct(_, selectedId, ids).then((c) => _));
   Future<CategoryModel> insertCategory(CategoryModel v) => _categories.insertOne(v.toJson()).then((e) => CategoryModel.fromJson(e.document ?? {}));
   Future<EmployeeModel> insertEmployee(EmployeeModel v) => _employees.insertOne(v.toJson()).then((e) => EmployeeModel.fromJson(e.document ?? {}));
   Future<RecieptModel> insertReciept(RecieptModel v) => _reciepts.insertOne(v.toJson()).then((e) => RecieptModel.fromJson(e.document ?? {}));
@@ -57,7 +67,8 @@ class MongoDataBase {
   //* Update One
   Future<bool> updateCategory(ProductModel productModel, List<String?>? ids) =>
       _categories.updateOne(where.eq('categary_name', productModel.categaryName), modify.set('products', [...(ids ?? []), productModel.id])).then((e) => e.isSuccess);
-
+  Future<bool> updateProduct(ProductModel productModel, String? selectedId, List<String?>? ids) =>
+      _products.updateOne(where.eq('_id', ObjectId.fromHexString(selectedId ?? '')), modify.set('products', [...(ids ?? []), productModel.id])).then((e) => e.isSuccess);
   // //* Delete All
   Future<bool> deleteProducts(List<String> ids, String categaryName, List<String?> allIds) {
     return _products.deleteMany({

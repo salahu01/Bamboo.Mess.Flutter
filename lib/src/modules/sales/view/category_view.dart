@@ -83,15 +83,20 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
       (i) {
         return GestureDetector(
           onTap: () {
-            if (i == (widget.categories[selectedIndex].products?.length ?? 1)) {
+            final isSubProduct = selectedProduct != null;
+            final prods = selectedProduct?.products ?? widget.categories[selectedIndex].products;
+            if (i == (prods?.length ?? 1)) {
+              final ids = isSubProduct ? selectedProduct?.productIds : widget.categories[selectedIndex].productIds;
+              final name = isSubProduct ? null : widget.categories[selectedIndex].categaryName;
               Dialogs.singleFieldDailog(
                 context,
-                ids: widget.categories[selectedIndex].productIds,
-                categoryName: widget.categories[selectedIndex].categaryName,
+                ids: ids,
+                categoryName: name,
+                subProduct: selectedProduct?.id,
                 onSuccess: () => ref.refresh(categoryProvider),
               );
-            } else if (widget.categories[selectedIndex].products?[i]?.productIds == null) {
-              ref.read(billProductProvider.notifier).addProductToBill(widget.categories[selectedIndex].products?[i]);
+            } else if (prods?[i]?.productIds == null) {
+              ref.read(billProductProvider.notifier).addProductToBill(prods?[i]);
             } else if (widget.categories[selectedIndex].products?[i]?.productIds != null) {
               setState(() => selectedProduct = widget.categories[selectedIndex].products?[i]);
             }

@@ -16,23 +16,32 @@ class ProductModel {
     this.products,
     this.price,
     required this.name,
-    required this.categaryName,
+    this.categaryName,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json, {List<ProductModel?>? products = const []}) => ProductModel(
+  factory ProductModel.fromJson(Map<String, dynamic> json, {List<ProductModel?>? products}) => ProductModel(
         categaryName: json['categary_name'],
         name: json['name'],
         price: json['price'],
         id: (json["_id"] as ObjectId).$oid,
         productIds: json["products"] == null ? null : List<String>.from(json["products"].map((x) => x)),
-        products: (json["products"] as List? ?? []).cast<String?>().map((e) => products?.singleWhere((v) => '${v?.id}' == '$e')).toList(),
+        products: products == null ? [] : (json["products"] as List? ?? []).cast<String?>().map((e) => products.singleWhere((v) => '${v?.id}' == '$e')).toList(),
       );
 
+  ProductModel update(List<ProductModel>? subs) {
+    return ProductModel(
+      name: name,
+      categaryName: categaryName,
+      id: id,
+      price: price,
+      productIds: productIds,
+      products: productIds?.map((e) => subs?.singleWhere((_) => _.id == e)).toList() ?? [],
+    );
+  }
+
   Map<String, dynamic> toJson() {
-    final json = <String, dynamic>{
-      'name': name,
-      'categary_name': categaryName,
-    };
+    final json = <String, dynamic>{'name': name};
+    if (categaryName != null) json['categary_name'] = categaryName;
     if (price != null) json['price'] = price;
     if (productIds != null) json['products'] = productIds;
     return json;
