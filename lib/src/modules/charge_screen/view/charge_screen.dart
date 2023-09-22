@@ -2,12 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
-import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 import 'package:freelance/src/modules/charge_screen/provider/charge.screen.provider.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
@@ -195,9 +193,6 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                         ref
                                             .read(uploadRecieptProvider.notifier)
                                             .createReciept(RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now()), ref);
-                                        BlocProvider.of<PrinterConnectivityCubit>(context)
-                                            .printerBluetoothManager
-                                            .printTicket(await BlocProvider.of<PrinterConnectivityCubit>(context).generateBtPrint());
                                       }
                                     },
                                     child: Container(

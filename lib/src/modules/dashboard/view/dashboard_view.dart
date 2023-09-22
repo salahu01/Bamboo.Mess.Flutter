@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/bluetooth_connection/bluetooth_connection.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
 import 'package:freelance/src/modules/foods/view/foods_view.dart';
 import 'package:freelance/src/modules/labours/view/labours.view.dart';
@@ -19,9 +18,9 @@ class DashBoardView extends ConsumerStatefulWidget {
 
 class _DashBoardViewState extends ConsumerState<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
-  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person, Icons.bluetooth];
-  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours', 'Bluetooth'];
-  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours', 'Bluetooth Connection'];
+  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person];
+  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours'];
+  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours'];
   int _drawerIndex = 0;
 
   @override
@@ -139,7 +138,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
               // ),
             ),
           ),
-          ...List.generate(5, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
+          ...List.generate(4, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
         ][_drawerIndex],
         actions: [
           Visibility(
@@ -194,7 +193,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(
-                  6,
+                  5,
                   (i) {
                     final selected = _drawerIndex == i;
                     return Padding(
@@ -224,7 +223,6 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
         const FoodsView(),
         const SettingsView(),
         const LaboursView(),
-        const BluetoothConnection(),
       ][_drawerIndex],
     );
   }

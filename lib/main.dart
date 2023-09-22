@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/services/db/local.db.sevices.dart';
 import 'package:freelance/src/core/services/db/remote.db.services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:freelance/src/modules/bluetooth_connection/bloc/bluethooth_connection_cubit.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 import 'package:hive_flutter/adapters.dart';
-// import 'dart:convert';
-// import 'package:drago_usb_printer/drago_usb_printer.dart';
 
 void main() async {
   await MongoDataBase().connectDb();
@@ -19,16 +15,8 @@ void main() async {
   await LocalDataBase().openBox();
   await retriveColor();
   WidgetsFlutterBinding.ensureInitialized();
-  const MethodChannel channel = MethodChannel('com.imin.printersdk');
-  await channel.invokeMethod("sdkInit").catchError((e) {});
+  await Printer.instance.initSdk();
   runApp(const ProviderScope(child: MyApp()));
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark,
-    ),
-  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,20 +26,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: <BlocProvider>[
-        BlocProvider<PrinterConnectivityCubit>(create: (_) => PrinterConnectivityCubit()),
-      ],
-      child: MaterialApp(
-        navigatorKey: navigator,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
-          fontFamily: "montserratfamily",
-        ),
-        debugShowCheckedModeBanner: false,
-        home: const DashBoardView(),
-        // home: const MyHomePage(title: "print sample"),
+    return MaterialApp(
+      navigatorKey: navigator,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
+        fontFamily: "montserratfamily",
       ),
+      debugShowCheckedModeBanner: false,
+      home: const DashBoardView(),
+      // home: const MyHomePage(title: "print sample"),
     );
   }
 }

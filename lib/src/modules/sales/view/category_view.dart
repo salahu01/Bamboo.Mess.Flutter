@@ -26,53 +26,60 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Visibility(
-        visible: selectedProduct == null,
-        replacement: Column(
-          children: [
-            // Expanded(
-            //   child: Card(
-            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            //     margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
-            //     elevation: 4,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(12),
-            //       child: _getReorderableWidget(),
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: widget.categories.isEmpty ? empty : _getReorderableWidget(),
+      body: selectedProduct != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 12),
+                  child: IconButton(
+                    onPressed: () => setState(() => selectedProduct = null),
+                    icon: Icon(Icons.arrow_back, color: primary.value, size: 32),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: _getReorderableWidget(products: selectedProduct?.products),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: widget.categories.isEmpty ? empty : _getReorderableWidget(),
+                    ),
+                  ),
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
+                  elevation: 4,
+                  child: buildBottom(context, width),
+                ),
+              ],
             ),
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
-              elevation: 4,
-              child: buildBottom(context, width),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
   Widget get empty => const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24)));
 
-  Widget _getReorderableWidget() {
+  Widget _getReorderableWidget({List<ProductModel?>? products}) {
+    final canAdd = selectedIndex == (widget.categories.length - 1) ? 0 : 1;
     final generatedChildren = List<Widget>.generate(
-      (widget.categories[selectedIndex].products?.length ?? 0) + 1,
+      ((products ?? widget.categories[selectedIndex].products)?.length ?? 0) + canAdd,
       (i) {
         return GestureDetector(
           onTap: () {
@@ -83,8 +90,10 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                 categoryName: widget.categories[selectedIndex].categaryName,
                 onSuccess: () => ref.refresh(categoryProvider),
               );
-            } else {
+            } else if (widget.categories[selectedIndex].products?[i]?.productIds == null) {
               ref.read(billProductProvider.notifier).addProductToBill(widget.categories[selectedIndex].products?[i]);
+            } else if (widget.categories[selectedIndex].products?[i]?.productIds != null) {
+              setState(() => selectedProduct = widget.categories[selectedIndex].products?[i]);
             }
           },
           child: Card(
@@ -92,7 +101,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
             color: primary.value,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: Center(
-              child: i == (widget.categories[selectedIndex].products?.length ?? 1)
+              child: i == ((products ?? widget.categories[selectedIndex].products)?.length ?? 1)
                   ? Container(
                       width: 90,
                       height: 90,
@@ -102,7 +111,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                   : Stack(
                       children: [
                         Visibility(
-                          visible: widget.categories[selectedIndex].products?[i]?.productIds != null,
+                          visible: (products ?? widget.categories[selectedIndex].products)?[i]?.productIds != null,
                           child: const Align(
                             alignment: Alignment.topRight,
                             child: Padding(
@@ -113,7 +122,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                         ),
                         Center(
                           child: Text(
-                            widget.categories[selectedIndex].products?[i]?.name ?? '',
+                            (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
                             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
                           ),
                         ),
