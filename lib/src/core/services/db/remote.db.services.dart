@@ -85,6 +85,20 @@ class MongoDataBase {
     });
   }
 
+  Future<bool> deleteSubCategoryProducts(List<String> ids, String? subCategoryId, List<String?> allIds) {
+    return _products.deleteMany({
+      '_id': {'\$in': ids.map((e) => ObjectId.fromHexString(e)).toList()},
+    }).then((e) {
+      if (e.isSuccess) {
+        for (var e in ids) {
+          allIds.remove(e);
+        }
+        return _products.updateOne(where.eq('_id', ObjectId.fromHexString(subCategoryId ?? '')), modify.set('products', [...allIds])).then((e) => e.isSuccess);
+      }
+      return false;
+    });
+  }
+
   //* Delete One
   Future<bool> deleteOneCategory(CategoryModel model) {
     return _products.deleteMany({
@@ -95,16 +109,22 @@ class MongoDataBase {
     });
   }
 
-  Future<bool> deleteSubCategory(ProductModel model) {
+  Future<bool> deleteOneSubCategory(ProductModel model, CategoryModel v) {
     return _products.deleteMany({
       '_id': {'\$in': model.productIds?.map((e) => ObjectId.fromHexString(e ?? '')).toList()}
     }).then((e) {
-      if (e.isSuccess) return _categories.deleteMany({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) => e.isSuccess);
+      if (e.isSuccess) {
+        return _products.deleteMany({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) {
+          if (e.isSuccess) {
+            v.productIds?.remove(model.id);
+            return _categories.updateOne(where.eq('_id', ObjectId.fromHexString(v.id ?? '')), modify.set('products', [...?v.productIds])).then((e) => e.isSuccess);
+          }
+          return false;
+        });
+      }
       return false;
     });
   }
-
-
 
   Future<bool> deleteOneEmployee(EmployeeModel model) {
     return _employees.deleteOne({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) => e.isSuccess);

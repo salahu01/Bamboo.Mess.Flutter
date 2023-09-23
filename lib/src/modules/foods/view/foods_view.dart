@@ -82,13 +82,19 @@ class FoodsView extends ConsumerWidget {
                                                   Dialogs.loadingDailog(context);
                                                   MongoDataBase().deleteOneCategory(data[i]).then((value) {
                                                     Navigator.pop(context);
-                                                    // ignore: unused_result
-                                                    value ? ref.refresh(categoryProvider) : null;
+                                                    if (value) {
+                                                      clearSelects(ref);
+                                                      // ignore: unused_result
+                                                      ref.refresh(categoryProvider);
+                                                    }
                                                   });
                                                 },
                                                 icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                               ),
-                                              onTap: () => ref.read(selCategoryProvider.notifier).update((_) => data[i]),
+                                              onTap: () {
+                                                clearSelects(ref);
+                                                ref.read(selCategoryProvider.notifier).update((_) => data[i]);
+                                              },
                                             ),
                                           );
                                         },
@@ -143,7 +149,7 @@ class FoodsView extends ConsumerWidget {
                                       visible: selCategory?.products?.isNotEmpty ?? false,
                                       replacement: const Center(child: Text('No Sub Categories !', style: TextStyle(fontSize: 24))),
                                       child: Consumer(builder: (context, ref, child) {
-                                        final ids = ref.watch(selSubProducts);
+                                        final ids = ref.watch(selProducts);
                                         return ListView.builder(
                                           itemCount: selCategory?.products?.length,
                                           itemBuilder: (BuildContext context, int index) {
@@ -155,6 +161,7 @@ class FoodsView extends ConsumerWidget {
                                                 selected: '${selSubCategory?.id}' == '${product?.id}',
                                                 onTap: () {
                                                   if (product?.price == null) {
+                                                    clearSubSelects(ref);
                                                     ref.read(selSubCategoryProvider.notifier).update((_) => _ = product);
                                                   }
                                                 },
@@ -176,12 +183,15 @@ class FoodsView extends ConsumerWidget {
                                                   visible: product?.price != null,
                                                   replacement: IconButton(
                                                     onPressed: () {
-                                                      // Dialogs.loadingDailog(context);
-                                                      // MongoDataBase().deleteOneCategory(data[i]).then((value) {
-                                                      //   Navigator.pop(context);
-                                                      //   // ignore: unused_result
-                                                      //   value ? ref.refresh(categoryProvider) : null;
-                                                      // });
+                                                      Dialogs.loadingDailog(context);
+                                                      MongoDataBase().deleteOneSubCategory(product!, selCategory!).then((value) {
+                                                        Navigator.pop(context);
+                                                        if (value) {
+                                                          clearSelects(ref);
+                                                          // ignore: unused_result
+                                                          ref.refresh(categoryProvider);
+                                                        }
+                                                      });
                                                     },
                                                     icon: const Icon(Icons.delete, size: 32, color: Colors.black),
                                                   ),
@@ -191,10 +201,10 @@ class FoodsView extends ConsumerWidget {
                                                       value: ids.map((e) => e.id).contains(product?.id),
                                                       activeColor: primary.value,
                                                       onChanged: (_) {
-                                                        if (_!) {
-                                                          ref.read(selSubProducts.notifier).update((s) => [...ids, product!]);
+                                                        if (_! && ref.read(selSubCategoryProducts).isEmpty) {
+                                                          ref.read(selProducts.notifier).update((s) => [...ids, product!]);
                                                         } else {
-                                                          ref.read(selSubProducts.notifier).update((s) => [...ids.where((e) => e.id != product!.id)]);
+                                                          ref.read(selProducts.notifier).update((s) => [...ids.where((e) => e.id != product!.id)]);
                                                         }
                                                       },
                                                     ),
@@ -256,7 +266,7 @@ class FoodsView extends ConsumerWidget {
                                       visible: selSubCategory?.products?.isNotEmpty ?? false,
                                       replacement: const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24))),
                                       child: Consumer(builder: (context, ref, child) {
-                                        final ids = ref.watch(selProducts);
+                                        final ids = ref.watch(selSubCategoryProducts);
                                         return ListView.builder(
                                           itemCount: selSubCategory?.products?.length,
                                           itemBuilder: (BuildContext context, int index) {
@@ -279,10 +289,10 @@ class FoodsView extends ConsumerWidget {
                                                   value: ids.map((e) => e.id).contains(product?.id),
                                                   activeColor: primary.value,
                                                   onChanged: (_) {
-                                                    if (_!) {
-                                                      ref.read(selProducts.notifier).update((s) => [...ids, product!]);
+                                                    if (_! && ref.read(selProducts).isEmpty) {
+                                                      ref.read(selSubCategoryProducts.notifier).update((s) => [...ids, product!]);
                                                     } else {
-                                                      ref.read(selProducts.notifier).update((s) => [...ids.where((e) => e.id != product!.id)]);
+                                                      ref.read(selSubCategoryProducts.notifier).update((s) => [...ids.where((e) => e.id != product!.id)]);
                                                     }
                                                   },
                                                 ),
@@ -305,16 +315,24 @@ class FoodsView extends ConsumerWidget {
                       alignment: Alignment.bottomRight,
                       child: Consumer(
                         builder: (context, myType, child) {
-                          final ids = ref.watch(selSubProducts);
+                          final prods = ref.watch(selProducts);
+                          final subProds = ref.watch(selSubCategoryProducts);
+                          final ids = prods.isNotEmpty ? prods : subProds;
                           return Visibility(
                             visible: ids.isNotEmpty,
                             child: GestureDetector(
                               onTap: () {
                                 Dialogs.loadingDailog(context);
-                                MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? []).then((value) {
+                                (prods.isNotEmpty
+                                        ? MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? [])
+                                        : MongoDataBase().deleteSubCategoryProducts(ids.map((e) => e.id!).toList(), selSubCategory?.id, selSubCategory?.productIds ?? []))
+                                    .then((value) {
                                   Navigator.pop(context);
-                                  // ignore: unused_result
-                                  value ? ref.refresh(categoryProvider) : null;
+                                  if (value) {
+                                    clearSelects(ref);
+                                    // ignore: unused_result
+                                    ref.refresh(categoryProvider);
+                                  }
                                 });
                               },
                               child: Card(
