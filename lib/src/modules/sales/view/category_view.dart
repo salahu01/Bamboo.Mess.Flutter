@@ -98,7 +98,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                 context,
                 ids: ids,
                 categoryName: name,
-                subProduct: widget.categories[selectedIndex].products![selectedSubIndex!]?.id,
+                subProduct: isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.id : null,
                 onSuccess: () => ref.refresh(categoryProvider),
               );
             } else if (products?[i]?.productIds == null) {

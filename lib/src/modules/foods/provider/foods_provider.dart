@@ -6,6 +6,14 @@ final selCategoryProvider = StateProvider<CategoryModel?>((ref) {
   return;
 });
 
-final selDeletedProvider = StateProvider<List<ProductModel>>((ref) {
+final selSubCategoryProvider = StateProvider<ProductModel?>((ref) {
+  return;
+});
+
+final selSubProducts = StateProvider<List<ProductModel>>((ref) {
+  return [];
+});
+
+final selProducts = StateProvider<List<ProductModel>>((ref) {
   return [];
 });
