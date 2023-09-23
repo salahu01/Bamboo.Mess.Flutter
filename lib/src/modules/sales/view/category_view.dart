@@ -17,7 +17,7 @@ class CategoryView extends ConsumerStatefulWidget {
 class _CategoryViewState extends ConsumerState<CategoryView> {
   int selectedIndex = 0;
   final lockedIndices = <int>[];
-  ProductModel? selectedProduct;
+  int? selectedSubIndex;
 
   final _scrollController = ScrollController();
   final _gridViewKey = GlobalKey();
@@ -26,14 +26,14 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: selectedProduct != null
+      body: selectedSubIndex != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 12, top: 12),
                   child: IconButton(
-                    onPressed: () => setState(() => selectedProduct = null),
+                    onPressed: () => setState(() => selectedSubIndex = null),
                     icon: Icon(Icons.arrow_back, color: primary.value, size: 32),
                   ),
                 ),
@@ -44,7 +44,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                     elevation: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: _getReorderableWidget(products: selectedProduct?.products),
+                      child: _getReorderableWidget(),
                     ),
                   ),
                 ),
@@ -76,29 +76,35 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
 
   Widget get empty => const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24)));
 
-  Widget _getReorderableWidget({List<ProductModel?>? products}) {
+  Widget _getReorderableWidget() {
     final canAdd = selectedIndex == (widget.categories.length - 1) ? 0 : 1;
+    List<ProductModel?>? products;
+    if (selectedSubIndex != null) {
+      products = widget.categories[selectedIndex].products?[selectedSubIndex!]?.products;
+    } else {
+      products = widget.categories[selectedIndex].products;
+    }
+
     final generatedChildren = List<Widget>.generate(
-      ((products ?? widget.categories[selectedIndex].products)?.length ?? 0) + canAdd,
+      (products?.length ?? 0) + canAdd,
       (i) {
         return GestureDetector(
           onTap: () {
-            final isSubProduct = selectedProduct != null;
-            final prods = selectedProduct?.products ?? widget.categories[selectedIndex].products;
-            if (i == (prods?.length ?? 1)) {
-              final ids = isSubProduct ? selectedProduct?.productIds : widget.categories[selectedIndex].productIds;
+            final isSubProduct = selectedSubIndex != null;
+            if (i == (products?.length ?? 1)) {
+              final ids = isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.productIds : widget.categories[selectedIndex].productIds;
               final name = isSubProduct ? null : widget.categories[selectedIndex].categaryName;
               Dialogs.singleFieldDailog(
                 context,
                 ids: ids,
                 categoryName: name,
-                subProduct: selectedProduct?.id,
+                subProduct: widget.categories[selectedIndex].products![selectedSubIndex!]?.id,
                 onSuccess: () => ref.refresh(categoryProvider),
               );
-            } else if (prods?[i]?.productIds == null) {
-              ref.read(billProductProvider.notifier).addProductToBill(prods?[i]);
+            } else if (products?[i]?.productIds == null) {
+              ref.read(billProductProvider.notifier).addProductToBill(products?[i]);
             } else if (widget.categories[selectedIndex].products?[i]?.productIds != null) {
-              setState(() => selectedProduct = widget.categories[selectedIndex].products?[i]);
+              setState(() => selectedSubIndex = i);
             }
           },
           child: Card(

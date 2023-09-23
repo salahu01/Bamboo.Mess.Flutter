@@ -69,7 +69,8 @@ class MongoDataBase {
       _categories.updateOne(where.eq('categary_name', productModel.categaryName), modify.set('products', [...(ids ?? []), productModel.id])).then((e) => e.isSuccess);
   Future<bool> updateProduct(ProductModel productModel, String? selectedId, List<String?>? ids) =>
       _products.updateOne(where.eq('_id', ObjectId.fromHexString(selectedId ?? '')), modify.set('products', [...(ids ?? []), productModel.id])).then((e) => e.isSuccess);
-  // //* Delete All
+
+  //* Delete All
   Future<bool> deleteProducts(List<String> ids, String categaryName, List<String?> allIds) {
     return _products.deleteMany({
       '_id': {'\$in': ids.map((e) => ObjectId.fromHexString(e)).toList()},
@@ -93,6 +94,17 @@ class MongoDataBase {
       return false;
     });
   }
+
+  Future<bool> deleteSubCategory(ProductModel model) {
+    return _products.deleteMany({
+      '_id': {'\$in': model.productIds?.map((e) => ObjectId.fromHexString(e ?? '')).toList()}
+    }).then((e) {
+      if (e.isSuccess) return _categories.deleteMany({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) => e.isSuccess);
+      return false;
+    });
+  }
+
+
 
   Future<bool> deleteOneEmployee(EmployeeModel model) {
     return _employees.deleteOne({'_id': ObjectId.fromHexString(model.id ?? '')}).then((e) => e.isSuccess);
