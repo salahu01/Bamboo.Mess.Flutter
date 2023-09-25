@@ -148,7 +148,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                           },
                                           child: Row(
                                             children: [
-                                              Text(selectedEmployee == null ? "Select Emplyee" : selectedEmployee.toString(), style: const TextStyle(fontSize: 25)),
+                                              Text(selectedEmployee == null ? "Select Emplyee" : '$selectedEmployee', style: const TextStyle(fontSize: 25)),
                                               selectedEmployee == null ? const Icon(Icons.keyboard_double_arrow_down_outlined) : const SizedBox.shrink()
                                             ],
                                           ),
@@ -191,8 +191,8 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                         Dialogs.showSnack(context, 'Please select employee !');
                                       } else {
                                         ref
-                                            .read(uploadRecieptProvider.notifier)
-                                            .createReciept(RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now()), ref);
+                                        .read(uploadRecieptProvider.notifier)
+                                        .createReciept(RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now()), ref, context);
                                       }
                                     },
                                     child: Container(
@@ -203,11 +203,6 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                         child: Consumer(
                                           builder: (context, ref, child) {
                                             final state = ref.watch(uploadRecieptProvider);
-                                            if (state == 'Success') {
-                                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                Navigator.pop(context);
-                                              });
-                                            }
                                             return Text(state, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold));
                                           },
                                         ),

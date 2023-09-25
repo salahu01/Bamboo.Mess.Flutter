@@ -3,9 +3,11 @@ package com.example.freelance
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+
 import com.imin.library.SystemPropManager
 import com.imin.printerlib.IminPrintUtils
 import com.imin.printerlib.IminPrintUtils.PrintConnectType
+
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -14,7 +16,9 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
+import java.lang.Exception
 import java.lang.ref.SoftReference
+import java.util.ArrayList
 
 class MainActivity: FlutterActivity() {
     private val whichChannel = "com.i_min.printer_sdk"
@@ -41,22 +45,50 @@ class MainActivity: FlutterActivity() {
                     result.success("init")
                 }
                 "printText" -> {
+                        if (call.arguments<Any?>() == null) return@setMethodCallHandler
+                        val arg = (call.arguments<Map<String,Any>>())!!
+                        val text = arg["text"] as String
+                        val bold = arg["bold"] as Boolean
+                        val alignment = arg["alignment"] as Int
+                        val size = arg["size"] as Int
+                        val underline = arg["underline"] as Boolean
+                        val underLineHeight = (arg["underLineHeight"] as Double).toFloat()
+                        val textLineSpacing = (arg["textLineSpacing"] as Double).toFloat()
+                        IminPrintUtils.getInstance(this@MainActivity)
+                            .setAlignment(alignment)
+                            .setTextLineSpacing(textLineSpacing)
+                            .setHaveLineHeight(underLineHeight)
+                            .setUnderline(underline)
+                            .setTextSize(size)
+                            .sethaveBold(bold)
+                            .printText("$text\n")
+                        result.success("printed successfully $text \n")
+                }
+                "cutPaper" -> {
+                    IminPrintUtils.getInstance(this@MainActivity).partialCut()
+                    result.success("paper cut successfully")
+                }
+                "createRow" -> {
                     if (call.arguments<Any?>() == null) return@setMethodCallHandler
                     val arg = (call.arguments<Map<String,Any>>())!!
-                    val text = arg["text"] as String
-                    val bold = arg["bold"] as Boolean
-                    val alignment = arg["alignment"] as Int
-                    val size = arg["size"] as Int
-                    val underline = arg["underline"] as Boolean
-                    val underLineHeight = arg["underLineHeight"] as Float
-                    IminPrintUtils.getInstance(this@MainActivity)
-                        .setAlignment(alignment)
-                        .setHaveLineHeight(underLineHeight)
-                        .setUnderline(underline)
-                        .setTextSize(size)
-                        .sethaveBold(bold)
-                        .printText("$text\n")
-                    result.success("$text printed successfully \n")
+                    try {
+                        val texts:Array<String> =  (arg["texts"] as ArrayList<String>).toTypedArray()
+                        val colWidthArr =  (arg["widths"] as ArrayList<Int>).toIntArray()
+                        val colAlign =  (arg["aligns"] as ArrayList<Int>).toIntArray()
+                        val size =  (arg["sizes"] as ArrayList<Int>).toIntArray()
+                        IminPrintUtils.getInstance(this@MainActivity).printColumnsText(texts,colWidthArr,colAlign,size)
+                        IminPrintUtils.getInstance(this@MainActivity).printAndFeedPaper(40)
+                        result.success("created row ${texts}")
+                    }catch (e:Exception){
+                        result.success("created row error $e")
+                    }
+
+                }
+                "blankSpacePrint" -> {
+                    if (call.arguments<Any?>() == null) return@setMethodCallHandler
+                    val size = (call.arguments<Int>())!!
+                    IminPrintUtils.getInstance(this@MainActivity).printAndFeedPaper(size)
+                    result.success("print blank space successfully")
                 }
                 "printBitmap" -> {
                     val image = call.argument<ByteArray>("image")
