@@ -71,18 +71,12 @@ class MainActivity: FlutterActivity() {
                 "createRow" -> {
                     if (call.arguments<Any?>() == null) return@setMethodCallHandler
                     val arg = (call.arguments<Map<String,Any>>())!!
-                    try {
                         val texts:Array<String> =  (arg["texts"] as ArrayList<String>).toTypedArray()
                         val colWidthArr =  (arg["widths"] as ArrayList<Int>).toIntArray()
                         val colAlign =  (arg["aligns"] as ArrayList<Int>).toIntArray()
                         val size =  (arg["sizes"] as ArrayList<Int>).toIntArray()
                         IminPrintUtils.getInstance(this@MainActivity).printColumnsText(texts,colWidthArr,colAlign,size)
-                        IminPrintUtils.getInstance(this@MainActivity).printAndFeedPaper(40)
                         result.success("created row ${texts}")
-                    }catch (e:Exception){
-                        result.success("created row error $e")
-                    }
-
                 }
                 "blankSpacePrint" -> {
                     if (call.arguments<Any?>() == null) return@setMethodCallHandler
