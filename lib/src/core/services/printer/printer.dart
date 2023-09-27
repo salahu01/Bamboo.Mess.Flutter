@@ -86,9 +86,9 @@ final class Printer {
     await _printBlankSpace(8);
 
     //* products
-    for (var e in model.products ?? []) {
-      await _printRow(['${e.name}', '₹${e?.count * e?.price}.00']);
-      await _printText(' ${e?.count} x ${e?.price}.00', alignment: PrintAlignment.left, size: 26);
+    for (var e in model.products!) {
+      await _printRow([e.name ?? '', '₹${((e.count ?? 0) * (e.price ?? 0))}.00']);
+      await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00', alignment: PrintAlignment.left, size: 26);
       await _printBlankSpace(2);
     }
 

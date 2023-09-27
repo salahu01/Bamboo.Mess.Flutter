@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/extensions/date_time.extension.dart';
 import 'package:freelance/src/core/services/db/remote.db.services.dart';
+import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/receipts/provider/receipts.provider.dart';
@@ -127,74 +128,85 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                     flex: 2,
                     child: Center(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.15),
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.12),
                         child: Card(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           elevation: 4,
-                          child: SizedBox(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 24),
-                                  child: Text(
-                                    '₹ ${data[_selectedRow][_selectedReceipt].totalAmount ?? ''}.00',
-                                    style: const TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 24),
+                                child: Text(
+                                  '₹ ${data[_selectedRow][_selectedReceipt].totalAmount ?? ''}.00',
+                                  style: const TextStyle(fontSize: 58, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              Text(
+                                'Total',
+                                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Colors.grey[900]),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 24, top: 8),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Employee : ${data[_selectedRow][_selectedReceipt].employee ?? ''}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                      const SizedBox(height: 12),
+                                      Text(data[_selectedRow][_selectedReceipt].orderType ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  'Total',
-                                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Colors.grey[900]),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                child: Divider(color: Colors.black),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: data[_selectedRow][_selectedReceipt].products?.length ?? 0,
+                                  itemBuilder: (context, i) {
+                                    return ListTile(
+                                      dense: true,
+                                      title: Text(
+                                        data[_selectedRow][_selectedReceipt].products?[i].name ?? '',
+                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                      ),
+                                      subtitle: Text(
+                                        'Qty : ${data[_selectedRow][_selectedReceipt].products?[i].count}',
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                      ),
+                                      trailing: Text(
+                                        '₹ ${(data[_selectedRow][_selectedReceipt].products?[i].count ?? 0) * (data[_selectedRow][_selectedReceipt].products?[i].price ?? 0)}',
+                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 24, top: 8),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Employee : ${data[_selectedRow][_selectedReceipt].employee ?? ''}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                                        const SizedBox(height: 12),
-                                        Text(data[_selectedRow][_selectedReceipt].orderType ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                  child: Divider(color: Colors.black),
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                                    physics: const BouncingScrollPhysics(),
-                                    itemCount: data[_selectedRow][_selectedReceipt].products?.length ?? 0,
-                                    itemBuilder: (context, i) {
-                                      return ListTile(
-                                        dense: true,
-                                        title: Text(
-                                          data[_selectedRow][_selectedReceipt].products?[i].name ?? '',
-                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                        ),
-                                        subtitle: Text(
-                                          'Qty : ${data[_selectedRow][_selectedReceipt].products?[i].count}',
-                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                        ),
-                                        trailing: Text(
-                                          '₹ ${(data[_selectedRow][_selectedReceipt].products?[i].count ?? 0) * (data[_selectedRow][_selectedReceipt].products?[i].price ?? 0)}',
-                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: FloatingActionButton.large(
+                        backgroundColor: primary.value,
+                        onPressed: () {
+                          Printer.instance.print(data[_selectedRow][_selectedReceipt]);
+                        },
+                        child: const Icon(Icons.print),
+                      ),
+                    ),
+                  )
                 ],
               );
             },

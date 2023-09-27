@@ -16,9 +16,9 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Exception
 import java.lang.ref.SoftReference
 import java.util.ArrayList
+import kotlin.Exception
 
 class MainActivity: FlutterActivity() {
     private val whichChannel = "com.i_min.printer_sdk"
@@ -45,38 +45,43 @@ class MainActivity: FlutterActivity() {
                     result.success("init")
                 }
                 "printText" -> {
-                        if (call.arguments<Any?>() == null) return@setMethodCallHandler
-                        val arg = (call.arguments<Map<String,Any>>())!!
-                        val text = arg["text"] as String
-                        val bold = arg["bold"] as Boolean
-                        val alignment = arg["alignment"] as Int
-                        val size = arg["size"] as Int
-                        val underline = arg["underline"] as Boolean
-                        val underLineHeight = (arg["underLineHeight"] as Double).toFloat()
-                        val textLineSpacing = (arg["textLineSpacing"] as Double).toFloat()
-                        IminPrintUtils.getInstance(this@MainActivity)
-                            .setAlignment(alignment)
-                            .setTextLineSpacing(textLineSpacing)
-                            .setHaveLineHeight(underLineHeight)
-                            .setUnderline(underline)
-                            .setTextSize(size)
-                            .sethaveBold(bold)
-                            .printText("$text\n")
-                        result.success("printed successfully $text \n")
+                    if (call.arguments<Any?>() == null) return@setMethodCallHandler
+                    val arg = (call.arguments<Map<String,Any>>())!!
+                    val text = arg["text"] as String
+                    val bold = arg["bold"] as Boolean
+                    val alignment = arg["alignment"] as Int
+                    val size = arg["size"] as Int
+                    val underline = arg["underline"] as Boolean
+                    val underLineHeight = (arg["underLineHeight"] as Double).toFloat()
+                    val textLineSpacing = (arg["textLineSpacing"] as Double).toFloat()
+                    IminPrintUtils.getInstance(this@MainActivity)
+                        .setAlignment(alignment)
+                        .setTextLineSpacing(textLineSpacing)
+                        .setHaveLineHeight(underLineHeight)
+                        .setUnderline(underline)
+                        .setTextSize(size)
+                        .sethaveBold(bold)
+                        .printText("$text\n")
+                    result.success("printed successfully $text \n")
                 }
                 "cutPaper" -> {
                     IminPrintUtils.getInstance(this@MainActivity).partialCut()
                     result.success("paper cut successfully")
                 }
                 "createRow" -> {
-                    if (call.arguments<Any?>() == null) return@setMethodCallHandler
-                    val arg = (call.arguments<Map<String,Any>>())!!
+                    try {
+                        if (call.arguments<Any?>() == null) return@setMethodCallHandler
+                        val arg = (call.arguments<Map<String,Any>>())!!
                         val texts:Array<String> =  (arg["texts"] as ArrayList<String>).toTypedArray()
                         val colWidthArr =  (arg["widths"] as ArrayList<Int>).toIntArray()
                         val colAlign =  (arg["aligns"] as ArrayList<Int>).toIntArray()
                         val size =  (arg["sizes"] as ArrayList<Int>).toIntArray()
                         IminPrintUtils.getInstance(this@MainActivity).printColumnsText(texts,colWidthArr,colAlign,size)
                         result.success("created row ${texts}")
+                    }catch (e:Exception){
+                        result.success("created row error : ${e}")
+                    }
+
                 }
                 "blankSpacePrint" -> {
                     if (call.arguments<Any?>() == null) return@setMethodCallHandler

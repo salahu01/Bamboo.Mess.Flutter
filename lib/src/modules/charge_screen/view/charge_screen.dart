@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
+import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/provider/charge.screen.provider.dart';
@@ -190,9 +192,9 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                       if (selectedEmployee == null) {
                                         Dialogs.showSnack(context, 'Please select employee !');
                                       } else {
-                                        ref
-                                        .read(uploadRecieptProvider.notifier)
-                                        .createReciept(RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now()), ref, context);
+                                        final reciept = RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now());
+                                        compute(Printer.instance.print, reciept);
+                                        ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
                                       }
                                     },
                                     child: Container(

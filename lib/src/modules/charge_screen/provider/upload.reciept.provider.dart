@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class UploadRecieptNotifier extends StateNotifier<String> {
   UploadRecieptNotifier() : super('Charge Amount');
 
-  void createReciept(RecieptModel reciept, ref,ctx) async {
+  void createReciept(RecieptModel reciept, ref, ctx) async {
     try {
       state = 'Loading...';
       await MongoDataBase().insertReciept(reciept);
@@ -21,7 +21,6 @@ class UploadRecieptNotifier extends StateNotifier<String> {
         ..read(billProductProvider.notifier).clearProducts()
         ..read(selectedBillProvider.notifier).update((state) => state = null)
         ..refresh(storedBillsProvider);
-       await Printer.instance.print(reciept);
       Navigator.pop(ctx);
     } catch (e) {
       state = 'Retry';
