@@ -105,7 +105,7 @@ class Dialogs {
                       final isOneProduct = selectedTyoeInFood == 'One Product';
                       final List list = [titleCtrl.text, categoryName];
                       if (isOneProduct) list.add(num.parse(priceCtrl.text));
-                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(list, ids: ids,subProduct: subProduct, onSuccess: onSuccess);
+                      ref.read(uploadProvider.notifier).uploadFoodAndCategory(list, ids: ids, subProduct: subProduct, onSuccess: onSuccess);
                     }
                   },
                   child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),

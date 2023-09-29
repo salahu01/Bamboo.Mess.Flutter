@@ -1,3 +1,6 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/extensions/date_time.extension.dart';
@@ -5,10 +8,12 @@ import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
+import 'package:freelance/src/core/widgets/snak_bar.dart';
 import 'package:freelance/src/modules/receipts/provider/receipts.provider.dart';
 
 class ReceiptsView extends ConsumerStatefulWidget {
-  const ReceiptsView({super.key});
+  TextEditingController? passwordController = TextEditingController();
+  ReceiptsView({super.key});
 
   @override
   ConsumerState<ReceiptsView> createState() => _ReceiptsViewState();
@@ -17,8 +22,19 @@ class ReceiptsView extends ConsumerStatefulWidget {
 class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
   int _selectedReceipt = 0;
   int _selectedRow = 0;
+  final List<String> _locations = ['Lock Screen', 'Lock App', 'Unlock Screen', 'Unlock App', 'Lock', 'Unlock'];
+  String? _selectedLocation;
+  bool isactivedelect = false;
+
+  @override
+  void dispose() {
+    isactivedelect = false;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    log("TRUE OR FALSE 2 => $isactivedelect");
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
       body: ref.watch(recieptsProvider).when(
@@ -94,17 +110,19 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                                 data[rowIndex][i].time ?? '',
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
                                               ),
-                                              trailing: IconButton(
-                                                onPressed: () {
-                                                  Dialogs.loadingDailog(context);
-                                                  MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
-                                                    Navigator.pop(context);
-                                                    // ignore: unused_result
-                                                    value ? ref.refresh(recieptsProvider) : null;
-                                                  });
-                                                },
-                                                icon: const Icon(Icons.delete, size: 32, color: Colors.black),
-                                              ),
+                                              trailing: isactivedelect == true
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        Dialogs.loadingDailog(context);
+                                                        MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
+                                                          Navigator.pop(context);
+                                                          // ignore: unused_result
+                                                          value ? ref.refresh(recieptsProvider) : null;
+                                                        });
+                                                      },
+                                                      icon: const Icon(Icons.delete, size: 32, color: Colors.black),
+                                                    )
+                                                  : const Icon(Icons.local_print_shop_outlined),
                                               onTap: () => setState(() {
                                                 _selectedReceipt = i;
                                                 _selectedRow = rowIndex;
@@ -195,6 +213,36 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                     ),
                   ),
                   Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        // width: 50,
+                        height: 50,
+                        color: Colors.transparent,
+                        child: DropdownButton(
+                          underline: const SizedBox.shrink(),
+                          icon: const Icon(Icons.lock_clock_outlined),
+                          dropdownColor: primary.value.withOpacity(0.2),
+                          value: _selectedLocation,
+                          onChanged: (_) {
+                            setState(() {
+                              widget.passwordController?.clear();
+                              _selectedLocation = _;
+                              _selectedLocation == 'Lock' ? alertBoxToPassword(context) : const SizedBox();
+                            });
+                          },
+                          items: _locations.map((location) {
+                            return DropdownMenuItem(
+                              value: location,
+                              child: Text(location),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -214,5 +262,75 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
     );
+  }
+
+  alertBoxToPassword(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final key = GlobalKey<FormState>();
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Spacer(),
+              Text('Enter Your Code When Lock The App'),
+              Spacer(),
+            ],
+          ),
+          titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          content: SizedBox(
+            width: 600,
+            child: Form(
+              key: key,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: TextFormField(
+                      controller: widget.passwordController,
+                      validator: (value) => value == null || value.isEmpty ? 'Please enter the value !' : null,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        hintText: "Enter The Password",
+                        hintStyle: const TextStyle(fontSize: 20),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.passwordController?.text == "12345" ? showSnackBar(context, "Password is Current") : showSnackBar(context, "Password is wrong !");
+                widget.passwordController?.text == "12345" ? isactivedelect = true : isactivedelect = false;
+                log("TRUE OR FALSE 1 => $isactivedelect");
+                Navigator.pop(context);
+              },
+              child: Text('OK', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  clear() {
+    widget.passwordController = null;
   }
 }
