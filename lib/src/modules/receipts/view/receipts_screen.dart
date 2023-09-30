@@ -50,32 +50,64 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                       margin: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            elevation: 4,
-                            margin: const EdgeInsets.only(top: 24, left: 24, right: 24),
-                            child: SizedBox(
-                              width: 600,
-                              height: 68,
-                              child: Center(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintText: 'Search here ...',
-                                    hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
-                                    prefixIcon: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 12),
-                                      child: Icon(Icons.search, color: Colors.black, size: 36),
+                          Row(
+                            children: [
+                              Card(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                elevation: 4,
+                                margin: const EdgeInsets.only(top: 24, left: 10),
+                                child: SizedBox(
+                                  width: 440,
+                                  height: 68,
+                                  child: Center(
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: 'Search here ...',
+                                        hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
+                                        prefixIcon: const Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 12),
+                                          child: Icon(Icons.search, color: Colors.black, size: 36),
+                                        ),
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                                        contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                                        isDense: true,
+                                      ),
+                                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                     ),
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 18),
-                                    isDense: true,
                                   ),
-                                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                 ),
                               ),
-                            ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20, left: 8),
+                                child: PopupMenuButton<String>(
+                                  icon: const Icon(Icons.align_vertical_bottom, size: 35),
+                                  onSelected: (value) {
+
+                                    print('Selected: $value');
+                                  },
+                                  itemBuilder: (BuildContext context) {
+                                    return <PopupMenuEntry<String>>[
+                                      const PopupMenuItem<String>(
+                                        value: 'Price: Low to High',
+                                        mouseCursor: MouseCursor.defer,
+                                        child: Text('Price: Low to High'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'Price: High to Low',
+                                        child: Text('Price: High to Low'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'Date: End to start',
+                                        child: Text('Date: End to start'),
+                                      ),
+                                    ];
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 12),
                           Expanded(
@@ -215,7 +247,6 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                   Align(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
-                      onTap: () {},
                       child: Container(
                         // width: 50,
                         height: 50,
