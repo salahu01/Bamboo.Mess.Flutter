@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
+import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/models/product.model.dart';
@@ -144,18 +146,40 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
         );
       },
     );
-    return GridView.count(
-      key: _gridViewKey,
-      childAspectRatio: 3 / 2,
-      shrinkWrap: true,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      controller: _scrollController,
-      crossAxisCount: 5,
-      padding: EdgeInsets.zero,
-      physics: const BouncingScrollPhysics(),
+    return ReorderableBuilder(
+      key: Key(_gridViewKey.toString()),
+      onReorder: _handleReorder,
+      lockedIndices: lockedIndices,
+      scrollController: _scrollController,
+      builder: (children) {
+        return GridView.count(
+          key: _gridViewKey,
+          childAspectRatio: 3 / 2,
+          shrinkWrap: true,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          controller: _scrollController,
+          crossAxisCount: 5,
+          padding: EdgeInsets.zero,
+          physics: const BouncingScrollPhysics(),
+          children: children,
+        );
+      },
       children: generatedChildren,
     );
+
+    // return GridView.count(
+    //   key: _gridViewKey,
+    //   childAspectRatio: 3 / 2,
+    //   shrinkWrap: true,
+    //   crossAxisSpacing: 8,
+    //   mainAxisSpacing: 8,
+    //   controller: _scrollController,
+    //   crossAxisCount: 5,
+    //   padding: EdgeInsets.zero,
+    //   physics: const BouncingScrollPhysics(),
+    //   children: generatedChildren,
+    // );
   }
 
   Widget buildBottom(BuildContext context, double width) {
@@ -207,6 +231,14 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
         ),
       ),
     );
+  }
+
+  void _handleReorder(List<OrderUpdateEntity> onReorderList) {
+    for (final reorder in onReorderList) {
+      final child = widget.categories[selectedIndex].products?.removeAt(reorder.oldIndex);
+      widget.categories[selectedIndex].products?.insert(reorder.newIndex, child);
+    }
+    setState(() {});
   }
 
   selectecdIndexUpdate(int index) {

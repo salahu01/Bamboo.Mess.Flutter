@@ -79,13 +79,11 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                   ),
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.only(top: 20, left: 8),
                                 child: PopupMenuButton<String>(
                                   icon: const Icon(Icons.align_vertical_bottom, size: 35),
                                   onSelected: (value) {
-
                                     print('Selected: $value');
                                   },
                                   itemBuilder: (BuildContext context) {
