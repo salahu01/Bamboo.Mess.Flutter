@@ -72,7 +72,7 @@ final class Printer {
   Future<void> print(RecieptModel model) async {
     //* top
     await _printBlankSpace(8);
-    await _printText('Bamboo Mess', bold: true, size: 26);
+    await _printText('Bamboo Mess', bold: true, size: 27);
     await _printBlankSpace(5);
     await _printText('Traffic Junction');
     await _printText('Sulthan Bathery');
@@ -94,7 +94,7 @@ final class Printer {
 
     //* tota amount
     await _printBlankSpace(8);
-    await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.left);
+    await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
     await _printBlankSpace(8);
 
     //* bottom

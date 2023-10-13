@@ -6,6 +6,7 @@ import 'package:freelance/src/core/services/db/remote.db.services.dart';
 import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
+import 'package:freelance/src/modules/receipts/view/sales_summary.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async {
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: const DashBoardView(),
-      // home: const MyHomePage(title: "print sample"),
+      // home: SalesSummary(),
     );
   }
 }

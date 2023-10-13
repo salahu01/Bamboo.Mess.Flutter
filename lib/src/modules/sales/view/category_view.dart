@@ -146,41 +146,40 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
         );
       },
     );
-    return ReorderableBuilder(
-      key: Key(_gridViewKey.toString()),
-      onReorder: _handleReorder,
-      lockedIndices: lockedIndices,
-      scrollController: _scrollController,
-      builder: (children) {
-        return GridView.count(
-          key: _gridViewKey,
-          childAspectRatio: 3 / 2,
-          shrinkWrap: true,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          controller: _scrollController,
-          crossAxisCount: 5,
-          padding: EdgeInsets.zero,
-          physics: const BouncingScrollPhysics(),
-          children: children,
-        );
-      },
-      children: generatedChildren,
-    );
-
-    // return GridView.count(
-    //   key: _gridViewKey,
-    //   childAspectRatio: 3 / 2,
-    //   shrinkWrap: true,
-    //   crossAxisSpacing: 8,
-    //   mainAxisSpacing: 8,
-    //   controller: _scrollController,
-    //   crossAxisCount: 5,
-    //   padding: EdgeInsets.zero,
-    //   physics: const BouncingScrollPhysics(),
+    // return ReorderableBuilder(
+    //   // key: Key(_gridViewKey.toString()),
+    //   onReorder: _handleReorder,
+    //   lockedIndices: lockedIndices,
+    //   scrollController: _scrollController,
+    //   builder: (children) {
+    //     return GridView.count(
+    //       key: _gridViewKey,
+    //       childAspectRatio: 3 / 2,
+    //       shrinkWrap: true,
+    //       crossAxisSpacing: 8,
+    //       mainAxisSpacing: 8,
+    //       controller: _scrollController,
+    //       crossAxisCount: 5,
+    //       padding: EdgeInsets.zero,
+    //       physics: const BouncingScrollPhysics(),
+    //     );
+    //   },
     //   children: generatedChildren,
     // );
-  }
+
+    return GridView.count(
+      key: _gridViewKey,
+      childAspectRatio: 3 / 2,
+      shrinkWrap: true,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      controller: _scrollController,
+      crossAxisCount: 5,
+      padding: EdgeInsets.zero,
+      physics: const BouncingScrollPhysics(),
+      children: generatedChildren,
+    );
+  } 
 
   Widget buildBottom(BuildContext context, double width) {
     return SizedBox(

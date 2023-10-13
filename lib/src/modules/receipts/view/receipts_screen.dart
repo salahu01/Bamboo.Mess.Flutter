@@ -10,6 +10,7 @@ import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/core/widgets/snak_bar.dart';
 import 'package:freelance/src/modules/receipts/provider/receipts.provider.dart';
+import 'package:freelance/src/modules/receipts/view/sales_summary.dart';
 
 class ReceiptsView extends ConsumerStatefulWidget {
   TextEditingController? passwordController = TextEditingController();
@@ -85,6 +86,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                   icon: const Icon(Icons.align_vertical_bottom, size: 35),
                                   onSelected: (value) {
                                     print('Selected: $value');
+                                    value == "Sales Summary" ? Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SalesSummary())) : const SizedBox.shrink();
                                   },
                                   itemBuilder: (BuildContext context) {
                                     return <PopupMenuEntry<String>>[
@@ -100,6 +102,11 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                       const PopupMenuItem<String>(
                                         value: 'Date: End to start',
                                         child: Text('Date: End to start'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'Sales Summary',
+                                        mouseCursor: MouseCursor.uncontrolled,
+                                        child: Text('Sales Summary'),
                                       ),
                                     ];
                                   },
