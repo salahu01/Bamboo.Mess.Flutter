@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: const DashBoardView(),
-      // home: SalesSummary(),
+      // home: const Test(),
     );
   }
 }

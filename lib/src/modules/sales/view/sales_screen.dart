@@ -21,7 +21,7 @@ class SalesView extends ConsumerWidget {
                   flex: 5,
                   child: CategoryView(categories: data),
                 ),
-                const Flexible(
+                 Flexible(
                   flex: 2,
                   child: SavedItemsView(),
                 ),

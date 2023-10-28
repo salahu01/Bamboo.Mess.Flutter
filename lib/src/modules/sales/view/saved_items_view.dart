@@ -1,13 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class SavedItemsView extends ConsumerWidget {
-  const SavedItemsView({super.key});
+  SavedItemsView({super.key});
 
+  bool isEditText = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -37,20 +42,50 @@ class SavedItemsView extends ConsumerWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: products.length,
                     itemBuilder: (context, i) {
-                      return ListTile(
-                        dense: true,
-                        onTap: () => ref.read(billProductProvider.notifier).removeProductFromBill(i),
-                        title: Text(
-                          products[i].name ?? '',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                      final editcontroller = TextEditingController(text: '${(products[i].count ?? 0) * (products[i].price ?? 0)}');
+                      return Slidable(
+                        key: const ValueKey(0),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              autoClose: true,
+                              onPressed: (context) {
+                                isEditText = true;
+                              },
+                              backgroundColor: primary.value,
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit_document,
+                              label: 'Edit',
+                            ),
+                          ],
                         ),
-                        subtitle: Text(
-                          'Qty : ${products[i].count ?? 0}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                        ),
-                        trailing: Text(
-                          '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                        child: ListTile(
+                          dense: true,
+                          onTap: () => ref.read(billProductProvider.notifier).removeProductFromBill(i),
+                          title: Text(
+                            products[i].name ?? '',
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                          ),
+                          subtitle: Text(
+                            'Qty : ${products[i].count ?? 0}',
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                          ),
+                          trailing: Container(
+                            width: 100,
+                            child: isEditText == false
+                                ? Text(
+                                    '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
+                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                                  )
+                                : TextFormField(
+                                    controller: editcontroller,
+                                    autofocus: true,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
+                                    maxLength: 5,
+                                  ),
+                          ),
                         ),
                       );
                     },
