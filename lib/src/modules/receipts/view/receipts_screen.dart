@@ -53,29 +53,31 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                         children: [
                           Row(
                             children: [
-                              Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                elevation: 4,
-                                margin: const EdgeInsets.only(top: 24, left: 10),
-                                child: SizedBox(
-                                  width: 440,
-                                  height: 68,
-                                  child: Center(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        hintText: 'Search here ...',
-                                        hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
-                                        prefixIcon: const Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 12),
-                                          child: Icon(Icons.search, color: Colors.black, size: 36),
+                              Flexible(
+                                child: Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  elevation: 4,
+                                  margin: const EdgeInsets.only(top: 24, left: 10),
+                                  child: SizedBox(
+                                    width: 440,
+                                    height: 68,
+                                    child: Center(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          hintText: 'Search here ...',
+                                          hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.8)),
+                                          prefixIcon: const Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 12),
+                                            child: Icon(Icons.search, color: Colors.black, size: 36),
+                                          ),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                                          isDense: true,
                                         ),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                                        contentPadding: const EdgeInsets.symmetric(vertical: 18),
-                                        isDense: true,
+                                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                       ),
-                                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                     ),
                                   ),
                                 ),
@@ -85,8 +87,20 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                 child: PopupMenuButton<String>(
                                   icon: const Icon(Icons.align_vertical_bottom, size: 35),
                                   onSelected: (value) {
-                                    print('Selected: $value');
-                                    value == "Sales Summary" ? Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const SalesSummary())) : const SizedBox.shrink();
+                                    if (value == 'Sales Summary') {
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SalesSummary(reciepts: data)));
+                                    }
+                                    setState(() {
+                                      if (value == 'Price: Low to High') {
+                                        for (var e in data) {
+                                          e.sort((a, b) => (a.totalAmount ?? 0).compareTo(b.totalAmount ?? 0));
+                                        }
+                                      } else if (value == 'Price: High to Low') {
+                                        for (var e in data) {
+                                          e.sort((a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0));
+                                        }
+                                      }
+                                    });
                                   },
                                   itemBuilder: (BuildContext context) {
                                     return <PopupMenuEntry<String>>[
