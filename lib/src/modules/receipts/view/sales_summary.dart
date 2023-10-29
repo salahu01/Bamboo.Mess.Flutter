@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:freelance/src/core/extensions/date_time.extension.dart';
@@ -77,13 +75,13 @@ class _SalesSummaryState extends State<SalesSummary> {
               const SizedBox(height: 32),
               Expanded(
                 child: SfCartesianChart(
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
+                  primaryXAxis: CategoryAxis(),
                   series: <ChartSeries>[
-                    LineSeries<List<RecieptModel>, int>(
-                      dataSource: monthlyReciepts,
-                      xValueMapper: (datas, _) => datas.first.date?.day ?? 0,
-                      yValueMapper: (datas, _) => datas.fold(0, (a, b) => (a ?? 0) + (b.totalAmount ?? 0)),
-                    )
+                    LineSeries<List<RecieptModel>, String>(
+                      dataSource: selectedData,
+                      xValueMapper: (data, _) => '${data[_].date?.findTime}',
+                      yValueMapper: (data, _) => data[_].totalAmount ?? 0,
+                    ),
                   ],
                 ),
               )
@@ -126,13 +124,5 @@ class _SalesSummaryState extends State<SalesSummary> {
               : '${selectedData[i].first.date?.year} - ${selectedData[i].first.date?.monthToString}';
       return DropdownMenuItem(value: i, child: Text(label, style: const TextStyle(color: Colors.black, fontSize: 32)));
     });
-  }
-
-  @override
-  void dispose() {
-    selectedData.clear();
-    yearlyReciepts.clear();
-    monthlyReciepts.clear();
-    super.dispose();
   }
 }
