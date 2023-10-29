@@ -188,13 +188,14 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                   ),
                                   const SizedBox(height: 45),
                                   InkWell(
-                                    onTap: () async {
+                                    onTap: () {
                                       if (selectedEmployee == null) {
                                         Dialogs.showSnack(context, 'Please select employee !');
                                       } else {
                                         final reciept = RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now());
-                                        compute(Printer.instance.print, reciept);
-                                        ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
+                                        Printer.instance.print(reciept).then((_) {
+                                          ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
+                                        });
                                       }
                                     },
                                     child: Container(
