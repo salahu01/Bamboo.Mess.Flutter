@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
@@ -10,9 +9,8 @@ import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class SavedItemsView extends ConsumerWidget {
-  SavedItemsView({super.key});
+  const SavedItemsView({super.key});
 
-  bool isEditText = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -51,7 +49,7 @@ class SavedItemsView extends ConsumerWidget {
                             SlidableAction(
                               autoClose: true,
                               onPressed: (context) {
-                                isEditText = true;
+                                alertBoxToPassword(context, editcontroller);
                               },
                               backgroundColor: primary.value,
                               foregroundColor: Colors.white,
@@ -71,20 +69,9 @@ class SavedItemsView extends ConsumerWidget {
                             'Qty : ${products[i].count ?? 0}',
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                           ),
-                          trailing: Container(
-                            width: 100,
-                            child: isEditText == false
-                                ? Text(
-                                    '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                                  )
-                                : TextFormField(
-                                    controller: editcontroller,
-                                    autofocus: true,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
-                                    maxLength: 5,
-                                  ),
+                          trailing: Text(
+                            '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                           ),
                         ),
                       );
@@ -160,6 +147,60 @@ class SavedItemsView extends ConsumerWidget {
           child: Text(name, style: const TextStyle(fontSize: 24)),
         ),
       ),
+    );
+  }
+
+  alertBoxToPassword(BuildContext context, TextEditingController controller) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final key = GlobalKey<FormState>();
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Spacer(),
+              Text('Edite current Price'),
+              Spacer(),
+            ],
+          ),
+          titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          content: SizedBox(
+            width: 600,
+            child: Form(
+              key: key,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: TextFormField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('EDITE', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+          ],
+        );
+      },
     );
   }
 }
