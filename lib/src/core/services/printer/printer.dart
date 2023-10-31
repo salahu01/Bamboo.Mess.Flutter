@@ -45,7 +45,7 @@ final class Printer {
 
   Future<void> _printRow(
     List<String> texts, {
-    List<int> widths = const [0, 0],
+    List<int> widths = const [],
     List<PrintAlignment> aligns = const [PrintAlignment.left, PrintAlignment.right],
     List<int> sizes = const [24, 24],
   }) async {

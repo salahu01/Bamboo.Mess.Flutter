@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:freelance/src/core/extensions/date_time.extension.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SalesSummary extends StatefulWidget {
   const SalesSummary({super.key, required this.reciepts});
@@ -13,25 +14,21 @@ class SalesSummary extends StatefulWidget {
 }
 
 class _SalesSummaryState extends State<SalesSummary> {
-  TextEditingController? pickdatecontroller;
-  final summuries = ['Year', 'Month'];
+  final summuries = ['Year', 'Month', 'Day'];
   String selectedSummury = 'Year';
   int selectedDataIndex = 0;
   List<List<RecieptModel>> monthlyReciepts = [];
-  // List<List<RecieptModel>> weeklyReciepts = [];
   List<List<RecieptModel>> yearlyReciepts = [];
-
+  List<List<RecieptModel>> selectedData = [];
   @override
   void initState() {
     for (var e in widget.reciepts) {
-      final yearlyIndex = monthlyReciepts.indexWhere((_) => '${_.first.date?.year}' == '${e.first.date?.year}');
-      yearlyIndex == -1 ? yearlyReciepts.add(e) : yearlyReciepts[yearlyIndex].addAll(e);
+      final yearlyIndex = yearlyReciepts.indexWhere((_) => '${_.first.date?.year}' == '${e.first.date?.year}');
+      yearlyIndex == -1 ? yearlyReciepts = [...yearlyReciepts, e] : yearlyReciepts[yearlyIndex] = [...yearlyReciepts[yearlyIndex], ...e];
       final monthIndex = monthlyReciepts.indexWhere((_) => '${_.first.date?.year}-${_.first.date?.month}' == '${e.first.date?.year}-${e.first.date?.month}');
-      monthIndex == -1 ? monthlyReciepts.add(e) : monthlyReciepts[monthIndex].addAll(e);
-      // final weekIndex =
-      //     weeklyReciepts.indexWhere((_) => '${_.first.date?.year}-${_.first.date?.month}-${_.first.date?.weekday}' == '${e.first.date?.year}-${e.first.date?.month}-${e.first.date?.weekday}');
-      // weekIndex == -1 ? weeklyReciepts.add(e) : weeklyReciepts[weekIndex].addAll(e);
+      monthIndex == -1 ? monthlyReciepts = [...monthlyReciepts, e] : monthlyReciepts[monthIndex] = [...monthlyReciepts[monthIndex], ...e];
     }
+    _updateSelectedData();
     super.initState();
   }
 
@@ -54,26 +51,37 @@ class _SalesSummaryState extends State<SalesSummary> {
                   DropdownButton(
                     value: selectedSummury,
                     items: summuries.map((e) => DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(color: Colors.black, fontSize: 32)))).toList(),
-                    onChanged: (v) => setState(() => selectedSummury = v!),
+                    onChanged: (v) {
+                      setState(() {
+                        selectedSummury = v!;
+                        selectedDataIndex = 0;
+                        _updateSelectedData();
+                      });
+                    },
                   ),
                   DropdownButton(
                     value: selectedDataIndex,
                     items: dropdownItems(),
-                    onChanged: (v) => setState(() => selectedDataIndex = v!),
+                    onChanged: (v) {
+                      setState(() {
+                        selectedDataIndex = v!;
+                        _updateSelectedData();
+                      });
+                    },
                   ),
-                  totalacount("Grand Total", "${monthlyReciepts.first.fold(0.0, (a, b) => (a) + (b.totalAmount ?? 0))}"),
+                  totalacount("Grand Total", "${selectedData[selectedDataIndex].fold(0.0, (a, b) => (a) + (b.totalAmount ?? 0))}"),
                 ],
               ),
               const SizedBox(height: 32),
               Expanded(
                 child: SfCartesianChart(
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
+                  primaryXAxis: CategoryAxis(),
                   series: <ChartSeries>[
-                    LineSeries<List<RecieptModel>, int>(
-                      dataSource: monthlyReciepts,
-                      xValueMapper: (datas, _) => datas.first.date?.day ?? 0,
-                      yValueMapper: (datas, _) => datas.fold(0, (a, b) => (a ?? 0) + (b.totalAmount ?? 0)),
-                    )
+                    LineSeries<List<RecieptModel>, String>(
+                      dataSource: selectedData,
+                      xValueMapper: (data, _) => '${data[_].date?.findTime}',
+                      yValueMapper: (data, _) => data[_].totalAmount ?? 0,
+                    ),
                   ],
                 ),
               )
@@ -82,6 +90,14 @@ class _SalesSummaryState extends State<SalesSummary> {
         ),
       ),
     );
+  }
+
+  void _updateSelectedData() {
+    selectedData = (selectedSummury == 'Year'
+        ? yearlyReciepts
+        : selectedSummury == 'Day'
+            ? widget.reciepts
+            : monthlyReciepts);
   }
 
   Widget totalacount(String text, String amount) {
@@ -100,9 +116,12 @@ class _SalesSummaryState extends State<SalesSummary> {
   }
 
   List<DropdownMenuItem> dropdownItems() {
-    final selectedData = (selectedSummury == 'Year' ? yearlyReciepts : monthlyReciepts);
     return List.generate(selectedData.length, (i) {
-      var label = selectedSummury == 'Year' ? '${selectedData[i].first.date?.year}' : '${selectedData[i].first.date?.year} - ${selectedData[i].first.date?.monthToString}';
+      var label = selectedSummury == 'Year'
+          ? '${selectedData[i].first.date?.year}'
+          : selectedSummury == 'Day'
+              ? '${selectedData[i].first.date?.order}'
+              : '${selectedData[i].first.date?.year} - ${selectedData[i].first.date?.monthToString}';
       return DropdownMenuItem(value: i, child: Text(label, style: const TextStyle(color: Colors.black, fontSize: 32)));
     });
   }
