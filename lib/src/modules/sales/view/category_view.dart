@@ -147,7 +147,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
       },
     );
     // return ReorderableBuilder(
-    //   // key: Key(_gridViewKey.toString()),
+    //   key: Key(_gridViewKey.toString()),
     //   onReorder: _handleReorder,
     //   lockedIndices: lockedIndices,
     //   scrollController: _scrollController,
@@ -162,6 +162,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
     //       crossAxisCount: 5,
     //       padding: EdgeInsets.zero,
     //       physics: const BouncingScrollPhysics(),
+    //       children: children,
     //     );
     //   },
     //   children: generatedChildren,

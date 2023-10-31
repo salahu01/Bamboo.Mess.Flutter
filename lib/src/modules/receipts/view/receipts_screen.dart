@@ -114,10 +114,6 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                         child: Text('Price: High to Low'),
                                       ),
                                       const PopupMenuItem<String>(
-                                        value: 'Date: End to start',
-                                        child: Text('Date: End to start'),
-                                      ),
-                                      const PopupMenuItem<String>(
                                         value: 'Sales Summary',
                                         mouseCursor: MouseCursor.uncontrolled,
                                         child: Text('Sales Summary'),

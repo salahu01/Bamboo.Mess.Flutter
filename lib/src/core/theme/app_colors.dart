@@ -8,6 +8,9 @@ final primaryColors = [
   Colors.blueGrey,
   Colors.lightGreen[800],
   Colors.red,
+  Colors.blue[200],
+  Colors.teal[200],
+  Colors.purpleAccent[200]
 ];
 
 //Selected primary.value.value
