@@ -99,11 +99,20 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                         for (var e in data) {
                                           e.sort((a, b) => (b.totalAmount ?? 0).compareTo(a.totalAmount ?? 0));
                                         }
+                                      } else if (value == "default") {
+                                        for (var e in data) {
+                                          e.sort((a, b) => (a.time ?? "").compareTo(b.time ?? ""));
+                                        }
                                       }
                                     });
                                   },
                                   itemBuilder: (BuildContext context) {
                                     return <PopupMenuEntry<String>>[
+                                      const PopupMenuItem<String>(
+                                        value: 'default',
+                                        mouseCursor: MouseCursor.defer,
+                                        child: Text('Default'),
+                                      ),
                                       const PopupMenuItem<String>(
                                         value: 'Price: Low to High',
                                         mouseCursor: MouseCursor.defer,
@@ -111,6 +120,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                       ),
                                       const PopupMenuItem<String>(
                                         value: 'Price: High to Low',
+                                        mouseCursor: MouseCursor.defer,
                                         child: Text('Price: High to Low'),
                                       ),
                                       const PopupMenuItem<String>(
@@ -363,8 +373,8 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
             ),
             TextButton(
               onPressed: () {
-                widget.passwordController?.text == "12345" ? showSnackBar(context, "Password is Current") : showSnackBar(context, "Password is wrong !");
-                widget.passwordController?.text == "12345" ? isactivedelect = true : isactivedelect = false;
+                widget.passwordController?.text == "6748" ? showSnackBar(context, "Password is Current") : showSnackBar(context, "Password is wrong !");
+                widget.passwordController?.text == "6748" ? isactivedelect = true : isactivedelect = false;
                 log("TRUE OR FALSE 1 => $isactivedelect");
                 Navigator.pop(context);
               },

@@ -79,14 +79,16 @@ class FoodsView extends ConsumerWidget {
                                               ),
                                               trailing: IconButton(
                                                 onPressed: () {
-                                                  Dialogs.loadingDailog(context);
-                                                  MongoDataBase().deleteOneCategory(data[i]).then((value) {
-                                                    Navigator.pop(context);
-                                                    if (value) {
-                                                      clearSelects(ref);
-                                                      // ignore: unused_result
-                                                      ref.refresh(categoryProvider);
-                                                    }
+                                                  alertBox(context, () {
+                                                    Dialogs.loadingDailog(context);
+                                                    MongoDataBase().deleteOneCategory(data[i]).then((value) {
+                                                      Navigator.pop(context);
+                                                      if (value) {
+                                                        clearSelects(ref);
+                                                        // ignore: unused_result
+                                                        ref.refresh(categoryProvider);
+                                                      }
+                                                    });
                                                   });
                                                 },
                                                 icon: const Icon(Icons.delete, size: 32, color: Colors.black),
@@ -183,14 +185,16 @@ class FoodsView extends ConsumerWidget {
                                                   visible: product?.price != null,
                                                   replacement: IconButton(
                                                     onPressed: () {
-                                                      Dialogs.loadingDailog(context);
-                                                      MongoDataBase().deleteOneSubCategory(product!, selCategory!).then((value) {
-                                                        Navigator.pop(context);
-                                                        if (value) {
-                                                          clearSelects(ref);
-                                                          // ignore: unused_result
-                                                          ref.refresh(categoryProvider);
-                                                        }
+                                                      alertBox(context, () {
+                                                        Dialogs.loadingDailog(context);
+                                                        MongoDataBase().deleteOneSubCategory(product!, selCategory!).then((value) {
+                                                          Navigator.pop(context);
+                                                          if (value) {
+                                                            clearSelects(ref);
+                                                            // ignore: unused_result
+                                                            ref.refresh(categoryProvider);
+                                                          }
+                                                        });
                                                       });
                                                     },
                                                     icon: const Icon(Icons.delete, size: 32, color: Colors.black),
@@ -322,17 +326,19 @@ class FoodsView extends ConsumerWidget {
                             visible: ids.isNotEmpty,
                             child: GestureDetector(
                               onTap: () {
-                                Dialogs.loadingDailog(context);
-                                (prods.isNotEmpty
-                                        ? MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? [])
-                                        : MongoDataBase().deleteSubCategoryProducts(ids.map((e) => e.id!).toList(), selSubCategory?.id, selSubCategory?.productIds ?? []))
-                                    .then((value) {
-                                  Navigator.pop(context);
-                                  if (value) {
-                                    clearSelects(ref);
-                                    // ignore: unused_result
-                                    ref.refresh(categoryProvider);
-                                  }
+                                alertBox(context, () {
+                                  Dialogs.loadingDailog(context);
+                                  (prods.isNotEmpty
+                                          ? MongoDataBase().deleteProducts(ids.map((e) => e.id!).toList(), ids.first.categaryName ?? '', selCategory?.productIds ?? [])
+                                          : MongoDataBase().deleteSubCategoryProducts(ids.map((e) => e.id!).toList(), selSubCategory?.id, selSubCategory?.productIds ?? []))
+                                      .then((value) {
+                                    Navigator.pop(context);
+                                    if (value) {
+                                      clearSelects(ref);
+                                      // ignore: unused_result
+                                      ref.refresh(categoryProvider);
+                                    }
+                                  });
                                 });
                               },
                               child: Card(
@@ -357,6 +363,41 @@ class FoodsView extends ConsumerWidget {
             error: (error, stackTrace) => Text('$error'),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
+    );
+  }
+
+  alertBox(BuildContext context, Function() onTap) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Spacer(),
+              Text('Are You Sure You Want to Delete'),
+              Spacer(),
+            ],
+          ),
+          titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('No', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+            const SizedBox(width: 20),
+            TextButton(
+              onPressed: () {
+                onTap();
+                Navigator.pop(context);
+              },
+              child: Text('Yes', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
-import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/models/product.model.dart';
@@ -57,7 +56,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                 Expanded(
                   child: Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+                    // margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
                     elevation: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -134,9 +133,12 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                           ),
                         ),
                         Center(
-                          child: Text(
-                            (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: Text(
+                              (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
+                            ),
                           ),
                         ),
                       ],
@@ -210,7 +212,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                     elevation: 8,
                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     color: index == selectedIndex ? primary.value : Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),  
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 48),
                       child: Center(

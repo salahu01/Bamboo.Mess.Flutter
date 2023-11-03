@@ -21,15 +21,13 @@ String? selectedEmployee;
 
 String? selectedOrderType = 'Dine in';
 
-var orderTypes = [
-  'Dine in',
-  'Parcel',
-];
+var orderTypes = ['Dine in', 'Parcel'];
 
 class _ChargeScreenState extends ConsumerState<ChargeScreen> {
   @override
   void initState() {
     super.initState();
+    selectedEmployee = null;
     Future.delayed(const Duration(seconds: 1), () async {
       await selectEmployee();
     });
@@ -48,10 +46,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
-            Icons.arrow_back,
-            size: 35,
-          ),
+          icon: const Icon(Icons.arrow_back, size: 35),
         ),
       ),
       body: Row(
@@ -241,7 +236,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
               child: ref.watch(laboursProvider).when(
                     data: (data) {
                       return GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 2, crossAxisSpacing: 2),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 2, crossAxisSpacing: 2),
                         itemCount: data.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
