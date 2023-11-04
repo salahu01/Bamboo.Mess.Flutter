@@ -22,6 +22,12 @@ class BillProductsNotifier extends StateNotifier<List<RecieptProduct>> {
     state = [...list];
   }
 
+  void updateProductFromBill(int index, num price) {
+    final list = state;
+    list[index].price = price;
+    state = [...list];
+  }
+
   void clearProducts() {
     state = [];
   }

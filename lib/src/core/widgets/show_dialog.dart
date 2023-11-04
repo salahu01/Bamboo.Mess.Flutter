@@ -5,6 +5,86 @@ import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class Dialogs {
+  static Future<void> editBillDailog(
+    BuildContext context, {
+    required int index,
+  }) {
+    final priceCtrl = TextEditingController();
+    final key = GlobalKey<FormState>();
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Consumer(builder: (context, ref, child) {
+          final state = ref.watch(uploadProvider);
+          return StatefulBuilder(builder: (BuildContext context, setState) {
+            return AlertDialog(
+              title: const Text('Edit Amount'),
+              titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              content: SizedBox(
+                width: 600,
+                child: Form(
+                  key: key,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: TextFormField(
+                      controller: priceCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the value !';
+                        }
+                        try {
+                          num.parse(
+                            priceCtrl.text,
+                          );
+                        } catch (e) {
+                          return 'Please enter the value !';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red)),
+                        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: primary.value)),
+                        hintText: 'Enter price here ...',
+                        hintStyle: const TextStyle(fontSize: 20),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    priceCtrl.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel', style: TextStyle(color: primary.value, fontSize: 18)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (key.currentState?.validate() ?? false) {
+                      final price = num.parse(priceCtrl.text);
+                      ref.read(billProductProvider.notifier).updateProductFromBill(index, price);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(state, style: TextStyle(color: primary.value, fontSize: 18)),
+                )
+              ],
+            );
+          });
+        });
+      },
+    );
+  }
+
   static Future<void> singleFieldDailog(
     BuildContext context, {
     List<String?>? ids = const [],

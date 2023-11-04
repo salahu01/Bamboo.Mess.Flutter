@@ -4,7 +4,7 @@ import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:freelance/src/modules/sales/view/category_view.dart';
-import 'package:freelance/src/modules/sales/view/saved_items_view.dart';
+import 'package:freelance/src/modules/sales/view/billing_view.dart';
 
 class SalesView extends ConsumerWidget {
   const SalesView({super.key, required this.showBills});
@@ -21,9 +21,9 @@ class SalesView extends ConsumerWidget {
                   flex: 5,
                   child: CategoryView(categories: data),
                 ),
-                 Flexible(
+                const Flexible(
                   flex: 2,
-                  child: SavedItemsView(),
+                  child: BillingView(),
                 ),
               ],
             ),

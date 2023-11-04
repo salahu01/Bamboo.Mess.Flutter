@@ -51,7 +51,7 @@ class RecieptProduct {
   @HiveField(0)
   final String? name;
   @HiveField(1)
-  final num? price;
+  num? price;
   @HiveField(2)
   int? count;
 

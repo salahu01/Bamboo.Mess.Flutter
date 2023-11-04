@@ -8,8 +8,8 @@ import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
-class SavedItemsView extends ConsumerWidget {
-  const SavedItemsView({super.key});
+class BillingView extends ConsumerWidget {
+  const BillingView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,39 +40,20 @@ class SavedItemsView extends ConsumerWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: products.length,
                     itemBuilder: (context, i) {
-                      final editcontroller = TextEditingController(text: '${(products[i].count ?? 0) * (products[i].price ?? 0)}');
-                      return Slidable(
-                        key: const ValueKey(0),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              autoClose: true,
-                              onPressed: (context) {
-                                alertBoxToPassword(context, editcontroller);
-                              },
-                              backgroundColor: primary.value,
-                              foregroundColor: Colors.white,
-                              icon: Icons.edit_document,
-                              label: 'Edit',
-                            ),
-                          ],
+                      return ListTile(
+                        dense: true,
+                        onTap: () => ref.read(billProductProvider.notifier).removeProductFromBill(i),
+                        title: Text(
+                          products[i].name ?? '',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                         ),
-                        child: ListTile(
-                          dense: true,
-                          onTap: () => ref.read(billProductProvider.notifier).removeProductFromBill(i),
-                          title: Text(
-                            products[i].name ?? '',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                          ),
-                          subtitle: Text(
-                            'Qty : ${products[i].count ?? 0}',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                          ),
-                          trailing: Text(
-                            '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
-                          ),
+                        subtitle: Text(
+                          'Qty : ${products[i].count ?? 0}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 0.6),
+                        ),
+                        trailing: Text(
+                          '₹ ${(products[i].count ?? 0) * (products[i].price ?? 0)}',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
                         ),
                       );
                     },

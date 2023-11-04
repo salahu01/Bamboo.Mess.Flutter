@@ -80,6 +80,9 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                       itemBuilder: (context, i) {
                         return ListTile(
                           dense: true,
+                          onTap: () {
+                            Dialogs.editBillDailog(context, index: i);
+                          },
                           title: Text(
                             products[i].name ?? '',
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.6),
