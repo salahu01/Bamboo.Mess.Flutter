@@ -28,7 +28,7 @@ class SettingsView extends StatelessWidget {
                         style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400, color: Colors.black),
                       ),
                       const Spacer(),
-                      ...List.generate(primaryColors.length, (i) {
+                      ...List.generate(primaryColors.length, (i) {   
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: CircleAvatar(

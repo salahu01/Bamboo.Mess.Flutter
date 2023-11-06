@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/labours/provider/labour.provider.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
@@ -8,8 +9,9 @@ class Dialogs {
   static Future<void> editBillDailog(
     BuildContext context, {
     required int index,
+    List<RecieptProduct>? product,
   }) {
-    final priceCtrl = TextEditingController();
+    final priceCtrl = TextEditingController(text: "${(product?[index].count ?? 0) * (product?[index].price ?? 0)}");
     final key = GlobalKey<FormState>();
     return showDialog(
       context: context,

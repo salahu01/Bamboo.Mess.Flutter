@@ -72,37 +72,43 @@ final class Printer {
   Future<void> print(RecieptModel model) async {
     //* top
     await _printBlankSpace(8);
-    await _printText('Bamboo Mess', bold: true, size: 27);
+    await _printText('Bamboo Mess', bold: true, size: 33);
     await _printBlankSpace(5);
+    await _printText('7025 220748', bold: true, size: 30);
+    await _printBlankSpace(2);
     await _printText('Traffic Junction');
     await _printText('Sulthan Bathery');
     await _printText('04936 220748');
-    await _printText('7025 220748');
     await _printText('FSSAI 11322012000137');
     await _printText('GST 32BIGPA9817C1ZP');
     await _printBlankSpace(8);
-    await _printText('Employee : Owner', alignment: PrintAlignment.left, size: 30);
+    await _printText('Employee : Owner', alignment: PrintAlignment.left, size: 27);
+    await _printText('POS : POS 1', alignment: PrintAlignment.left, size: 27);
+    await _printText('--------------------------------------------------------------------');
     await _printText('Dine in', alignment: PrintAlignment.left, size: 30);
+    await _printText('--------------------------------------------------------------------');
     await _printBlankSpace(8);
 
     //* products
     for (var e in model.products!) {
-      await _printText(e.name ?? '');
-      await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 = ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.left, size: 26);
+      await _printText(e.name ?? '', alignment: PrintAlignment.left,size: 26);
+      await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 ', alignment: PrintAlignment.left, size: 23);
+      await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 30);
       await _printBlankSpace(2);
+      await _printText('--------------------------------------------------------------------');
     }
 
     //* tota amount
-    await _printBlankSpace(8);
+    await _printBlankSpace(5);
     await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
-    await _printBlankSpace(8);
+    await _printText('--------------------------------------------------------------------');
 
     //* bottom
+    await _printBlankSpace(8);
     await _printText('Thank you');
     await _printText('Visit Again');
-    await _printBlankSpace(8);
     await _printText(model.date?.order ?? '', alignment: PrintAlignment.left);
-    await _printBlankSpace(80);
+    await _printBlankSpace(100);
     await _cutPaper();
   }
 }

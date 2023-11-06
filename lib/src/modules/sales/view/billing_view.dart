@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/view/charge_screen.dart';

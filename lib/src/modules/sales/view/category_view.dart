@@ -66,7 +66,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                 ),
                 Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
+                  margin: const EdgeInsets.only(left: 15, bottom: 15),
                   elevation: 4,
                   child: buildBottom(context, width),
                 ),
@@ -134,7 +134,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                         ),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            padding: const EdgeInsets.only(left: 7, right: 5),
                             child: Text(
                               (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
                               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
@@ -193,7 +193,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
           scrollDirection: Axis.horizontal,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 12),
+              padding: const EdgeInsets.only(right: 12),
               child: IconButton(
                 onPressed: () {
                   Dialogs.singleFieldDailog(context, onSuccess: () => ref.refresh(categoryProvider));
@@ -212,7 +212,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                     elevation: 8,
                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     color: index == selectedIndex ? primary.value : Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),  
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 48),
                       child: Center(

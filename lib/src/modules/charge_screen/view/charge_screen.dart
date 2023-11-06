@@ -81,7 +81,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                         return ListTile(
                           dense: true,
                           onTap: () {
-                            Dialogs.editBillDailog(context, index: i);
+                            Dialogs.editBillDailog(context, index: i,product: products);
                           },
                           title: Text(
                             products[i].name ?? '',
