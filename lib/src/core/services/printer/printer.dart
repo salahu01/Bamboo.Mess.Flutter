@@ -84,24 +84,24 @@ final class Printer {
     await _printBlankSpace(8);
     await _printText('Employee : Owner', alignment: PrintAlignment.left, size: 27);
     await _printText('POS : POS 1', alignment: PrintAlignment.left, size: 27);
-    await _printText('--------------------------------------------------------------------');
+    await _printText('------------------------------------------------------------------------');
     await _printText('Dine in', alignment: PrintAlignment.left, size: 30);
-    await _printText('--------------------------------------------------------------------');
+    await _printText('------------------------------------------------------------------------');
     await _printBlankSpace(8);
 
     //* products
     for (var e in model.products!) {
-      await _printText(e.name ?? '', alignment: PrintAlignment.left,size: 26);
+      await _printText(e.name ?? '', alignment: PrintAlignment.left, size: 26);
       await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 ', alignment: PrintAlignment.left, size: 23);
       await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 30);
-      await _printBlankSpace(2);
-      await _printText('--------------------------------------------------------------------');
+      // await _printBlankSpace(2);
+      await _printText('------------------------------------------------------------------------');
     }
 
     //* tota amount
-    await _printBlankSpace(5);
+    // await _printBlankSpace(5);
     await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
-    await _printText('--------------------------------------------------------------------');
+    await _printText('------------------------------------------------------------------------');
 
     //* bottom
     await _printBlankSpace(8);

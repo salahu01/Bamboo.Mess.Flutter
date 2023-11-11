@@ -202,7 +202,7 @@ class Dialogs {
 
   static Future<void> addEmployeeDialog(BuildContext context) {
     final ctrls = List.generate(3, (i) => TextEditingController());
-    final hints = ['Enter Employee Name ', 'Enter Phone Phone', 'Enter Gender Gender'];
+    final hints = ['Enter Employee Name ', 'Enter Phone Phone', 'Enter Gender '];
     final key = GlobalKey<FormState>();
     return showDialog(
       context: context,

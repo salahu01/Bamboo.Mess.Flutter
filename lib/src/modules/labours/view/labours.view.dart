@@ -80,12 +80,14 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
                                       ),
                                       trailing: IconButton(
                                         onPressed: () {
-                                          _selectedLabour = null;
-                                          Dialogs.loadingDailog(context);
-                                          MongoDataBase().deleteOneEmployee(data[i]).then((value) {
-                                            Navigator.pop(context);
-                                            // ignore: unused_result
-                                            value ? ref.refresh(laboursProvider) : null;
+                                          alertBox(context, () {
+                                            _selectedLabour = null;
+                                            Dialogs.loadingDailog(context);
+                                            MongoDataBase().deleteOneEmployee(data[i]).then((value) {
+                                              Navigator.pop(context);
+                                              // ignore: unused_result
+                                              value ? ref.refresh(laboursProvider) : null;
+                                            });
                                           });
                                         },
                                         icon: const Icon(Icons.delete, size: 32, color: Colors.black),
@@ -167,6 +169,41 @@ class _LaboursViewState extends ConsumerState<LaboursView> {
           ),
         ),
       ),
+    );
+  }
+
+  alertBox(BuildContext context, Function() onTap) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Spacer(),
+              Text('Are You Sure You Want to Delete'),
+              Spacer(),
+            ],
+          ),
+          titleTextStyle: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('No', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+            const SizedBox(width: 20),
+            TextButton(
+              onPressed: () {
+                onTap();
+                Navigator.pop(context);
+              },
+              child: Text('Yes', style: TextStyle(color: primary.value, fontSize: 18)),
+            ),
+          ],
+        );
+      },
     );
   }
 }
