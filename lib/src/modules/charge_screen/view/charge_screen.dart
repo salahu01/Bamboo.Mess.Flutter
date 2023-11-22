@@ -81,7 +81,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                         return ListTile(
                           dense: true,
                           onTap: () {
-                            Dialogs.editBillDailog(context, index: i,product: products);
+                            Dialogs.editBillDailog(context, index: i, product: products);
                           },
                           title: Text(
                             products[i].name ?? '',
@@ -188,7 +188,13 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                       if (selectedEmployee == null) {
                                         Dialogs.showSnack(context, 'Please select employee !');
                                       } else {
-                                        final reciept = RecieptModel(products: products, orderType: selectedOrderType, employee: selectedEmployee, date: DateTime.now());
+                                        final reciept = RecieptModel(
+                                          products: products,
+                                          orderType: selectedOrderType,
+                                          employee: selectedEmployee,
+                                          date: DateTime.now(),
+                                          totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
+                                        );
                                         Printer.instance.print(reciept).then((_) {
                                           ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
                                         });

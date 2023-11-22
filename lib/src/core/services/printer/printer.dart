@@ -98,7 +98,7 @@ final class Printer {
       await _printText('------------------------------------------------------------------------');
     }
 
-    //* tota amount
+    //* total amount
     // await _printBlankSpace(5);
     await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
     await _printText('------------------------------------------------------------------------');
