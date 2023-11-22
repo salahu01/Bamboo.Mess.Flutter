@@ -26,6 +26,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
   final List<String> _locations = ['Lock Screen', 'Lock App', 'Unlock Screen', 'Unlock App', 'Lock', 'Unlock'];
   String? _selectedLocation;
   bool isactivedelect = false;
+  String? sortType;
 
   @override
   void dispose() {
@@ -38,7 +39,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
     log("TRUE OR FALSE 2 => $isactivedelect");
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
-      body: ref.watch(recieptsProvider).when(
+      body: ref.watch(recieptsProvider(sortType)).when(
             data: (data) {
               if (data.isEmpty) {
                 return const Center(child: Text('No Reciepts', style: TextStyle(fontSize: 30)));
@@ -104,6 +105,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                           e.sort((a, b) => (a.time ?? "").compareTo(b.time ?? ""));
                                         }
                                       }
+                                      sortType = value;
                                     });
                                   },
                                   itemBuilder: (BuildContext context) {
@@ -173,8 +175,9 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                                         Dialogs.loadingDailog(context);
                                                         MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
                                                           Navigator.pop(context);
+                                                          _selectedReceipt = 0;
                                                           // ignore: unused_result
-                                                          value ? ref.refresh(recieptsProvider) : null;
+                                                          value ? ref.refresh(recieptsProvider(sortType)) : null;
                                                         });
                                                       },
                                                       icon: const Icon(Icons.delete, size: 32, color: Colors.black),
