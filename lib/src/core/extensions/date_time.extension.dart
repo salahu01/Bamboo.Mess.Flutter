@@ -1,5 +1,3 @@
-
-
 extension DateTimeX on DateTime {
   //* get Months
   List<String> get _months => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -8,7 +6,7 @@ extension DateTimeX on DateTime {
   List<String> get _days => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   //* find month in string
-  String get monthToString => _months[month];
+  String get monthToString => _months[month - 1];
 
   //* find day
   String get dayToString => _days[weekday - 1];
