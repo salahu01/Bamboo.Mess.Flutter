@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
@@ -15,7 +17,9 @@ void main() async {
   await LocalDataBase().openBox();
   await retriveColor();
   WidgetsFlutterBinding.ensureInitialized();
-  await Printer.instance.initSdk();
+  if (Platform.isAndroid) {
+    await Printer.instance.initSdk();
+  }
   runApp(const ProviderScope(child: MyApp()));
 }
 
