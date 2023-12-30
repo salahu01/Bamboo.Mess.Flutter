@@ -24,7 +24,7 @@ class MongoDataBase {
   DbCollection get _reciepts => _db.collection('reciepts');
 
   //* Db url
-  final _url = 'mongodb+srv://bamboomess:CM165hyXFrbO0bh0@cluster0.t4xnhwn.mongodb.net/bamboo_mess?retryWrites=true&w=majority';
+  final _url = 'mongodb+srv://dev:PRVcukOzHPpugU79@cluster0.t4xnhwn.mongodb.net/bamboo_mess?retryWrites=true&w=majority';
 
   //* This variable for store MongoDB Instance
   late final Db _db;
