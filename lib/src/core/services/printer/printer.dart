@@ -87,13 +87,13 @@ final class Printer {
     await _printText('------------------------------------------------------------------------');
     await _printText('Dine in', alignment: PrintAlignment.left, size: 30);
     await _printText('------------------------------------------------------------------------');
-    await _printBlankSpace(8);
+    await _printBlankSpace(4);
 
     //* products
     for (var e in model.products!) {
-      await _printText(e.name ?? '', alignment: PrintAlignment.left, size: 26);
+      await _printText('${e.name ?? ''}                                                                   ${'₹${(e.count ?? 0) * (e.price ?? 0)}.00'}', alignment: PrintAlignment.left, size: 28);
       await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 ', alignment: PrintAlignment.left, size: 23);
-      await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 30);
+      // await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 30);
       // await _printBlankSpace(2);
       await _printText('------------------------------------------------------------------------');
     }
