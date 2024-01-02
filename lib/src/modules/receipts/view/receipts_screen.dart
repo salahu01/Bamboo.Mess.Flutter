@@ -11,6 +11,7 @@ import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/core/widgets/snak_bar.dart';
 import 'package:freelance/src/modules/receipts/provider/receipts.provider.dart';
 import 'package:freelance/src/modules/receipts/view/sales_summary.dart';
+import 'package:intl/intl.dart';
 
 class ReceiptsView extends ConsumerStatefulWidget {
   TextEditingController? passwordController = TextEditingController();
@@ -34,9 +35,12 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
     super.dispose();
   }
 
+  String getFormatedString({required DateTime date, String? formate}) {
+    return DateFormat(formate ?? 'dd-MM-yyyy').format(date);
+  }
+
   @override
   Widget build(BuildContext context) {
-    log("TRUE OR FALSE 2 => $isactivedelect");
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
       body: ref.watch(recieptsProvider(sortType)).when(
@@ -225,15 +229,29 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Colors.grey[900]),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 24, top: 8),
+                                padding: const EdgeInsets.only(left: 24, top: 8, right: 24),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('Employee : ${data[_selectedRow][_selectedReceipt].employee ?? ''}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Employee : ${data[_selectedRow][_selectedReceipt].employee ?? ''}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                          Text('Bill Number : ${data[_selectedRow][_selectedReceipt].id?.substring(4, 8)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                        ],
+                                      ),
                                       const SizedBox(height: 12),
-                                      Text(data[_selectedRow][_selectedReceipt].orderType ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(data[_selectedRow][_selectedReceipt].orderType ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                                          Text('Date : ${getFormatedString(date: data[_selectedRow][_selectedReceipt].date ?? DateTime.now())} / ${data[_selectedRow][_selectedReceipt].time}',
+                                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
                                     ],
                                   ),
                                 ),

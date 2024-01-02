@@ -49,7 +49,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
     return Scaffold(
       key: _key,
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 70,
         backgroundColor: primary.value,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.black),
         leadingWidth: 80,
