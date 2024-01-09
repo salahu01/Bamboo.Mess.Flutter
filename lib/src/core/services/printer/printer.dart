@@ -84,8 +84,8 @@ final class Printer {
     await _printBlankSpace(8);
     await _printText('Employee : Owner', alignment: PrintAlignment.left, size: 27);
     await _printText('POS : POS 1', alignment: PrintAlignment.left, size: 27);
-    await _printText(model.date?.order ?? '', alignment: PrintAlignment.left);
     await _printText('Bill Number : ${model.id?.substring(4, 8)}', alignment: PrintAlignment.left);
+    await _printText('Time : ${model.date?.order} / ${model.time}', alignment: PrintAlignment.left);
     await _printText('------------------------------------------------------------------------');
     await _printText('Dine in', alignment: PrintAlignment.left, size: 30);
     await _printText('------------------------------------------------------------------------');
@@ -93,9 +93,9 @@ final class Printer {
 
     //* products
     for (var e in model.products!) {
-      await _printText('${e.name ?? ''}                                                                    ${'₹${(e.count ?? 0) * (e.price ?? 0)}.00'}', alignment: PrintAlignment.left, size: 28);
+      await _printText(e.name ?? '', alignment: PrintAlignment.left, size: 28);
+      await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 28);
       await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 ', alignment: PrintAlignment.left, size: 23);
-      // await _printText(' ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 30);
       // await _printBlankSpace(2);
       await _printText('------------------------------------------------------------------------');
     }

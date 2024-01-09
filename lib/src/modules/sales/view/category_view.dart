@@ -33,7 +33,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 12, top: 12),
+                  padding: const EdgeInsets.only(left: 12),
                   child: IconButton(
                     onPressed: () => setState(() => selectedSubIndex = null),
                     icon: Icon(Icons.arrow_back, color: primary.value, size: 32),
@@ -42,7 +42,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                 Expanded(
                   child: Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    margin: const EdgeInsets.only(left: 24, right: 12, top: 24, bottom: 24),
+                    margin: const EdgeInsets.only(left: 24, right: 12, bottom: 24),
                     elevation: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -213,7 +213,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                   },
                   child: Card(
                     elevation: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    // margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     color: index == selectedIndex ? primary.value : Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     child: Padding(

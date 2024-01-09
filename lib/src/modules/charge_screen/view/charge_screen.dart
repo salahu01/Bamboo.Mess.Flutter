@@ -104,158 +104,159 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
             ),
           ),
           Expanded(
-              flex: 4,
-              child: ref.watch(laboursProvider).when(
-                    data: (data) {
-                      return Container(
-                        color: const Color.fromARGB(255, 228, 222, 222),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+            flex: 4,
+            child: ref.watch(laboursProvider).when(
+                  data: (data) {
+                    return Container(
+                      color: const Color.fromARGB(255, 228, 222, 222),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // if (selectedEmployee == null) {
+                                    //   Dialogs.showSnack(context, 'Please select employee !');
+                                    // } else {
+                                    //   final reciept = RecieptModel(
+                                    //     products: products,
+                                    //     orderType: selectedOrderType,
+                                    //     employee: selectedEmployee,
+                                    //     date: DateTime.now(),
+                                    //     totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
+                                    //   );
+                                    //   Printer.instance.print(reciept).then((_) {
+                                    //     ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
+                                    //   });
+                                    // }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(10)),
+                                    width: MediaQuery.of(context).size.width * 0.1,
+                                    height: 50,
+                                    child: const Center(child: Text("Print KOT", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (selectedEmployee == null) {
-                                        Dialogs.showSnack(context, 'Please select employee !');
-                                      } else {
-                                        final reciept = RecieptModel(
-                                          products: products,
-                                          orderType: selectedOrderType,
-                                          employee: selectedEmployee,
-                                          date: DateTime.now(),
-                                          totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                                        );
-                                        Printer.instance.print(reciept).then((_) {
-                                          ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
-                                        });
-                                      }
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(10)),
-                                      width: MediaQuery.of(context).size.width * 0.1,
-                                      height: 50,
-                                      child: const Center(child: Text("Print KOT", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                                Text(
+                                  "₹ ${products.fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}",
+                                  style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w600),
+                                ),
+                                const Text(
+                                  "Total Amount",
+                                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.17,
+                                      height: MediaQuery.of(context).size.height * 0.07,
+                                      child: InkWell(
+                                        onTap: () {
+                                          selectEmployee();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text(selectedEmployee == null ? "Select Emplyee" : '$selectedEmployee', style: const TextStyle(fontSize: 25)),
+                                            selectedEmployee == null ? const Icon(Icons.keyboard_double_arrow_down_outlined) : const SizedBox.shrink()
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.17,
+                                      height: MediaQuery.of(context).size.height * 0.07,
+                                      child: Center(
+                                        child: DropdownButton(
+                                          underline: const SizedBox.shrink(),
+                                          value: selectedOrderType,
+                                          icon: const Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Icon(Icons.keyboard_arrow_down, size: 35),
+                                          ),
+                                          items: orderTypes.map((String items) {
+                                            return DropdownMenuItem(
+                                              value: items,
+                                              child: Text(
+                                                items,
+                                                style: const TextStyle(fontSize: 25),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              selectedOrderType = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 45),
+                                InkWell(
+                                  onTap: () {
+                                    if (selectedEmployee == null) {
+                                      Dialogs.showSnack(context, 'Please select employee !');
+                                    } else {
+                                      final reciept = RecieptModel(
+                                        products: products,
+                                        orderType: selectedOrderType,
+                                        employee: selectedEmployee,
+                                        date: DateTime.now(),
+                                        totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
+                                      );
+                                      Printer.instance.print(reciept).then((_) {
+                                        ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    height: MediaQuery.of(context).size.height * 0.1,
+                                    decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(30)),
+                                    child: Center(
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          final state = ref.watch(uploadRecieptProvider);
+                                          return Text(state, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold));
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "₹ ${products.fold<num>(0, (v, e) => v + (e.count ?? 0) * (e.price ?? 0))}",
-                                    style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w600),
-                                  ),
-                                  const Text(
-                                    "Total Amount",
-                                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.17,
-                                        height: MediaQuery.of(context).size.height * 0.07,
-                                        child: InkWell(
-                                          onTap: () {
-                                            selectEmployee();
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Text(selectedEmployee == null ? "Select Emplyee" : '$selectedEmployee', style: const TextStyle(fontSize: 25)),
-                                              selectedEmployee == null ? const Icon(Icons.keyboard_double_arrow_down_outlined) : const SizedBox.shrink()
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.17,
-                                        height: MediaQuery.of(context).size.height * 0.07,
-                                        child: Center(
-                                          child: DropdownButton(
-                                            underline: const SizedBox.shrink(),
-                                            value: selectedOrderType,
-                                            icon: const Padding(
-                                              padding: EdgeInsets.only(left: 15),
-                                              child: Icon(Icons.keyboard_arrow_down, size: 35),
-                                            ),
-                                            items: orderTypes.map((String items) {
-                                              return DropdownMenuItem(
-                                                value: items,
-                                                child: Text(
-                                                  items,
-                                                  style: const TextStyle(fontSize: 25),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                selectedOrderType = newValue!;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 45),
-                                  InkWell(
-                                    onTap: () {
-                                      if (selectedEmployee == null) {
-                                        Dialogs.showSnack(context, 'Please select employee !');
-                                      } else {
-                                        final reciept = RecieptModel(
-                                          products: products,
-                                          orderType: selectedOrderType,
-                                          employee: selectedEmployee,
-                                          date: DateTime.now(),
-                                          totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                                        );
-                                        Printer.instance.print(reciept).then((_) {
-                                          ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
-                                        });
-                                      }
-                                    },
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.4,
-                                      height: MediaQuery.of(context).size.height * 0.1,
-                                      decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(30)),
-                                      child: Center(
-                                        child: Consumer(
-                                          builder: (context, ref, child) {
-                                            final state = ref.watch(uploadRecieptProvider);
-                                            return Text(state, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold));
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    error: (error, stackTrace) => Text('$error'),
-                    loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
-                  )),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  error: (error, stackTrace) => Text('$error'),
+                  loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
+                ),
+          ),
         ],
       ),
     );
