@@ -118,20 +118,14 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                 padding: const EdgeInsets.all(15.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    // if (selectedEmployee == null) {
-                                    //   Dialogs.showSnack(context, 'Please select employee !');
-                                    // } else {
-                                    //   final reciept = RecieptModel(
-                                    //     products: products,
-                                    //     orderType: selectedOrderType,
-                                    //     employee: selectedEmployee,
-                                    //     date: DateTime.now(),
-                                    //     totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                                    //   );
-                                    //   Printer.instance.print(reciept).then((_) {
-                                    //     ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
-                                    //   });
-                                    // }
+                                    final reciept = RecieptModel(
+                                      products: products,
+                                      orderType: selectedOrderType,
+                                      employee: selectedEmployee,
+                                      date: DateTime.now(),
+                                      totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
+                                    );
+                                    Printer.instance.printKOT(reciept);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(10)),

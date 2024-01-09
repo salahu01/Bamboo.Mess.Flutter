@@ -69,6 +69,19 @@ final class Printer {
     debugPrint('printer response : $res');
   }
 
+  Future<void> printKOT(RecieptModel model) async {
+    await _printBlankSpace(8);
+    await _printText('KOT', bold: true, size: 30);
+    await _printBlankSpace(2);
+    for (var e in model.products!) {
+      await _printText(e.name ?? '', alignment: PrintAlignment.left, size: 28);
+      await _printText(' ₹${(e.count ?? 0)}', alignment: PrintAlignment.right, size: 28);
+      await _printText('------------------------------------------------------------------------');
+    }
+    await _printBlankSpace(50);
+    await _cutPaper();
+  }
+
   Future<void> print(RecieptModel model) async {
     //* top
     await _printBlankSpace(8);
