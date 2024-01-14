@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
 import 'package:freelance/src/core/services/db/local.db.sevices.dart';
 import 'package:freelance/src/core/services/db/remote.db.services.dart';
+import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,8 @@ class UploadRecieptNotifier extends StateNotifier<String> {
   void createReciept(RecieptModel reciept, ref, ctx) async {
     try {
       state = 'Loading...';
-      await MongoDataBase().insertReciept(reciept);
+      final savedReciept = await MongoDataBase().insertReciept(reciept);
+      await Printer.instance.print(savedReciept);
       final selected = ref.read(selectedBillProvider);
       if (selected != null) {
         await LocalDataBase().removeProducts(selected);

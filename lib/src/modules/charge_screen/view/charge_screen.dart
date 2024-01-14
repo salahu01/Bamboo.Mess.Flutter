@@ -221,9 +221,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                         date: DateTime.now(),
                                         totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
                                       );
-                                      Printer.instance.print(reciept).then((_) {
-                                        ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
-                                      });
+                                      ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
                                     }
                                   },
                                   child: Container(
