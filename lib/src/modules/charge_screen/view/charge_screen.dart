@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/models/reciept.model.dart';
-import 'package:freelance/src/core/services/printer/printer.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/charge_screen/provider/charge.screen.provider.dart';
@@ -111,32 +110,6 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                       color: const Color.fromARGB(255, 228, 222, 222),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    final reciept = RecieptModel(
-                                      products: products,
-                                      orderType: selectedOrderType,
-                                      employee: selectedEmployee,
-                                      date: DateTime.now(),
-                                      totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                                    );
-                                    Printer.instance.printKOT(reciept);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(color: primary.value, borderRadius: BorderRadius.circular(10)),
-                                    width: MediaQuery.of(context).size.width * 0.1,
-                                    height: 50,
-                                    child: const Center(child: Text("Print KOT", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           Expanded(
                             flex: 2,
                             child: Column(
