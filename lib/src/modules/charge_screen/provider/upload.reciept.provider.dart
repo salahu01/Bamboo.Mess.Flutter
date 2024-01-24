@@ -71,17 +71,7 @@ class UploadRecieptNotifier extends StateNotifier<String> {
             const SizedBox(width: 20),
             InkWell(
               onTap: () async {
-                final savedReciept = await MongoDataBase().insertReciept(reciept);
-                final reciepts = RecieptModel(
-                  products: savedReciept.products,
-                  orderType: savedReciept.orderType,
-                  employee: savedReciept.employee,
-                  id: savedReciept.id,
-                  time: savedReciept.time,
-                  date: DateTime.now(),
-                  totalAmount: savedReciept.products?.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                );
-                Printer.instance.printKOT(reciepts);
+                Printer.instance.printKOT(reciept);
                 Navigator.pop(context);
               },
               child: Container(
