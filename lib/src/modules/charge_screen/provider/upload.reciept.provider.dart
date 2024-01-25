@@ -26,7 +26,7 @@ class UploadRecieptNotifier extends StateNotifier<String> {
         ..read(selectedBillProvider.notifier).update((state) => state = null)
         ..refresh(storedBillsProvider);
       Navigator.pop(ctx);
-      alertBox(ctx, reciept);
+      alertBox(ctx, savedReciept);
     } catch (e) {
       state = 'Retry';
     }
