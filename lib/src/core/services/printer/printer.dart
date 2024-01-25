@@ -72,16 +72,17 @@ final class Printer {
   Future<void> printKOT(RecieptModel model) async {
     await _printBlankSpace(8);
     await _printText('KOT', bold: true, size: 35);
+    await _printBlankSpace(5);
     await _printText('Bill Number : ${model.id?.substring(4, 8)}', alignment: PrintAlignment.left);
     await _printText('Time : ${model.date?.order} / ${model.time}', alignment: PrintAlignment.left);
     await _printText('------------------------------------------------------------------------');
     await _printBlankSpace(10);
     for (var e in model.products!) {
       await _printText(e.name ?? '', alignment: PrintAlignment.left, size: 28);
-      await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00 ', alignment: PrintAlignment.right, size: 28);
+      await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00         ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 28, bold: true);
       await _printText('------------------------------------------------------------------------');
     }
-    await _printBlankSpace(100);
+    await _printBlankSpace(150);
     await _cutPaper();
   }
 
