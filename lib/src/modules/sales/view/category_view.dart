@@ -139,7 +139,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                             padding: const EdgeInsets.only(left: 7, right: 5),
                             child: Text(
                               (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
-                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
                             ),
                           ),
                         ),
@@ -159,12 +159,12 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
         builder: (children) {
           return GridView.count(
             key: _gridViewKey,
-            childAspectRatio: 3 / 2,
+            childAspectRatio: 4 / 2.8,
             shrinkWrap: true,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisSpacing: 4,
+            mainAxisSpacing: 4,
             controller: _scrollController,
-            crossAxisCount: 5,
+            crossAxisCount: 6,
             padding: EdgeInsets.zero,
             physics: const BouncingScrollPhysics(),
             children: children,
@@ -175,12 +175,12 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
     }
     return GridView.count(
       key: _gridViewKey,
-      childAspectRatio: 3 / 2,
+      childAspectRatio: 4 / 2.8,
       shrinkWrap: true,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
+      crossAxisSpacing: 4,
+      mainAxisSpacing: 4,
       controller: _scrollController,
-      crossAxisCount: 5,
+      crossAxisCount: 6,
       padding: EdgeInsets.zero,
       physics: const BouncingScrollPhysics(),
       children: generatedChildren,
