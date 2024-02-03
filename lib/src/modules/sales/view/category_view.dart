@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
@@ -80,6 +78,7 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
   }
 
   Widget get empty => const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24)));
+  Widget get searchEmpty => const Center(child: Text('Coudn\'t find Foods !', style: TextStyle(fontSize: 24)));
 
   Widget _getReorderableWidget() {
     return ValueListenableBuilder(
@@ -108,6 +107,11 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
             }
             return p;
           });
+        }
+
+        //* Managing if not found searched product
+        if (query.text.isNotEmpty && (products?.isEmpty ?? true)) {
+          return searchEmpty;
         }
 
         final generatedChildren = List<Widget>.generate(
