@@ -18,6 +18,7 @@ class DashBoardView extends ConsumerStatefulWidget {
 
 class _DashBoardViewState extends ConsumerState<DashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
+  late final _searchCtrl = TextEditingController();
   final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person];
   final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours'];
   final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours'];
@@ -94,6 +95,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10),
                                 child: TextField(
+                                  controller: _searchCtrl,
                                   autofocus: true,
                                   focusNode: _focusNode,
                                   decoration: const InputDecoration(
@@ -218,12 +220,18 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
         ),
       ),
       body: [
-        SalesView(showBills: showBills),
-         ReceiptsView(),
+        SalesView(showBills: showBills, searchCtrl: _searchCtrl),
+        ReceiptsView(),
         const FoodsView(),
         const SettingsView(),
         const LaboursView(),
       ][_drawerIndex],
     );
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
   }
 }

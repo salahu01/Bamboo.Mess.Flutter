@@ -7,8 +7,9 @@ import 'package:freelance/src/modules/sales/view/category_view.dart';
 import 'package:freelance/src/modules/sales/view/billing_view.dart';
 
 class SalesView extends ConsumerWidget {
-  const SalesView({super.key, required this.showBills});
+  const SalesView({super.key, required this.showBills, required this.searchCtrl});
   final bool showBills;
+  final TextEditingController searchCtrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,7 +20,7 @@ class SalesView extends ConsumerWidget {
               children: [
                 Flexible(
                   flex: 5,
-                  child: CategoryView(categories: data),
+                  child: CategoryView(categories: data, searchCtrl: searchCtrl),
                 ),
                 const Flexible(
                   flex: 2,

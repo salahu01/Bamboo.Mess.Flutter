@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/widgets.dart';
@@ -9,8 +11,9 @@ import 'package:freelance/src/core/widgets/show_dialog.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
 class CategoryView extends ConsumerStatefulWidget {
-  const CategoryView({super.key, required this.categories});
+  const CategoryView({super.key, required this.categories, required this.searchCtrl});
   final List<CategoryModel> categories;
+  final TextEditingController searchCtrl;
 
   @override
   ConsumerState<CategoryView> createState() => _CategoryViewState();
@@ -79,111 +82,133 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
   Widget get empty => const Center(child: Text('No Foods !', style: TextStyle(fontSize: 24)));
 
   Widget _getReorderableWidget() {
-    final canAdd = selectedIndex == (widget.categories.length - 1) ? 0 : 1;
-    List<ProductModel?>? products;
-    if (selectedSubIndex != null) {
-      products = widget.categories[selectedIndex].products?[selectedSubIndex!]?.products;
-    } else {
-      products = widget.categories[selectedIndex].products;
-    }
+    return ValueListenableBuilder(
+      valueListenable: widget.searchCtrl,
+      builder: (BuildContext context, query, Widget? child) {
+        //* Manage Add feature visible or not
+        final canAdd = selectedIndex == (widget.categories.length - 1) || query.text.isNotEmpty ? 0 : 1;
 
-    final generatedChildren = List<Widget>.generate(
-      (products?.length ?? 0) + canAdd,
-      (i) {
-        return GestureDetector(
-          key: Key('$i'),
-          onTap: () {
-            final isSubProduct = selectedSubIndex != null;
-            if (i == (products?.length ?? 1)) {
-              final ids = isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.productIds : widget.categories[selectedIndex].productIds;
-              final name = isSubProduct ? null : widget.categories[selectedIndex].categaryName;
-              Dialogs.singleFieldDailog(
-                context,
-                ids: ids,
-                categoryName: name,
-                subProduct: isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.id : null,
-                onSuccess: () => ref.refresh(categoryProvider),
-              );
-            } else if (products?[i]?.productIds == null) {
-              ref.read(billProductProvider.notifier).addProductToBill(products?[i]);
-            } else if (widget.categories[selectedIndex].products?[i]?.productIds != null) {
-              setState(() => selectedSubIndex = i);
+        //*
+        List<ProductModel?>? products;
+
+        //* Sorting Products if selected subcategory
+        if (selectedSubIndex != null) {
+          products = widget.categories[selectedIndex].products?[selectedSubIndex!]?.products;
+        } else {
+          products = widget.categories[selectedIndex].products;
+        }
+
+        //* Search Functionality
+        if (query.text.isNotEmpty) {
+          products = products?.fold<List<ProductModel?>?>([], (p, e) {
+            if (e?.products?.isNotEmpty ?? false) {
+              p?.addAll(e?.products?.where((_) => '${_?.name}'.toLowerCase().contains(query.text.toLowerCase())) ?? []);
+            } else if ('${e?.name}'.toLowerCase().contains(query.text.toLowerCase())) {
+              p?.add(e);
             }
+            return p;
+          });
+        }
+
+        final generatedChildren = List<Widget>.generate(
+          (products?.length ?? 0) + canAdd,
+          (i) {
+            return GestureDetector(
+              key: Key('$i'),
+              onTap: () {
+                final isSubProduct = selectedSubIndex != null;
+                if (i == (products?.length ?? 1)) {
+                  final ids = isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.productIds : widget.categories[selectedIndex].productIds;
+                  final name = isSubProduct ? null : widget.categories[selectedIndex].categaryName;
+                  Dialogs.singleFieldDailog(
+                    context,
+                    ids: ids,
+                    categoryName: name,
+                    subProduct: isSubProduct ? widget.categories[selectedIndex].products![selectedSubIndex!]?.id : null,
+                    onSuccess: () => ref.refresh(categoryProvider),
+                  );
+                } else if (products?[i]?.productIds == null) {
+                  ref.read(billProductProvider.notifier).addProductToBill(products?[i]);
+                } else if (widget.categories[selectedIndex].products?[i]?.productIds != null) {
+                  setState(() => selectedSubIndex = i);
+                }
+              },
+              child: Card(
+                elevation: 8,
+                color: primary.value,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: Center(
+                  child: i == ((products ?? widget.categories[selectedIndex].products)?.length ?? 1)
+                      ? Container(
+                          width: 90,
+                          height: 90,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 70, 70, 70)),
+                          child: const Icon(Icons.add, size: 60, color: Colors.white),
+                        )
+                      : Stack(
+                          children: [
+                            Visibility(
+                              visible: (products ?? widget.categories[selectedIndex].products)?[i]?.productIds != null,
+                              child: const Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.category, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 7, right: 5),
+                                child: Text(
+                                  (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
+                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+            );
           },
-          child: Card(
-            elevation: 8,
-            color: primary.value,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: Center(
-              child: i == ((products ?? widget.categories[selectedIndex].products)?.length ?? 1)
-                  ? Container(
-                      width: 90,
-                      height: 90,
-                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 70, 70, 70)),
-                      child: const Icon(Icons.add, size: 60, color: Colors.white),
-                    )
-                  : Stack(
-                      children: [
-                        Visibility(
-                          visible: (products ?? widget.categories[selectedIndex].products)?[i]?.productIds != null,
-                          child: const Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(Icons.category, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 7, right: 5),
-                            child: Text(
-                              (products ?? widget.categories[selectedIndex].products)?[i]?.name ?? '',
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-          ),
+        );
+        if (selectedSubIndex == null) {
+          return ReorderableBuilder(
+            key: Key(_gridViewKey.toString()),
+            onReorder: _handleReorder,
+            lockedIndices: lockedIndices,
+            scrollController: _scrollController,
+            builder: (children) {
+              return GridView.count(
+                key: _gridViewKey,
+                childAspectRatio: 4 / 2.8,
+                shrinkWrap: true,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                controller: _scrollController,
+                crossAxisCount: 6,
+                padding: EdgeInsets.zero,
+                physics: const BouncingScrollPhysics(),
+                children: children,
+              );
+            },
+            children: generatedChildren,
+          );
+        }
+        return GridView.count(
+          key: _gridViewKey,
+          childAspectRatio: 4 / 2.8,
+          shrinkWrap: true,
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 4,
+          controller: _scrollController,
+          crossAxisCount: 6,
+          padding: EdgeInsets.zero,
+          physics: const BouncingScrollPhysics(),
+          children: generatedChildren,
         );
       },
-    );
-    if (selectedSubIndex == null) {
-      return ReorderableBuilder(
-        key: Key(_gridViewKey.toString()),
-        onReorder: _handleReorder,
-        lockedIndices: lockedIndices,
-        scrollController: _scrollController,
-        builder: (children) {
-          return GridView.count(
-            key: _gridViewKey,
-            childAspectRatio: 4 / 2.8,
-            shrinkWrap: true,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            controller: _scrollController,
-            crossAxisCount: 6,
-            padding: EdgeInsets.zero,
-            physics: const BouncingScrollPhysics(),
-            children: children,
-          );
-        },
-        children: generatedChildren,
-      );
-    }
-    return GridView.count(
-      key: _gridViewKey,
-      childAspectRatio: 4 / 2.8,
-      shrinkWrap: true,
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
-      controller: _scrollController,
-      crossAxisCount: 6,
-      padding: EdgeInsets.zero,
-      physics: const BouncingScrollPhysics(),
-      children: generatedChildren,
     );
   }
 
