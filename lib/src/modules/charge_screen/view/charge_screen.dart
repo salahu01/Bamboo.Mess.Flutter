@@ -23,14 +23,14 @@ String? selectedOrderType = 'Dine in';
 var orderTypes = ['Dine in', 'Parcel'];
 
 class _ChargeScreenState extends ConsumerState<ChargeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    selectedEmployee = null;
-    Future.delayed(const Duration(seconds: 1), () async {
-      await selectEmployee();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   selectedEmployee = null;
+  //   Future.delayed(const Duration(seconds: 1), () async {
+  //     await selectEmployee();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -184,18 +184,19 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                                 const SizedBox(height: 45),
                                 InkWell(
                                   onTap: () {
-                                    if (selectedEmployee == null) {
-                                      Dialogs.showSnack(context, 'Please select employee !');
-                                    } else {
-                                      final reciept = RecieptModel(
-                                        products: products,
-                                        orderType: selectedOrderType,
-                                        employee: selectedEmployee,
-                                        date: DateTime.now(),
-                                        totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
-                                      );
-                                      ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
-                                    }
+                                    // if (selectedEmployee == null) {
+                                    //   Dialogs.showSnack(context, 'Please select employee !');
+                                    // } else {
+
+                                    final reciept = RecieptModel(
+                                      products: products,
+                                      orderType: selectedOrderType,
+                                      employee: selectedEmployee,
+                                      date: DateTime.now(),
+                                      totalAmount: products.fold(0, (p, c) => (p ?? 0) + ((c.price ?? 0) * (c.count ?? 0))),
+                                    );
+                                    ref.read(uploadRecieptProvider.notifier).createReciept(reciept, ref, context);
+                                    // }
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.4,

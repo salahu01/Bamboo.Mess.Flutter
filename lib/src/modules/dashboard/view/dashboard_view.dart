@@ -94,14 +94,33 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                           ? Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10),
-                                child: TextField(
+                                child: TextFormField(
                                   controller: _searchCtrl,
                                   autofocus: true,
                                   focusNode: _focusNode,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        _searchCtrl.clear();
+                                        FocusScopeNode currentFocus = FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        color: primary.value,
+                                        child: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.white,
+                                          size: 35,
+                                        ),
+                                      ),
+                                    ),
                                     hintText: "Search foods here ...",
-                                    hintStyle: TextStyle(color: Colors.black),
+                                    hintStyle: const TextStyle(color: Colors.black),
                                   ),
                                 ),
                               ),

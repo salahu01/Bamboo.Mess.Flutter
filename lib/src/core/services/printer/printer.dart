@@ -82,7 +82,9 @@ final class Printer {
       await _printText(' ${e.count ?? 0} x ${e.price ?? 0}.00         ₹${(e.count ?? 0) * (e.price ?? 0)}.00', alignment: PrintAlignment.right, size: 28, bold: true);
       await _printText('------------------------------------------------------------------------');
     }
-    await _printBlankSpace(150);
+    await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
+    await _printText('------------------------------------------------------------------------');
+    await _printBlankSpace(250);
     await _cutPaper();
   }
 
