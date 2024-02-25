@@ -90,23 +90,15 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
         //*
         List<ProductModel?>? products;
 
+        //* Search Functionality
+        if (query.text.isNotEmpty) {
+          products = widget.categories.last.products?.where((e) => '${e?.name}'.toLowerCase().contains(query.text.toLowerCase())).toList() ?? [];
+        }
         //* Sorting Products if selected subcategory
-        if (selectedSubIndex != null) {
+        else if (selectedSubIndex != null) {
           products = widget.categories[selectedIndex].products?[selectedSubIndex!]?.products;
         } else {
           products = widget.categories[selectedIndex].products;
-        }
-
-        //* Search Functionality
-        if (query.text.isNotEmpty) {
-          products = products?.fold<List<ProductModel?>?>([], (p, e) {
-            if (e?.products?.isNotEmpty ?? false) {
-              p?.addAll(e?.products?.where((_) => '${_?.name}'.toLowerCase().contains(query.text.toLowerCase())) ?? []);
-            } else if ('${e?.name}'.toLowerCase().contains(query.text.toLowerCase())) {
-              p?.add(e);
-            }
-            return p;
-          });
         }
 
         //* Managing if not found searched product
