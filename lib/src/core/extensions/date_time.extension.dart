@@ -3,7 +3,7 @@ extension DateTimeX on DateTime {
   List<String> get _months => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   //* get days
-  List<String> get _days => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  List<String> get _days => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   //* find month in string
   String get monthToString => _months[month - 1];
