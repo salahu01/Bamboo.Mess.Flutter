@@ -84,9 +84,10 @@ final class Printer {
     }
     await _printText('Total : ₹${model.totalAmount}', bold: true, size: 40, alignment: PrintAlignment.right);
     await _printText('------------------------------------------------------------------------');
+    await _printText('Consume the parcel within 2 hours', bold: true, size: 35);
     await _printBlankSpace(250);
     await _cutPaper();
-  }
+  } 
 
   Future<void> print(RecieptModel model) async {
     //* top

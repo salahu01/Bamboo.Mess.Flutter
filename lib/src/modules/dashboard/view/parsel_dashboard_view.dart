@@ -4,24 +4,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/modules/dashboard/provider/dashboard_provider.dart';
 import 'package:freelance/src/modules/foods/view/foods_view.dart';
-import 'package:freelance/src/modules/labours/view/labours.view.dart';
 import 'package:freelance/src/modules/receipts/view/receipts_screen.dart';
-import 'package:freelance/src/modules/sales/view/sales_screen.dart';
-import 'package:freelance/src/modules/settings/settings_view.dart';
+import 'package:freelance/src/modules/sales/view/parsel_sales_screen.dart';
 
-class DashBoardView extends ConsumerStatefulWidget {
-  const DashBoardView({super.key});
+class ParselDashBoardView extends ConsumerStatefulWidget {
+  const ParselDashBoardView({super.key});
 
   @override
-  ConsumerState<DashBoardView> createState() => _DashBoardViewState();
+  ConsumerState<ParselDashBoardView> createState() => _ParselDashBoardViewState();
 }
 
-class _DashBoardViewState extends ConsumerState<DashBoardView> {
+class _ParselDashBoardViewState extends ConsumerState<ParselDashBoardView> {
   final _key = GlobalKey<ScaffoldState>();
   late final _searchCtrl = TextEditingController();
-  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category, Icons.settings, Icons.person];
-  final _drawerTitles = ['Sales', 'Receipts', 'Foods', 'Settings', 'Labours'];
-  final _appBarTitles = ['Receipts', 'Foods', 'Settings', 'Labours'];
+  final _drawerIcons = [Icons.shopping_basket, Icons.receipt_outlined, Icons.category];
+  final _drawerTitles = ['Sales', 'Receipts', 'Foods'];
+  final _appBarTitles = ['Receipts', 'Foods'];
   int _drawerIndex = 0;
 
   @override
@@ -73,7 +71,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-               const Text("Main Menu",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 25)),
+                const Text("Parsel Menu", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
                 Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   elevation: 10,
@@ -142,7 +140,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
               ],
             ),
           ),
-          ...List.generate(4, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
+          ...List.generate(2, (i) => Text(_appBarTitles[i], style: const TextStyle(color: Colors.white, fontSize: 40)))
         ][_drawerIndex],
         actions: [
           Visibility(
@@ -197,7 +195,7 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(
-                  5,
+                  3,
                   (i) {
                     final selected = _drawerIndex == i;
                     return Padding(
@@ -222,11 +220,9 @@ class _DashBoardViewState extends ConsumerState<DashBoardView> {
         ),
       ),
       body: [
-        SalesView(showBills: showBills, searchCtrl: _searchCtrl),
+        ParselSalesView(showBills: showBills, searchCtrl: _searchCtrl),
         ReceiptsView(),
         const FoodsView(),
-        const SettingsView(),
-        const LaboursView(),
       ][_drawerIndex],
     );
   }

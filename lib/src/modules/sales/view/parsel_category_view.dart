@@ -7,19 +7,19 @@ import 'package:freelance/src/core/models/category.model.dart';
 import 'package:freelance/src/core/models/product.model.dart';
 import 'package:freelance/src/core/theme/app_colors.dart';
 import 'package:freelance/src/core/widgets/show_dialog.dart';
-import 'package:freelance/src/modules/dashboard/view/parsel_dashboard_view.dart';
+import 'package:freelance/src/modules/dashboard/view/dashboard_view.dart';
 import 'package:freelance/src/modules/sales/providers/sales.provider.dart';
 
-class CategoryView extends ConsumerStatefulWidget {
-  const CategoryView({super.key, required this.categories, required this.searchCtrl});
+class ParselCategoryView extends ConsumerStatefulWidget {
+  const ParselCategoryView({super.key, required this.categories, required this.searchCtrl});
   final List<CategoryModel> categories;
   final TextEditingController searchCtrl;
 
   @override
-  ConsumerState<CategoryView> createState() => _CategoryViewState();
+  ConsumerState<ParselCategoryView> createState() => _ParselCategoryViewState();
 }
 
-class _CategoryViewState extends ConsumerState<CategoryView> {
+class _ParselCategoryViewState extends ConsumerState<ParselCategoryView> {
   int selectedIndex = 0;
   final lockedIndices = <int>[];
   int? selectedSubIndex;
@@ -241,14 +241,14 @@ class _CategoryViewState extends ConsumerState<CategoryView> {
                           },
                           transitionDuration: const Duration(seconds: 1),
                           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-                            return const ParselDashBoardView();
+                            return const DashBoardView();
                           },
                         ),
                       );
                     },
                     child: SizedBox(
                       width: 80,
-                      child: Icon(CupertinoIcons.forward_fill, color: primary.value, size: 60),
+                      child: Icon(CupertinoIcons.backward_fill, color: primary.value, size: 60),
                     ),
                   ),
                 ),

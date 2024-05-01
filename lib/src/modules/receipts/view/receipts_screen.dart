@@ -117,7 +117,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                       const PopupMenuItem<String>(
                                         value: 'default',
                                         mouseCursor: MouseCursor.defer,
-                                        child: Text('Default'),
+                                        child: Text('Default'), 
                                       ),
                                       const PopupMenuItem<String>(
                                         value: 'Price: Low to High',
