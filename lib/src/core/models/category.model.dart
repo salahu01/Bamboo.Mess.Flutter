@@ -16,11 +16,13 @@ final class CategoryModel {
     required this.categaryName,
   });
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json, {List<ProductModel?>? products = const []}) {
+  factory CategoryModel.fromJson(Map<String, dynamic> json, {List<ProductModel?> products = const []}) {
+    final productMap = Map.fromEntries(products.where((product) => product != null).map((product) => MapEntry(product!.id, product)));
+    final productIds = List<String>.from(json["products"].map((x) => x));
     return CategoryModel(
       id: (json["_id"] as ObjectId).$oid,
-      productIds: List<String>.from(json["products"].map((x) => x)),
-      products: (json["products"] as List? ?? []).cast<String?>().map((e) => products?.singleWhere((v) => '${v?.id}' == '$e')).toList(),
+      productIds: productIds,
+      products: List<ProductModel?>.from(productIds.map((productId) => productMap[productId])),
       categaryName: json["categary_name"],
     );
   }

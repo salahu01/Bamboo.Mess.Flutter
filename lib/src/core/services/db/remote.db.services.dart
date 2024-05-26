@@ -37,9 +37,7 @@ class MongoDataBase {
 
   //* Find All
   Future<List<ProductModel>> get getProducts async {
-    final productsJson = await _products.find();
-    print(productsJson.toString());
-    final products = productsJson.map((e) => ProductModel.fromJson(e)).toList();
+    final products = await _products.find().map((e) => ProductModel.fromJson(e)).toList();
     final subProducts = products.where((_) => _.categaryName == null).toList();
     for (var i = 0; i < products.length; i++) {
       products[i] = products[i].update(subProducts);

@@ -28,7 +28,7 @@ class SalesView extends ConsumerWidget {
                 ),
               ],
             ),
-            error: (error, stackTrace) => Text('$error'),
+            error: (error, stackTrace) => Center(child: Text('$error')),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
       child: ref.watch(storedBillsProvider).when(
@@ -113,7 +113,7 @@ class SalesView extends ConsumerWidget {
                 },
               );
             },
-            error: (error, stackTrace) => Text('$error'),
+            error: (error, stackTrace) => Center(child: Text('$error')),
             loading: () => Center(child: CircularProgressIndicator(color: primary.value)),
           ),
     );
