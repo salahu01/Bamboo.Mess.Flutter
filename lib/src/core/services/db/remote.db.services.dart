@@ -6,16 +6,13 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDataBase {
   //* This constructor body for creating singleton widget
-  factory MongoDataBase() {
-    _dataBase == null ? {_dataBase = MongoDataBase._internel()} : {};
-    return _dataBase!;
-  }
+  factory MongoDataBase() => _instance ??= MongoDataBase._();
 
   //* This named constructor for create object for this class
-  MongoDataBase._internel();
+  MongoDataBase._();
 
   //* This variable for store this class object globally
-  static MongoDataBase? _dataBase;
+  static MongoDataBase? _instance;
 
   //* collections
   DbCollection get _products => _db.collection('products');
@@ -24,7 +21,7 @@ class MongoDataBase {
   DbCollection get _reciepts => _db.collection('reciepts');
 
   //* Db url
-  final _url = 'mongodb+srv://swalahu:salahu37@crocs.2mrp72j.mongodb.net/bamboo_mess?retryWrites=true&w=majority';
+  static const _url = 'mongodb+srv://swalahu:salahu37@crocs.2mrp72j.mongodb.net/bamboo_mess?retryWrites=true&w=majority';
 
   //* This variable for store MongoDB Instance
   late final Db _db;
