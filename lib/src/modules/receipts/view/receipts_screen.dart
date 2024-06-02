@@ -41,9 +41,10 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
 
   @override
   Widget build(BuildContext context) {
+    var reciepts = ref.watch(FetchRecieptsProvider(page: 1, sortType: sortType));
     return Scaffold(
       backgroundColor: primary.value.withOpacity(0.2),
-      body: ref.watch(recieptsProvider(sortType)).when(
+      body: reciepts.when(
             data: (data) {
               if (data.isEmpty) {
                 return const Center(child: Text('No Reciepts', style: TextStyle(fontSize: 30)));
@@ -117,7 +118,7 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                                       const PopupMenuItem<String>(
                                         value: 'default',
                                         mouseCursor: MouseCursor.defer,
-                                        child: Text('Default'), 
+                                        child: Text('Default'),
                                       ),
                                       const PopupMenuItem<String>(
                                         value: 'Price: Low to High',
@@ -142,63 +143,66 @@ class _ReceiptsViewState extends ConsumerState<ReceiptsView> {
                           ),
                           const SizedBox(height: 12),
                           Expanded(
-                            child: ListView(
-                              children: List.generate(data.length, (rowIndex) {
-                                return ListView(
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Text(data[rowIndex].first.date?.order ?? '', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: primary.value)),
-                                    ),
-                                    Column(
-                                      children: List.generate(
-                                        data[rowIndex].length,
-                                        (i) {
-                                          final selected = _selectedReceipt == i && rowIndex == _selectedRow;
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                                            child: ListTile(
-                                              selected: selected,
-                                              selectedTileColor: primary.value,
-                                              contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                              leading: const Icon(Icons.payments, size: 34, color: Colors.black),
-                                              title: Text(
-                                                '${data[rowIndex][i].totalAmount ?? ''}',
-                                                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
-                                              ),
-                                              subtitle: Text(
-                                                data[rowIndex][i].time ?? '',
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
-                                              ),
-                                              trailing: isactivedelect == true
-                                                  ? IconButton(
-                                                      onPressed: () {
-                                                        Dialogs.loadingDailog(context);
-                                                        MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
-                                                          Navigator.pop(context);
-                                                          _selectedReceipt = 0;
-                                                          // ignore: unused_result
-                                                          value ? ref.refresh(recieptsProvider(sortType)) : null;
-                                                        });
-                                                      },
-                                                      icon: const Icon(Icons.delete, size: 32, color: Colors.black),
-                                                    )
-                                                  : const Icon(Icons.local_print_shop_outlined),
-                                              onTap: () => setState(() {
-                                                _selectedReceipt = i;
-                                                _selectedRow = rowIndex;
-                                              }),
-                                            ),
-                                          );
-                                        },
+                            child: RefreshIndicator(
+                              onRefresh: () => ref.refresh(FetchRecieptsProvider(page: 1, sortType: sortType).future),
+                              child: ListView(
+                                children: List.generate(data.length, (rowIndex) {
+                                  return ListView(
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Text(data[rowIndex].first.date?.order ?? '', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: primary.value)),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              }),
+                                      Column(
+                                        children: List.generate(
+                                          data[rowIndex].length,
+                                          (i) {
+                                            final selected = _selectedReceipt == i && rowIndex == _selectedRow;
+                                            return Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                                              child: ListTile(
+                                                selected: selected,
+                                                selectedTileColor: primary.value,
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                leading: const Icon(Icons.payments, size: 34, color: Colors.black),
+                                                title: Text(
+                                                  '${data[rowIndex][i].totalAmount ?? ''}',
+                                                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+                                                ),
+                                                subtitle: Text(
+                                                  data[rowIndex][i].time ?? '',
+                                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.8)),
+                                                ),
+                                                trailing: isactivedelect == true
+                                                    ? IconButton(
+                                                        onPressed: () {
+                                                          Dialogs.loadingDailog(context);
+                                                          MongoDataBase().deleteOneReciept(data[rowIndex][i]).then((value) {
+                                                            Navigator.pop(context);
+                                                            _selectedReceipt = 0;
+                                                            // ignore: unused_result
+                                                            value ? ref.refresh(FetchRecieptsProvider(page: 1, sortType: sortType)) : null;
+                                                          });
+                                                        },
+                                                        icon: const Icon(Icons.delete, size: 32, color: Colors.black),
+                                                      )
+                                                    : const Icon(Icons.local_print_shop_outlined),
+                                                onTap: () => setState(() {
+                                                  _selectedReceipt = i;
+                                                  _selectedRow = rowIndex;
+                                                }),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 12),

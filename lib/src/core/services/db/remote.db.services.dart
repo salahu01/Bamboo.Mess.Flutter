@@ -47,7 +47,7 @@ class MongoDataBase {
 
   Future<List<CategoryModel>> get getCategories => getProducts.then((v) => _categories.find().map((e) => CategoryModel.fromJson(e, products: v)).toList());
   Future<List<EmployeeModel>> get getEmployees => _employees.find().map((e) => EmployeeModel.fromJson(e)).toList();
-  Future<List<RecieptModel>> get getReciepts => _reciepts.find().map((e) => RecieptModel.fromJson(e)).toList();
+  Future<List<RecieptModel>> getReciepts(int page, int limit) => _reciepts.find(where.skip(page * limit).limit((page + 1) * limit)).map((e) => RecieptModel.fromJson(e)).toList();
 
   //* Find One
   Future<ProductModel?>? get findOneProduct => _products.findOne().then((e) => e == null ? null : ProductModel.fromJson(e));
